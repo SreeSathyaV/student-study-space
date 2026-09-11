@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notes - Study Space</title>
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        .notes-container {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 2rem;
+            padding: 2rem;
+        }
+
+        .notes-panel {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .note-item {
+            padding: 1rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .note-item:hover {
+            border-color: #6366f1;
+            background-color: #f0f4ff;
+        }
+
+        .note-item.active {
+            border-color: #6366f1;
+            background-color: #e0e7ff;
+        }
+
+        .note-title {
+            font-weight: bold;
+            color: #1f2937;
+            margin-bottom: 0.3rem;
+        }
+
+        .note-preview {
+            color: #6b7280;
+            font-size: 0.9rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .note-date {
+            color: #9ca3af;
+            font-size: 0.8rem;
+            margin-top: 0.3rem;
+        }
+
+        .note-editor {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .editor-title input {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+
+        .editor-content {
+            min-height: 400px;
+            padding: 1rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: inherit;
+        }
+
+        .toolbar {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .toolbar button {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .toolbar-btn {
+            background: #f3f4f6;
+            color: #1f2937;
+        }
+
+        .toolbar-btn:hover {
+            background: #e5e7eb;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+            justify-content: flex-end;
+            flex-wrap: wrap;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem 2rem;
+            color: #9ca3af;
+        }
+
+        .empty-state-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        @media (max-width: 1024px) {
+            .notes-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">📚 Study Space</div>
+            <ul class="nav-menu">
+                <li><a href="../index.html">🏠 Home</a></li>
+                <li><a href="notes.html" class="active">📝 Notes</a></li>
+                <li><a href="tasks.html">✅ Tasks</a></li>
+                <li><a href="events.html">📅 Events</a></li>
+                <li><a href="planner.html">⏰ Planner</a></li>
+                <li><a href="documents.html">📂 Documents</a></li>
+                <li><a href="painting.html">🎨 Painting</a></li>
+                <li><a href="games.html">🎮 Games</a></li>
+                <li><a href="profile.html">👤 Profile</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>📝 My Notes</h1>
+            <p class="tagline">Create, organize and manage your notes easily.</p>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <div class="container" style="padding: 2rem 0;">
+        <div class="notes-container">
+            <!-- Left Panel -->
+            <div class="notes-panel">
+                <h3 style="margin-bottom: 1.5rem;">Your Notes</h3>
+                <button class="btn" style="width: 100%; margin-bottom: 1.5rem;" onclick="createNewNote()">+ Create New Note</button>
+                <div id="notesList"></div>
+            </div>
+
+            <!-- Right Panel -->
+            <div class="note-editor">
+                <div id="emptyState" class="empty-state">
+                    <div class="empty-state-icon">📝</div>
+                    <h3>No notes yet</h3>
+                    <p>Create a new note to get started</p>
+                </div>
+                <div id="editorPanel" style="display: none;">
+                    <div class="toolbar">
+                        <button class="toolbar-btn" onclick="makeBold()"><strong>Bold</strong></button>
+                        <button class="toolbar-btn" onclick="makeItalic()"><em>Italic</em></button>
+                        <button class="toolbar-btn" onclick="makeUnderline()"><u>Underline</u></button>
+                        <button class="toolbar-btn" onclick="toggleFavorite()">⭐ Favorite</button>
+                        <button class="toolbar-btn" onclick="insertImage()">🖼️ Image</button>
+                    </div>
+                    <div class="editor-title">
+                        <input type="text" id="noteTitle" placeholder="Note Title" style="width: 100%;">
+                    </div>
+                    <textarea id="noteContent" class="editor-content" placeholder="Start typing your note..."></textarea>
+                    <div class="action-buttons">
+                        <button class="btn btn-secondary" onclick="discardNote()">Discard</button>
+                        <button class="btn" onclick="saveNote()">💾 Save Note</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../script.js"></script>
+    <script>
+        let currentNoteId = null;
+
+        function loadNotes() {
+            const notes = Storage.get('notes');
+            const notesList = document.getElementById('notesList');
+            
+            if (notes.length === 0) {
+                notesList.innerHTML = '<p style="color: #9ca3af; text-align: center;">No notes yet</p>';
+                return;
+            }
+
+            notesList.innerHTML = notes.map(note => `
+                <div class="note-item" onclick="selectNote(${note.id})">
+                    <div class="note-title">${note.title || 'Untitled'}</div>
+                    <div class="note-preview">${note.content.substring(0, 50)}...</div>
+                    <div class="note-date">${new Date(note.id).toLocaleDateString()}</div>
+                </div>
+            `).join('');
+        }
+
+        function createNewNote() {
+            currentNoteId = null;
+            document.getElementById('noteTitle').value = '';
+            document.getElementById('noteContent').value = '';
+            document.getElementById('emptyState').style.display = 'none';
+            document.getElementById('editorPanel').style.display = 'block';
+            document.getElementById('noteTitle').focus();
+        }
+
+        function selectNote(id) {
+            currentNoteId = id;
+            const notes = Storage.get('notes');
+            const note = notes.find(n => n.id === id);
+            
+            if (note) {
+                document.getElementById('noteTitle').value = note.title;
+                document.getElementById('noteContent').value = note.content;
+                document.getElementById('emptyState').style.display = 'none';
+                document.getElementById('editorPanel').style.display = 'block';
+                loadNotes();
+                document.querySelector(`[onclick="selectNote(${id})"]`).classList.add('active');
+            }
+        }
+
+        function saveNote() {
+            const title = document.getElementById('noteTitle').value || 'Untitled';
+            const content = document.getElementById('noteContent').value;
+
+            if (!content.trim()) {
+                showNotification('Please add content to your note', 'error');
+                return;
+            }
+
+            if (currentNoteId) {
+                Storage.update('notes', currentNoteId, { title, content });
+                showNotification('Note updated successfully!');
+            } else {
+                const newNote = { title, content };
+                const result = Storage.add('notes', newNote);
+                currentNoteId = result[result.length - 1].id;
+                showNotification('Note saved successfully!');
+            }
+            loadNotes();
+        }
+
+        function discardNote() {
+            if (confirm('Discard this note?')) {
+                currentNoteId = null;
+                document.getElementById('emptyState').style.display = 'block';
+                document.getElementById('editorPanel').style.display = 'none';
+            }
+        }
+
+        function toggleFavorite() {
+            if (currentNoteId) {
+                Storage.update('notes', currentNoteId, { favorite: true });
+                showNotification('Added to favorites!');
+            } else {
+                showNotification('Save the note first', 'error');
+            }
+        }
+
+        function makeBold() {
+            const textarea = document.getElementById('noteContent');
+            const start = textarea.selectionStart;
+            const end = textarea.selectionEnd;
+            const text = textarea.value;
+            textarea.value = text.substring(0, start) + '**' + text.substring(start, end) + '**' + text.substring(end);
+        }
+
+        function makeItalic() {
+            const textarea = document.getElementById('noteContent');
+            const start = textarea.selectionStart;
+            const end = textarea.selectionEnd;
+            const text = textarea.value;
+            textarea.value = text.substring(0, start) + '_' + text.substring(start, end) + '_' + text.substring(end);
+        }
+
+        function makeUnderline() {
+            const textarea = document.getElementById('noteContent');
+            const start = textarea.selectionStart;
+            const end = textarea.selectionEnd;
+            const text = textarea.value;
+            textarea.value = text.substring(0, start) + '__' + text.substring(start, end) + '__' + text.substring(end);
+        }
+
+        function insertImage() {
+            showNotification('Image upload feature coming soon!');
+        }
+
+        // Load notes on page load
+        loadNotes();
+    </script>
+</body>
+</html>
