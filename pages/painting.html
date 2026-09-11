@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painting - Student Study Space</title>
+
+    <link rel="stylesheet" href="../styles.css">
+
+    <style>
+        .painting-container {
+            max-width: 1000px;
+            margin: 30px auto;
+            padding: 20px;
+        }
+
+        .toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: center;
+            padding: 15px;
+            background: #ffffff;
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+
+        .toolbar button {
+            padding: 10px 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            background: #f0f0f0;
+        }
+
+        .toolbar button:hover {
+            background: #ddd;
+        }
+
+        #colorPicker {
+            width: 45px;
+            height: 40px;
+            border: none;
+            cursor: pointer;
+        }
+
+        #brushSize {
+            width: 100px;
+        }
+
+        #paintCanvas {
+            width: 100%;
+            height: 500px;
+            background: white;
+            border: 2px solid #ddd;
+            border-radius: 15px;
+            cursor: crosshair;
+            touch-action: none;
+        }
+
+        .back-btn {
+            text-decoration: none;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="painting-container">
+
+    <a href="../index.html" class="back-btn">← Back to Home</a>
+
+    <h1>🎨 Creative Studio</h1>
+    <p>Draw, paint and express your creativity.</p>
+
+    <div class="toolbar">
+
+        <label>
+            Color:
+            <input type="color" id="colorPicker" value="#000000">
+        </label>
+
+        <label>
+            Brush:
+            <input type="range" id="brushSize" min="1" max="40" value="5">
+        </label>
+
+        <button onclick="setTool('brush')">🖌 Brush</button>
+
+        <button onclick="setTool('pencil')">✏️ Pencil</button>
+
+        <button onclick="setTool('eraser')">🧹 Eraser</button>
+
+        <button onclick="undo()">↩ Undo</button>
+
+        <button onclick="redo()">↪ Redo</button>
+
+        <button onclick="clearCanvas()">🗑 Clear</button>
+
+        <button onclick="savePainting()">💾 Save</button>
+
+    </div>
+
+    <canvas id="paintCanvas"></canvas>
+
+</div>
+
+<script>
+
+const canvas = document.getElementById("paintCanvas");
+const ctx = canvas.getContext("2d");
+
+let drawing = false;
+let tool = "brush";
+
+let undoStack = [];
+let redoStack = [];
+
+function resizeCanvas() {
+    const rect = canvas.getBoundingClientRect();
+
+    canvas.width = rect.width;
+    canvas.height = rect.height;
+
+    ctx.fillStyle = "white";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+}
+
+resizeCanvas();
+
+function getPosition(e) {
+
+    const rect = canvas.getBoundingClientRect();
+
+    return {
+        x: e.clientX - rect.left,
+        y: e.clientY - rect.top
+    };
+}
+
+function startDrawing(e) {
+
+    drawing = true;
+
+    undoStack.push(canvas.toDataURL());
+    redoStack = [];
+
+    const pos = getPosition(e);
+
+    ctx.beginPath();
+    ctx.moveTo(pos.x, pos.y);
+}
+
+function draw(e) {
+
+    if (!drawing) return;
+
+    const pos = getPosition(e);
+
+    let color = document.getElementById("colorPicker").value;
+    let size = document.getElementById("brushSize").value;
+
+    if (tool === "eraser") {
+        ctx.strokeStyle = "white";
+        ctx.lineWidth = size * 2;
+    } else {
+        ctx.strokeStyle = color;
+        ctx.lineWidth = size;
+    }
+
+    ctx.lineCap = "round";
+    ctx.lineJoin = "round";
+
+    ctx.lineTo(pos.x, pos.y);
+    ctx.stroke();
+}
+
+function stopDrawing() {
+    drawing = false;
+    ctx.closePath();
+}
+
+canvas.addEventListener("pointerdown", startDrawing);
+canvas.addEventListener("pointermove", draw);
+canvas.addEventListener("pointerup", stopDrawing);
+canvas.addEventListener("pointerleave", stopDrawing);
+
+function setTool(selectedTool) {
+    tool = selectedTool;
+}
+
+function clearCanvas() {
+
+    undoStack.push(canvas.toDataURL());
+
+    ctx.fillStyle = "white";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+}
+
+function undo() {
+
+    if (undoStack.length === 0) return;
+
+    redoStack.push(canvas.toDataURL());
+
+    const previous = undoStack.pop();
+
+    const image = new Image();
+
+    image.onload = function() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+    };
+
+    image.src = previous;
+}
+
+function redo() {
+
+    if (redoStack.length === 0) return;
+
+    undoStack.push(canvas.toDataURL());
+
+    const next = redoStack.pop();
+
+    const image = new Image();
+
+    image.onload = function() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+    };
+
+    image.src = next;
+}
+
+function savePainting() {
+
+    const link = document.createElement("a");
+
+    link.download = "my-painting.png";
+    link.href = canvas.toDataURL("image/png");
+
+    link.click();
+}
+
+</script>
+
+</body>
+</html>
