@@ -1,1952 +1,998 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Student Study Space - Games</title>
+
+<style>
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+
+    background:
+        radial-gradient(circle at 10% 20%, rgba(255,255,255,0.9), transparent 30%),
+        radial-gradient(circle at 90% 80%, rgba(210,225,255,0.8), transparent 35%),
+        linear-gradient(135deg, #eaf1ff, #f7f1ff, #eafaf5);
+
+    min-height: 100vh;
+    padding: 25px;
+    color: #222;
+}
+
+.container {
+    max-width: 1200px;
+    margin: auto;
+}
+
+/* HEADER */
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.header h1 {
+    font-size: 32px;
+}
+
+.header p {
+    margin-top: 5px;
+    color: #666;
+}
+
+.back-btn {
+    text-decoration: none;
+    background: #ffffff;
+    color: #333;
+    padding: 12px 20px;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+/* GAME GRID */
+
+.games-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 25px;
+}
+
+.game-card {
+    background: rgba(255,255,255,0.8);
+    backdrop-filter: blur(15px);
+
+    border-radius: 22px;
+    padding: 25px;
+
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+
+    text-align: center;
+}
+
+.game-card h2 {
+    margin-bottom: 8px;
+}
+
+.game-description {
+    color: #666;
+    margin-bottom: 15px;
+}
+
+/* COMMON BUTTON */
+
+button {
+    border: none;
+    padding: 10px 18px;
+    border-radius: 10px;
+    cursor: pointer;
+
+    background: #4f46e5;
+    color: white;
+
+    font-size: 14px;
+    margin: 4px;
+}
+
+button:hover {
+    opacity: 0.85;
+}
+
+.pause {
+    background: #f59e0b;
+}
 
-    <meta charset="UTF-8">
+.restart {
+    background: #ef4444;
+}
+
+/* =========================
+   SNAKE
+========================= */
+
+#snakeCanvas {
+    background: #111827;
+    border-radius: 15px;
+    width: 100%;
+    max-width: 420px;
+    height: 420px;
+    display: block;
+    margin: 15px auto;
+}
+
+.score {
+    font-weight: bold;
+    margin: 10px;
+}
 
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+/* =========================
+   MEMORY GAME
+========================= */
 
-    <title>Games | Student Study Space</title>
+.memory-board {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+
+    max-width: 360px;
+    margin: 15px auto;
+}
 
-    <style>
+.memory-card {
+    height: 75px;
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+    background: #6366f1;
+    color: transparent;
 
-        body {
+    border-radius: 12px;
 
-            font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
-            min-height: 100vh;
+    font-size: 30px;
+    cursor: pointer;
 
-            background:
-                radial-gradient(
-                    circle at 10% 20%,
-                    rgba(255,255,255,0.8),
-                    transparent 30%
-                ),
+    transition: 0.3s;
+}
 
-                radial-gradient(
-                    circle at 90% 80%,
-                    rgba(210,225,255,0.8),
-                    transparent 35%
-                ),
+.memory-card.flipped,
+.memory-card.matched {
+    background: white;
+    color: #222;
+}
 
-                linear-gradient(
-                    135deg,
-                    #eaf1ff,
-                    #f7f1ff,
-                    #eafaf5
-                );
+.memory-card.matched {
+    background: #bbf7d0;
+}
 
-            color: #243447;
+/* =========================
+   TARGET SHOOTER
+========================= */
 
-        }
+.target-area {
+    position: relative;
 
+    height: 350px;
+    max-width: 500px;
 
-        /* =========================
-           MAIN CONTAINER
-        ========================= */
+    margin: 15px auto;
 
-        .container {
+    background:
+        linear-gradient(
+            180deg,
+            #bfdbfe 0%,
+            #dbeafe 55%,
+            #bbf7d0 55%,
+            #86efac 100%
+        );
 
-            width: 92%;
+    border-radius: 15px;
+    overflow: hidden;
 
-            max-width: 1200px;
+    cursor: crosshair;
+}
 
-            margin: auto;
+.target {
+    position: absolute;
 
-            padding: 30px 0;
+    width: 55px;
+    height: 55px;
 
-        }
+    border-radius: 50%;
 
+    background:
+        radial-gradient(
+            circle,
+            white 0 15%,
+            red 16% 35%,
+            white 36% 55%,
+            red 56% 100%
+        );
 
-        /* =========================
-           HEADER
-        ========================= */
+    box-shadow: 0 4px 10px rgba(0,0,0,0.25);
 
-        .back-btn {
+    cursor: crosshair;
+}
 
-            display: inline-block;
+.target-info {
+    display: flex;
+    justify-content: center;
+    gap: 25px;
 
-            text-decoration: none;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
 
-            color: #243447;
+/* =========================
+   PING PONG
+========================= */
 
-            font-weight: bold;
+#pongCanvas {
+    background: #111827;
 
-            margin-bottom: 25px;
+    width: 100%;
+    max-width: 500px;
 
-        }
+    height: 300px;
 
+    border-radius: 15px;
 
-        header {
+    display: block;
+    margin: 15px auto;
+}
 
-            text-align: center;
+.pong-info {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
 
-            margin-bottom: 35px;
+    font-weight: bold;
+}
 
-        }
+/* =========================
+   RESPONSIVE
+========================= */
 
+@media(max-width: 800px) {
 
-        header h1 {
+    .games-grid {
+        grid-template-columns: 1fr;
+    }
 
-            font-size: 42px;
+    .header {
+        flex-direction: column;
+        gap: 15px;
+    }
 
-            margin-bottom: 10px;
+}
 
-        }
-
-
-        header p {
-
-            color: #667085;
-
-            font-size: 17px;
-
-        }
-
-
-        /* =========================
-           GAME CARDS
-        ========================= */
-
-        .games-grid {
-
-            display: grid;
-
-            grid-template-columns:
-                repeat(
-                    auto-fit,
-                    minmax(210px, 1fr)
-                );
-
-            gap: 22px;
-
-        }
-
-
-        .game-card {
-
-            background:
-                rgba(255,255,255,0.75);
-
-            backdrop-filter: blur(15px);
-
-            border: 1px solid
-                rgba(255,255,255,0.9);
-
-            border-radius: 22px;
-
-            padding: 30px 20px;
-
-            text-align: center;
-
-            cursor: pointer;
-
-            box-shadow:
-                0 12px 30px
-                rgba(40,50,80,0.10);
-
-            transition:
-                transform 0.25s,
-                box-shadow 0.25s;
-
-        }
-
-
-        .game-card:hover {
-
-            transform:
-                translateY(-8px);
-
-            box-shadow:
-                0 18px 35px
-                rgba(40,50,80,0.16);
-
-        }
-
-
-        .game-icon {
-
-            font-size: 58px;
-
-            margin-bottom: 15px;
-
-        }
-
-
-        .game-card h2 {
-
-            margin-bottom: 8px;
-
-        }
-
-
-        .game-card p {
-
-            color: #667085;
-
-        }
-
-
-        /* =========================
-           GAME AREA
-        ========================= */
-
-        #gameArea {
-
-            margin-top: 35px;
-
-            background:
-                rgba(255,255,255,0.82);
-
-            backdrop-filter: blur(15px);
-
-            border-radius: 25px;
-
-            padding: 30px;
-
-            min-height: 350px;
-
-            text-align: center;
-
-            box-shadow:
-                0 15px 40px
-                rgba(40,50,80,0.10);
-
-        }
-
-
-        #gameArea h2 {
-
-            margin-bottom: 10px;
-
-        }
-
-
-        /* =========================
-           BUTTONS
-        ========================= */
-
-        button {
-
-            font-family: inherit;
-
-        }
-
-
-        .game-controls {
-
-            display: flex;
-
-            justify-content: center;
-
-            flex-wrap: wrap;
-
-            gap: 10px;
-
-            margin-top: 20px;
-
-        }
-
-
-        .game-controls button {
-
-            border: none;
-
-            padding: 11px 20px;
-
-            border-radius: 10px;
-
-            background: #243447;
-
-            color: white;
-
-            cursor: pointer;
-
-            font-weight: bold;
-
-            transition: 0.2s;
-
-        }
-
-
-        .game-controls button:hover {
-
-            transform:
-                translateY(-2px);
-
-            opacity: 0.9;
-
-        }
-
-
-        .pause-button {
-
-            background: #d97706 !important;
-
-        }
-
-
-        .resume-button {
-
-            background: #15803d !important;
-
-        }
-
-
-        .restart-button {
-
-            background: #475569 !important;
-
-        }
-
-
-        /* =========================
-           SCORE
-        ========================= */
-
-        .score-board {
-
-            font-size: 20px;
-
-            font-weight: bold;
-
-            margin: 15px;
-
-        }
-
-
-        /* =========================
-           SNAKE
-        ========================= */
-
-        #snakeCanvas {
-
-            display: block;
-
-            margin: 20px auto;
-
-            max-width: 100%;
-
-            background:
-                linear-gradient(
-                    135deg,
-                    #f8fafc,
-                    #eef2f7
-                );
-
-            border:
-                3px solid #243447;
-
-            border-radius: 12px;
-
-        }
-
-
-        .snake-message {
-
-            font-weight: bold;
-
-            min-height: 25px;
-
-        }
-
-
-        /* =========================
-           BLOCK GAME
-        ========================= */
-
-        .block-board {
-
-            display: grid;
-
-            grid-template-columns:
-                repeat(6, 55px);
-
-            gap: 8px;
-
-            justify-content: center;
-
-            margin: 25px auto;
-
-        }
-
-
-        .block {
-
-            width: 55px;
-
-            height: 55px;
-
-            border: none;
-
-            border-radius: 10px;
-
-            background:
-                linear-gradient(
-                    145deg,
-                    #64748b,
-                    #334155
-                );
-
-            color: white;
-
-            font-size: 20px;
-
-            cursor: pointer;
-
-            transition: 0.2s;
-
-        }
-
-
-        .block:hover {
-
-            transform:
-                scale(1.08);
-
-        }
-
-
-        .block.removed {
-
-            opacity: 0;
-
-            transform:
-                scale(0);
-
-            pointer-events: none;
-
-        }
-
-
-        /* =========================
-           TIC TAC TOE
-        ========================= */
-
-        .tic-board {
-
-            display: grid;
-
-            grid-template-columns:
-                repeat(3, 90px);
-
-            gap: 8px;
-
-            justify-content: center;
-
-            margin: 25px auto;
-
-        }
-
-
-        .tic-cell {
-
-            width: 90px;
-
-            height: 90px;
-
-            border: none;
-
-            border-radius: 14px;
-
-            background: #f8fafc;
-
-            font-size: 38px;
-
-            font-weight: bold;
-
-            cursor: pointer;
-
-            box-shadow:
-                0 5px 15px
-                rgba(0,0,0,0.08);
-
-        }
-
-
-        .tic-cell:hover {
-
-            background: #e9eef5;
-
-        }
-
-
-        /* =========================
-           MEMORY GAME
-        ========================= */
-
-        .memory-board {
-
-            display: grid;
-
-            grid-template-columns:
-                repeat(4, 90px);
-
-            gap: 12px;
-
-            justify-content: center;
-
-            margin: 25px auto;
-
-        }
-
-
-        .memory-card {
-
-            width: 90px;
-
-            height: 90px;
-
-            border: none;
-
-            border-radius: 15px;
-
-            background:
-                linear-gradient(
-                    135deg,
-                    #334155,
-                    #64748b
-                );
-
-            color: white;
-
-            font-size: 35px;
-
-            cursor: pointer;
-
-            transition: 0.25s;
-
-        }
-
-
-        .memory-card:hover {
-
-            transform:
-                scale(1.05);
-
-        }
-
-
-        .memory-card.matched {
-
-            background: #dcfce7;
-
-            color: #166534;
-
-            cursor: default;
-
-        }
-
-
-        /* =========================
-           PAUSE OVERLAY
-        ========================= */
-
-        .paused-message {
-
-            display: none;
-
-            margin: 15px auto;
-
-            padding: 12px 20px;
-
-            width: fit-content;
-
-            border-radius: 10px;
-
-            background: #fff7ed;
-
-            color: #c2410c;
-
-            font-weight: bold;
-
-        }
-
-
-        /* =========================
-           MOBILE
-        ========================= */
-
-        @media(max-width:600px) {
-
-            header h1 {
-
-                font-size: 32px;
-
-            }
-
-
-            #gameArea {
-
-                padding: 20px;
-
-            }
-
-
-            .block-board {
-
-                grid-template-columns:
-                    repeat(6, 40px);
-
-                gap: 5px;
-
-            }
-
-
-            .block {
-
-                width: 40px;
-
-                height: 40px;
-
-            }
-
-
-            .tic-board {
-
-                grid-template-columns:
-                    repeat(3, 70px);
-
-            }
-
-
-            .tic-cell {
-
-                width: 70px;
-
-                height: 70px;
-
-                font-size: 30px;
-
-            }
-
-
-            .memory-board {
-
-                grid-template-columns:
-                    repeat(4, 65px);
-
-                gap: 7px;
-
-            }
-
-
-            .memory-card {
-
-                width: 65px;
-
-                height: 65px;
-
-                font-size: 27px;
-
-            }
-
-        }
-
-    </style>
-
+</style>
 </head>
-
 
 <body>
 
-
 <div class="container">
 
+    <!-- HEADER -->
 
-    <a href="../index.html"
-       class="back-btn">
+    <div class="header">
 
-        ← Back to Home
+        <div>
+            <h1>🎮 Student Games</h1>
+            <p>Take a short break and refresh your mind!</p>
+        </div>
 
-    </a>
+        <a href="../index.html" class="back-btn">
+            ← Back to Home
+        </a>
 
+    </div>
 
-    <header>
-
-        <h1>🎮 Games</h1>
-
-        <p>
-            Take a short break and enjoy some fun mini games.
-        </p>
-
-    </header>
-
-
-    <!-- GAME SELECTION -->
 
     <div class="games-grid">
 
 
-        <div class="game-card"
-             onclick="snakeGame()">
+        <!-- =================================================
+             GAME 1 : SNAKE
+        ================================================== -->
 
-            <div class="game-icon">
-                🐍
+        <div class="game-card">
+
+            <h2>🐍 Snake</h2>
+
+            <p class="game-description">
+                Eat the food and grow the snake.
+            </p>
+
+            <div class="score">
+                Score: <span id="snakeScore">0</span>
             </div>
 
-            <h2>Snake</h2>
+            <canvas
+                id="snakeCanvas"
+                width="420"
+                height="420">
+            </canvas>
 
-            <p>
-                Classic snake challenge
+            <button onclick="startSnake()">
+                ▶ Start
+            </button>
+
+            <button
+                class="pause"
+                onclick="pauseSnake()">
+                ⏸ Pause
+            </button>
+
+            <button
+                onclick="resumeSnake()">
+                ▶ Resume
+            </button>
+
+            <button
+                class="restart"
+                onclick="restartSnake()">
+                🔄 Restart
+            </button>
+
+            <p style="margin-top:10px;color:#666;">
+                Use Arrow Keys ⬆️⬇️⬅️➡️
             </p>
 
         </div>
 
 
-        <div class="game-card"
-             onclick="blockGame()">
+        <!-- =================================================
+             GAME 2 : MEMORY
+        ================================================== -->
 
-            <div class="game-icon">
-                🧱
+        <div class="game-card">
+
+            <h2>🧠 Memory Match</h2>
+
+            <p class="game-description">
+                Find all matching pairs.
+            </p>
+
+            <div class="score">
+                Moves: <span id="memoryMoves">0</span>
             </div>
 
-            <h2>Block Game</h2>
+            <div
+                id="memoryBoard"
+                class="memory-board">
+            </div>
 
-            <p>
-                Clear blocks and score
-            </p>
+            <button onclick="startMemory()">
+                ▶ Start
+            </button>
+
+            <button
+                class="pause"
+                onclick="pauseMemory()">
+                ⏸ Pause
+            </button>
+
+            <button
+                onclick="resumeMemory()">
+                ▶ Resume
+            </button>
+
+            <button
+                class="restart"
+                onclick="startMemory()">
+                🔄 Restart
+            </button>
 
         </div>
 
 
-        <div class="game-card"
-             onclick="ticTacToe()">
+        <!-- =================================================
+             GAME 3 : TARGET SHOOTER
+        ================================================== -->
 
-            <div class="game-icon">
-                ❌⭕
+        <div class="game-card">
+
+            <h2>🎯 Target Shooter</h2>
+
+            <p class="game-description">
+                Click the targets before time runs out!
+            </p>
+
+            <div class="target-info">
+
+                <span>
+                    Score:
+                    <span id="targetScore">0</span>
+                </span>
+
+                <span>
+                    Time:
+                    <span id="targetTime">30</span>s
+                </span>
+
             </div>
 
-            <h2>Tic-Tac-Toe</h2>
+            <div
+                id="targetArea"
+                class="target-area">
 
-            <p>
-                Challenge your opponent
-            </p>
+                <div
+                    id="target"
+                    class="target"
+                    style="display:none;">
+                </div>
+
+            </div>
+
+            <button onclick="startTargetGame()">
+                ▶ Start
+            </button>
+
+            <button
+                class="pause"
+                onclick="pauseTargetGame()">
+                ⏸ Pause
+            </button>
+
+            <button
+                onclick="resumeTargetGame()">
+                ▶ Resume
+            </button>
+
+            <button
+                class="restart"
+                onclick="startTargetGame()">
+                🔄 Restart
+            </button>
 
         </div>
 
 
-        <div class="game-card"
-             onclick="memoryGame()">
+        <!-- =================================================
+             GAME 4 : PING PONG
+        ================================================== -->
 
-            <div class="game-icon">
-                🧠
+        <div class="game-card">
+
+            <h2>🏓 Ping Pong</h2>
+
+            <p class="game-description">
+                Move your paddle and return the ball.
+            </p>
+
+            <div class="pong-info">
+
+                <span>
+                    You:
+                    <span id="playerScore">0</span>
+                </span>
+
+                <span>
+                    Computer:
+                    <span id="computerScore">0</span>
+                </span>
+
             </div>
 
-            <h2>Memory Game</h2>
+            <canvas
+                id="pongCanvas"
+                width="500"
+                height="300">
+            </canvas>
 
-            <p>
-                Match all the cards
+            <button onclick="startPong()">
+                ▶ Start
+            </button>
+
+            <button
+                class="pause"
+                onclick="pausePong()">
+                ⏸ Pause
+            </button>
+
+            <button
+                onclick="resumePong()">
+                ▶ Resume
+            </button>
+
+            <button
+                class="restart"
+                onclick="restartPong()">
+                🔄 Restart
+            </button>
+
+            <p style="margin-top:10px;color:#666;">
+                Move mouse or use ↑ ↓ keys
             </p>
 
         </div>
 
 
     </div>
-
-
-    <!-- GAME AREA -->
-
-    <div id="gameArea">
-
-        <h2>
-            Choose a Game 🎮
-        </h2>
-
-        <p>
-            Select any game above to start playing.
-        </p>
-
-    </div>
-
 
 </div>
 
 
 <script>
 
+/* =========================================================
+   SNAKE GAME
+========================================================= */
 
-/* =====================================================
-   GLOBAL VARIABLES
-===================================================== */
+const snakeCanvas =
+    document.getElementById("snakeCanvas");
+
+const snakeCtx =
+    snakeCanvas.getContext("2d");
+
+const snakeSize = 20;
+
+let snake;
+let snakeFood;
+
+let snakeDirection = "RIGHT";
+
+let snakeScore = 0;
 
 let snakeInterval = null;
 
 let snakePaused = false;
 
-let blockPaused = false;
 
-let memoryPaused = false;
+function createSnakeFood() {
 
+    snakeFood = {
 
-/* =====================================================
-   SNAKE GAME
-===================================================== */
+        x:
+            Math.floor(
+                Math.random() *
+                (snakeCanvas.width / snakeSize)
+            ) * snakeSize,
 
-function snakeGame() {
+        y:
+            Math.floor(
+                Math.random() *
+                (snakeCanvas.height / snakeSize)
+            ) * snakeSize
 
+    };
 
-    document.getElementById("gameArea").innerHTML = `
-
-        <h2>🐍 Snake Game</h2>
-
-        <div class="score-board">
-
-            Score:
-            <span id="snakeScore">
-                0
-            </span>
-
-        </div>
-
-        <canvas
-            id="snakeCanvas"
-            width="500"
-            height="500">
-        </canvas>
-
-        <div
-            id="snakePausedMessage"
-            class="paused-message">
-
-            ⏸ Game Paused
-
-        </div>
-
-        <div class="game-controls">
-
-            <button
-                class="pause-button"
-                onclick="pauseSnake()">
-
-                ⏸ Pause
-
-            </button>
-
-            <button
-                class="resume-button"
-                onclick="resumeSnake()">
-
-                ▶ Resume
-
-            </button>
-
-            <button
-                class="restart-button"
-                onclick="snakeGame()">
-
-                🔄 Restart
-
-            </button>
-
-        </div>
-
-        <p>
-            Use Arrow Keys to move the snake.
-        </p>
-
-        <p
-            id="snakeStatus"
-            class="snake-message">
-        </p>
-
-    `;
+}
 
 
-    startSnake();
+function drawSnakeGame() {
+
+    snakeCtx.fillStyle = "#111827";
+
+    snakeCtx.fillRect(
+        0,
+        0,
+        snakeCanvas.width,
+        snakeCanvas.height
+    );
+
+
+    /* FOOD */
+
+    snakeCtx.fillStyle = "#ef4444";
+
+    snakeCtx.beginPath();
+
+    snakeCtx.arc(
+        snakeFood.x + 10,
+        snakeFood.y + 10,
+        8,
+        0,
+        Math.PI * 2
+    );
+
+    snakeCtx.fill();
+
+
+    /* SNAKE */
+
+    snake.forEach((part, index) => {
+
+        snakeCtx.fillStyle =
+            index === 0
+            ? "#22c55e"
+            : "#86efac";
+
+        snakeCtx.fillRect(
+            part.x + 1,
+            part.y + 1,
+            snakeSize - 2,
+            snakeSize - 2
+        );
+
+    });
+
+}
+
+
+function moveSnake() {
+
+    if (snakePaused) return;
+
+    let head = {
+        x: snake[0].x,
+        y: snake[0].y
+    };
+
+
+    if (snakeDirection === "UP")
+        head.y -= snakeSize;
+
+    if (snakeDirection === "DOWN")
+        head.y += snakeSize;
+
+    if (snakeDirection === "LEFT")
+        head.x -= snakeSize;
+
+    if (snakeDirection === "RIGHT")
+        head.x += snakeSize;
+
+
+    /* WALL COLLISION */
+
+    if (
+        head.x < 0 ||
+        head.x >= snakeCanvas.width ||
+        head.y < 0 ||
+        head.y >= snakeCanvas.height
+    ) {
+
+        gameOverSnake();
+        return;
+
+    }
+
+
+    /* BODY COLLISION */
+
+    for (let part of snake) {
+
+        if (
+            head.x === part.x &&
+            head.y === part.y
+        ) {
+
+            gameOverSnake();
+            return;
+
+        }
+
+    }
+
+
+    snake.unshift(head);
+
+
+    /* FOOD */
+
+    if (
+        head.x === snakeFood.x &&
+        head.y === snakeFood.y
+    ) {
+
+        snakeScore += 10;
+
+        document.getElementById(
+            "snakeScore"
+        ).textContent = snakeScore;
+
+        createSnakeFood();
+
+    }
+    else {
+
+        snake.pop();
+
+    }
+
+
+    drawSnakeGame();
 
 }
 
 
 function startSnake() {
 
-
     clearInterval(snakeInterval);
 
-
-    const canvas =
-        document.getElementById(
-            "snakeCanvas"
-        );
-
-
-    const ctx =
-        canvas.getContext("2d");
-
-
-    const size = 20;
-
-
-    let snake = [
-
-        {
-            x: 240,
-            y: 240
-        },
-
-        {
-            x: 220,
-            y: 240
-        },
-
-        {
-            x: 200,
-            y: 240
-        }
-
+    snake = [
+        {x: 200, y: 200},
+        {x: 180, y: 200},
+        {x: 160, y: 200}
     ];
 
+    snakeDirection = "RIGHT";
 
-    let food =
-        createSnakeFood();
-
-
-    let direction = "RIGHT";
-
-
-    let nextDirection = "RIGHT";
-
-
-    let score = 0;
-
+    snakeScore = 0;
 
     snakePaused = false;
 
+    document.getElementById(
+        "snakeScore"
+    ).textContent = 0;
 
-    document.onkeydown =
-        function(event) {
+    createSnakeFood();
 
-
-            if (
-                event.key === "ArrowUp" &&
-                direction !== "DOWN"
-            ) {
-
-                nextDirection = "UP";
-
-            }
-
-
-            if (
-                event.key === "ArrowDown" &&
-                direction !== "UP"
-            ) {
-
-                nextDirection = "DOWN";
-
-            }
-
-
-            if (
-                event.key === "ArrowLeft" &&
-                direction !== "RIGHT"
-            ) {
-
-                nextDirection = "LEFT";
-
-            }
-
-
-            if (
-                event.key === "ArrowRight" &&
-                direction !== "LEFT"
-            ) {
-
-                nextDirection = "RIGHT";
-
-            }
-
-        };
-
-
-    function gameLoop() {
-
-
-        if (snakePaused)
-            return;
-
-
-        direction =
-            nextDirection;
-
-
-        let head = {
-
-            x: snake[0].x,
-
-            y: snake[0].y
-
-        };
-
-
-        if (direction === "UP")
-            head.y -= size;
-
-
-        if (direction === "DOWN")
-            head.y += size;
-
-
-        if (direction === "LEFT")
-            head.x -= size;
-
-
-        if (direction === "RIGHT")
-            head.x += size;
-
-
-        /* WALL COLLISION */
-
-        if (
-
-            head.x < 0 ||
-
-            head.x >= canvas.width ||
-
-            head.y < 0 ||
-
-            head.y >= canvas.height
-
-        ) {
-
-            snakeGameOver();
-
-            return;
-
-        }
-
-
-        /* BODY COLLISION */
-
-        for (
-            let part of snake
-        ) {
-
-            if (
-
-                head.x === part.x &&
-
-                head.y === part.y
-
-            ) {
-
-                snakeGameOver();
-
-                return;
-
-            }
-
-        }
-
-
-        snake.unshift(head);
-
-
-        /* FOOD */
-
-        if (
-
-            head.x === food.x &&
-
-            head.y === food.y
-
-        ) {
-
-            score++;
-
-
-            document.getElementById(
-                "snakeScore"
-            ).textContent = score;
-
-
-            food =
-                createSnakeFood();
-
-        }
-
-        else {
-
-            snake.pop();
-
-        }
-
-
-        drawSnake();
-
-    }
-
-
-    function drawSnake() {
-
-
-        ctx.clearRect(
-            0,
-            0,
-            canvas.width,
-            canvas.height
-        );
-
-
-        /* FOOD */
-
-        ctx.fillStyle =
-            "#ef4444";
-
-
-        ctx.beginPath();
-
-
-        ctx.arc(
-
-            food.x + 10,
-
-            food.y + 10,
-
-            9,
-
-            0,
-
-            Math.PI * 2
-
-        );
-
-
-        ctx.fill();
-
-
-        /* SNAKE */
-
-        snake.forEach(
-            function(part, index) {
-
-
-                ctx.fillStyle =
-                    index === 0
-                    ? "#172033"
-                    : "#52657a";
-
-
-                ctx.beginPath();
-
-
-                ctx.roundRect(
-
-                    part.x,
-
-                    part.y,
-
-                    18,
-
-                    18,
-
-                    5
-
-                );
-
-
-                ctx.fill();
-
-
-            }
-        );
-
-    }
-
-
-    function snakeGameOver() {
-
-
-        clearInterval(
-            snakeInterval
-        );
-
-
-        document.getElementById(
-            "snakeStatus"
-        ).textContent =
-
-            "🎮 Game Over! Final Score: "
-            + score;
-
-    }
-
+    drawSnakeGame();
 
     snakeInterval =
         setInterval(
-            gameLoop,
-            110
+            moveSnake,
+            100
         );
-
-
-    function createSnakeFood() {
-
-
-        return {
-
-            x:
-                Math.floor(
-                    Math.random() * 25
-                ) * 20,
-
-            y:
-                Math.floor(
-                    Math.random() * 25
-                ) * 20
-
-        };
-
-    }
 
 }
 
 
 function pauseSnake() {
 
-
     snakePaused = true;
-
-
-    const message =
-        document.getElementById(
-            "snakePausedMessage"
-        );
-
-
-    if (message)
-        message.style.display =
-            "block";
 
 }
 
 
 function resumeSnake() {
 
-
     snakePaused = false;
 
-
-    const message =
-        document.getElementById(
-            "snakePausedMessage"
-        );
+}
 
 
-    if (message)
-        message.style.display =
-            "none";
+function restartSnake() {
+
+    startSnake();
 
 }
 
 
-/* =====================================================
-   BLOCK GAME
-===================================================== */
+function gameOverSnake() {
 
-function blockGame() {
+    clearInterval(snakeInterval);
 
-
-    document.getElementById(
-        "gameArea"
-    ).innerHTML = `
-
-        <h2>🧱 Block Challenge</h2>
-
-        <div class="score-board">
-
-            Score:
-            <span id="blockScore">
-                0
-            </span>
-
-        </div>
-
-        <div
-            id="blockPausedMessage"
-            class="paused-message">
-
-            ⏸ Game Paused
-
-        </div>
-
-        <div
-            id="blockBoard"
-            class="block-board">
-        </div>
-
-        <div class="game-controls">
-
-            <button
-                class="pause-button"
-                onclick="pauseBlocks()">
-
-                ⏸ Pause
-
-            </button>
-
-            <button
-                class="resume-button"
-                onclick="resumeBlocks()">
-
-                ▶ Resume
-
-            </button>
-
-            <button
-                class="restart-button"
-                onclick="blockGame()">
-
-                🔄 Restart
-
-            </button>
-
-        </div>
-
-    `;
-
-
-    createBlockBoard();
-
-}
-
-
-function createBlockBoard() {
-
-
-    const board =
-        document.getElementById(
-            "blockBoard"
-        );
-
-
-    board.innerHTML = "";
-
-
-    blockPaused = false;
-
-
-    let score = 0;
-
-
-    for (
-        let i = 0;
-        i < 36;
-        i++
-    ) {
-
-
-        const block =
-            document.createElement(
-                "button"
-            );
-
-
-        block.className =
-            "block";
-
-
-        block.textContent =
-            "◆";
-
-
-        block.onclick =
-            function() {
-
-
-                if (blockPaused)
-                    return;
-
-
-                if (
-                    this.classList
-                    .contains("removed")
-                )
-                    return;
-
-
-                this.classList
-                    .add("removed");
-
-
-                score += 10;
-
-
-                document.getElementById(
-                    "blockScore"
-                ).textContent =
-                    score;
-
-
-                if (
-                    score === 360
-                ) {
-
-                    setTimeout(
-                        function() {
-
-                            alert(
-                                "🎉 You cleared all blocks!"
-                            );
-
-                        },
-                        100
-                    );
-
-                }
-
-            };
-
-
-        board.appendChild(
-            block
-        );
-
-    }
-
-}
-
-
-function pauseBlocks() {
-
-
-    blockPaused = true;
-
-
-    const message =
-        document.getElementById(
-            "blockPausedMessage"
-        );
-
-
-    if (message)
-        message.style.display =
-            "block";
-
-}
-
-
-function resumeBlocks() {
-
-
-    blockPaused = false;
-
-
-    const message =
-        document.getElementById(
-            "blockPausedMessage"
-        );
-
-
-    if (message)
-        message.style.display =
-            "none";
-
-}
-
-
-/* =====================================================
-   TIC TAC TOE
-===================================================== */
-
-function ticTacToe() {
-
-
-    document.getElementById(
-        "gameArea"
-    ).innerHTML = `
-
-        <h2>❌⭕ Tic-Tac-Toe</h2>
-
-        <h3 id="ticStatus">
-
-            Player X's Turn
-
-        </h3>
-
-        <div
-            id="ticBoard"
-            class="tic-board">
-        </div>
-
-        <div class="game-controls">
-
-            <button
-                class="restart-button"
-                onclick="ticTacToe()">
-
-                🔄 Restart
-
-            </button>
-
-        </div>
-
-    `;
-
-
-    let cells =
-        Array(9).fill("");
-
-
-    let player = "X";
-
-
-    let gameOver = false;
-
-
-    const board =
-        document.getElementById(
-            "ticBoard"
-        );
-
-
-    const status =
-        document.getElementById(
-            "ticStatus"
-        );
-
-
-    for (
-        let i = 0;
-        i < 9;
-        i++
-    ) {
-
-
-        const cell =
-            document.createElement(
-                "button"
-            );
-
-
-        cell.className =
-            "tic-cell";
-
-
-        cell.onclick =
-            function() {
-
-
-                if (
-                    cells[i] !== "" ||
-                    gameOver
-                )
-                    return;
-
-
-                cells[i] =
-                    player;
-
-
-                cell.textContent =
-                    player;
-
-
-                if (
-                    checkWinner()
-                ) {
-
-
-                    status.textContent =
-
-                        "🎉 Player "
-                        + player
-                        + " Wins!";
-
-
-                    gameOver =
-                        true;
-
-
-                    return;
-
-                }
-
-
-                if (
-                    !cells.includes("")
-                ) {
-
-
-                    status.textContent =
-                        "🤝 It's a Draw!";
-
-
-                    gameOver =
-                        true;
-
-
-                    return;
-
-                }
-
-
-                player =
-                    player === "X"
-                    ? "O"
-                    : "X";
-
-
-                status.textContent =
-
-                    "Player "
-                    + player
-                    + "'s Turn";
-
-            };
-
-
-        board.appendChild(
-            cell
-        );
-
-    }
-
-
-    function checkWinner() {
-
-
-        const combinations = [
-
-            [0,1,2],
-
-            [3,4,5],
-
-            [6,7,8],
-
-            [0,3,6],
-
-            [1,4,7],
-
-            [2,5,8],
-
-            [0,4,8],
-
-            [2,4,6]
-
-        ];
-
-
-        return combinations.some(
-            function(combo) {
-
-
-                const a = combo[0];
-
-                const b = combo[1];
-
-                const c = combo[2];
-
-
-                return (
-
-                    cells[a] &&
-
-                    cells[a] === cells[b] &&
-
-                    cells[a] === cells[c]
-
-                );
-
-            }
-        );
-
-    }
-
-}
-
-
-/* =====================================================
-   MEMORY GAME
-===================================================== */
-
-function memoryGame() {
-
-
-    document.getElementById(
-        "gameArea"
-    ).innerHTML = `
-
-        <h2>🧠 Memory Match</h2>
-
-        <div class="score-board">
-
-            Moves:
-            <span id="memoryMoves">
-                0
-            </span>
-
-        </div>
-
-        <div
-            id="memoryPausedMessage"
-            class="paused-message">
-
-            ⏸ Game Paused
-
-        </div>
-
-        <div
-            id="memoryBoard"
-            class="memory-board">
-        </div>
-
-        <div class="game-controls">
-
-            <button
-                class="pause-button"
-                onclick="pauseMemory()">
-
-                ⏸ Pause
-
-            </button>
-
-            <button
-                class="resume-button"
-                onclick="resumeMemory()">
-
-                ▶ Resume
-
-            </button>
-
-            <button
-                class="restart-button"
-                onclick="memoryGame()">
-
-                🔄 Restart
-
-            </button>
-
-        </div>
-
-    `;
-
-
-    const symbols = [
-
-        "🌟","🌟",
-
-        "🍎","🍎",
-
-        "🚀","🚀",
-
-        "🐶","🐶",
-
-        "🌈","🌈",
-
-        "⚽","⚽"
-
-    ];
-
-
-    symbols.sort(
-        () =>
-            Math.random() - 0.5
+    alert(
+        "Game Over! Your score: " +
+        snakeScore
     );
 
-
-    const board =
-        document.getElementById(
-            "memoryBoard"
-        );
+}
 
 
-    let firstCard = null;
+document.addEventListener(
+    "keydown",
+    function(event) {
 
-    let secondCard = null;
+        if (
+            event.key === "ArrowUp" &&
+            snakeDirection !== "DOWN"
+        )
+            snakeDirection = "UP";
 
-    let lockBoard = false;
 
-    let moves = 0;
+        if (
+            event.key === "ArrowDown" &&
+            snakeDirection !== "UP"
+        )
+            snakeDirection = "DOWN";
+
+
+        if (
+            event.key === "ArrowLeft" &&
+            snakeDirection !== "RIGHT"
+        )
+            snakeDirection = "LEFT";
+
+
+        if (
+            event.key === "ArrowRight" &&
+            snakeDirection !== "LEFT"
+        )
+            snakeDirection = "RIGHT";
+
+    }
+);
+
+
+/* =========================================================
+   MEMORY GAME
+========================================================= */
+
+const memoryBoard =
+    document.getElementById("memoryBoard");
+
+let memoryCards = [];
+
+let firstCard = null;
+let secondCard = null;
+
+let memoryLocked = false;
+
+let memoryMoves = 0;
+
+let memoryPaused = false;
+
+
+const emojis = [
+    "🍎",
+    "🍌",
+    "🍓",
+    "🍇",
+    "🍉",
+    "🥝"
+];
+
+
+function startMemory() {
+
+    memoryBoard.innerHTML = "";
+
+    memoryMoves = 0;
+
+    firstCard = null;
+    secondCard = null;
+
+    memoryLocked = false;
 
     memoryPaused = false;
 
+    document.getElementById(
+        "memoryMoves"
+    ).textContent = 0;
 
-    symbols.forEach(
-        function(symbol) {
 
+    memoryCards =
+        [...emojis, ...emojis]
+        .sort(
+            () => Math.random() - 0.5
+        );
+
+
+    memoryCards.forEach(
+        (emoji, index) => {
 
             const card =
-                document.createElement(
-                    "button"
-                );
-
+                document.createElement("div");
 
             card.className =
                 "memory-card";
 
+            card.dataset.value = emoji;
 
-            card.textContent =
-                "?";
+            card.textContent = emoji;
 
-
-            card.dataset.symbol =
-                symbol;
-
+            card.dataset.index = index;
 
             card.onclick =
-                function() {
+                () => flipMemoryCard(card);
 
-
-                    if (
-
-                        memoryPaused ||
-
-                        lockBoard ||
-
-                        this === firstCard ||
-
-                        this.classList
-                            .contains("matched")
-
-                    )
-                        return;
-
-
-                    this.textContent =
-                        symbol;
-
-
-                    if (!firstCard) {
-
-                        firstCard =
-                            this;
-
-                        return;
-
-                    }
-
-
-                    secondCard =
-                        this;
-
-
-                    moves++;
-
-
-                    document.getElementById(
-                        "memoryMoves"
-                    ).textContent =
-                        moves;
-
-
-                    if (
-
-                        firstCard.dataset
-                            .symbol ===
-
-                        secondCard.dataset
-                            .symbol
-
-                    ) {
-
-
-                        firstCard.classList
-                            .add("matched");
-
-
-                        secondCard.classList
-                            .add("matched");
-
-
-                        resetCards();
-
-
-                        const matched =
-                            document
-                            .querySelectorAll(
-                                ".memory-card.matched"
-                            )
-                            .length;
-
-
-                        if (
-                            matched ===
-                            symbols.length
-                        ) {
-
-
-                            setTimeout(
-                                function() {
-
-                                    alert(
-
-                                        "🎉 You completed the Memory Game in "
-                                        + moves
-                                        + " moves!"
-
-                                    );
-
-                                },
-                                300
-                            );
-
-                        }
-
-                    }
-
-                    else {
-
-
-                        lockBoard =
-                            true;
-
-
-                        setTimeout(
-                            function() {
-
-
-                                if (
-                                    firstCard
-                                )
-                                    firstCard
-                                        .textContent =
-                                        "?";
-
-
-                                if (
-                                    secondCard
-                                )
-                                    secondCard
-                                        .textContent =
-                                        "?";
-
-
-                                resetCards();
-
-
-                            },
-                            800
-                        );
-
-                    }
-
-                };
-
-
-            board.appendChild(
-                card
-            );
+            memoryBoard.appendChild(card);
 
         }
     );
 
+}
 
-    function resetCards() {
 
+function flipMemoryCard(card) {
+
+    if (memoryPaused)
+        return;
+
+    if (memoryLocked)
+        return;
+
+    if (card.classList.contains("flipped"))
+        return;
+
+    if (card.classList.contains("matched"))
+        return;
+
+
+    card.classList.add("flipped");
+
+
+    if (!firstCard) {
+
+        firstCard = card;
+
+        return;
+
+    }
+
+
+    secondCard = card;
+
+    memoryMoves++;
+
+    document.getElementById(
+        "memoryMoves"
+    ).textContent = memoryMoves;
+
+
+    if (
+        firstCard.dataset.value ===
+        secondCard.dataset.value
+    ) {
+
+        firstCard.classList.add("matched");
+
+        secondCard.classList.add("matched");
 
         firstCard = null;
 
         secondCard = null;
 
-        lockBoard = false;
+
+        checkMemoryWin();
+
+    }
+    else {
+
+        memoryLocked = true;
+
+        setTimeout(
+            () => {
+
+                firstCard.classList.remove(
+                    "flipped"
+                );
+
+                secondCard.classList.remove(
+                    "flipped"
+                );
+
+                firstCard = null;
+
+                secondCard = null;
+
+                memoryLocked = false;
+
+            },
+            800
+        );
+
+    }
+
+}
+
+
+function checkMemoryWin() {
+
+    const matched =
+        document.querySelectorAll(
+            ".memory-card.matched"
+        );
+
+
+    if (matched.length === memoryCards.length) {
+
+        setTimeout(
+            () => {
+
+                alert(
+                    "🎉 You completed the Memory Game in " +
+                    memoryMoves +
+                    " moves!"
+                );
+
+            },
+            300
+        );
 
     }
 
@@ -1955,45 +1001,698 @@ function memoryGame() {
 
 function pauseMemory() {
 
-
     memoryPaused = true;
-
-
-    const message =
-        document.getElementById(
-            "memoryPausedMessage"
-        );
-
-
-    if (message)
-        message.style.display =
-            "block";
 
 }
 
 
 function resumeMemory() {
 
-
     memoryPaused = false;
-
-
-    const message =
-        document.getElementById(
-            "memoryPausedMessage"
-        );
-
-
-    if (message)
-        message.style.display =
-            "none";
 
 }
 
 
+/* =========================================================
+   TARGET SHOOTER
+========================================================= */
+
+const targetArea =
+    document.getElementById("targetArea");
+
+const target =
+    document.getElementById("target");
+
+let targetScore = 0;
+
+let targetTime = 30;
+
+let targetTimer = null;
+
+let targetPaused = false;
+
+
+function moveTarget() {
+
+    if (targetPaused)
+        return;
+
+
+    const maxX =
+        targetArea.clientWidth -
+        target.offsetWidth;
+
+
+    const maxY =
+        targetArea.clientHeight -
+        target.offsetHeight;
+
+
+    const x =
+        Math.random() * maxX;
+
+    const y =
+        Math.random() * maxY;
+
+
+    target.style.left =
+        x + "px";
+
+    target.style.top =
+        y + "px";
+
+}
+
+
+function startTargetGame() {
+
+    clearInterval(targetTimer);
+
+    targetScore = 0;
+
+    targetTime = 30;
+
+    targetPaused = false;
+
+
+    document.getElementById(
+        "targetScore"
+    ).textContent = 0;
+
+    document.getElementById(
+        "targetTime"
+    ).textContent = 30;
+
+
+    target.style.display =
+        "block";
+
+
+    moveTarget();
+
+
+    targetTimer =
+        setInterval(
+            () => {
+
+                if (targetPaused)
+                    return;
+
+
+                targetTime--;
+
+
+                document.getElementById(
+                    "targetTime"
+                ).textContent =
+                    targetTime;
+
+
+                moveTarget();
+
+
+                if (targetTime <= 0) {
+
+                    clearInterval(targetTimer);
+
+                    target.style.display =
+                        "none";
+
+
+                    alert(
+                        "🎯 Time Up! Your score: " +
+                        targetScore
+                    );
+
+                }
+
+            },
+            1000
+        );
+
+}
+
+
+target.onclick =
+    function(event) {
+
+        if (targetPaused)
+            return;
+
+
+        event.stopPropagation();
+
+
+        targetScore++;
+
+
+        document.getElementById(
+            "targetScore"
+        ).textContent =
+            targetScore;
+
+
+        moveTarget();
+
+    };
+
+
+function pauseTargetGame() {
+
+    targetPaused = true;
+
+}
+
+
+function resumeTargetGame() {
+
+    targetPaused = false;
+
+}
+
+
+targetArea.onclick =
+    function() {
+
+        if (!targetPaused && targetTime > 0) {
+
+            /* Missed shot */
+
+            if (targetScore > 0) {
+
+                targetScore--;
+
+                document.getElementById(
+                    "targetScore"
+                ).textContent =
+                    targetScore;
+
+            }
+
+        }
+
+    };
+
+
+/* =========================================================
+   PING PONG
+========================================================= */
+
+const pongCanvas =
+    document.getElementById("pongCanvas");
+
+const pongCtx =
+    pongCanvas.getContext("2d");
+
+
+let player = {
+
+    x: 20,
+    y: 120,
+
+    width: 12,
+    height: 60,
+
+    speed: 7
+
+};
+
+
+let computer = {
+
+    x: 468,
+    y: 120,
+
+    width: 12,
+    height: 60,
+
+    speed: 4
+
+};
+
+
+let ball = {
+
+    x: 250,
+    y: 150,
+
+    radius: 8,
+
+    speedX: 5,
+    speedY: 3
+
+};
+
+
+let playerScore = 0;
+
+let computerScore = 0;
+
+let pongRunning = false;
+
+let pongPaused = false;
+
+let pongAnimation;
+
+
+function drawPong() {
+
+    /* BACKGROUND */
+
+    pongCtx.fillStyle = "#111827";
+
+    pongCtx.fillRect(
+        0,
+        0,
+        pongCanvas.width,
+        pongCanvas.height
+    );
+
+
+    /* CENTER LINE */
+
+    pongCtx.strokeStyle =
+        "#374151";
+
+    pongCtx.setLineDash([
+        8,
+        8
+    ]);
+
+    pongCtx.beginPath();
+
+    pongCtx.moveTo(
+        pongCanvas.width / 2,
+        0
+    );
+
+    pongCtx.lineTo(
+        pongCanvas.width / 2,
+        pongCanvas.height
+    );
+
+    pongCtx.stroke();
+
+    pongCtx.setLineDash([]);
+
+
+    /* PLAYER */
+
+    pongCtx.fillStyle =
+        "#60a5fa";
+
+    pongCtx.fillRect(
+        player.x,
+        player.y,
+        player.width,
+        player.height
+    );
+
+
+    /* COMPUTER */
+
+    pongCtx.fillStyle =
+        "#f87171";
+
+    pongCtx.fillRect(
+        computer.x,
+        computer.y,
+        computer.width,
+        computer.height
+    );
+
+
+    /* BALL */
+
+    pongCtx.fillStyle =
+        "#ffffff";
+
+    pongCtx.beginPath();
+
+    pongCtx.arc(
+        ball.x,
+        ball.y,
+        ball.radius,
+        0,
+        Math.PI * 2
+    );
+
+    pongCtx.fill();
+
+}
+
+
+function updatePong() {
+
+    if (!pongRunning)
+        return;
+
+    if (pongPaused) {
+
+        drawPong();
+
+        pongAnimation =
+            requestAnimationFrame(
+                updatePong
+            );
+
+        return;
+
+    }
+
+
+    /* BALL */
+
+    ball.x += ball.speedX;
+
+    ball.y += ball.speedY;
+
+
+    /* TOP/BOTTOM */
+
+    if (
+        ball.y -
+        ball.radius <= 0 ||
+
+        ball.y +
+        ball.radius >=
+        pongCanvas.height
+    ) {
+
+        ball.speedY *= -1;
+
+    }
+
+
+    /* PLAYER COLLISION */
+
+    if (
+        ball.x -
+        ball.radius <=
+        player.x +
+        player.width &&
+
+        ball.y >= player.y &&
+
+        ball.y <=
+        player.y +
+        player.height
+    ) {
+
+        ball.speedX =
+            Math.abs(ball.speedX);
+
+        ball.speedX += 0.3;
+
+    }
+
+
+    /* COMPUTER COLLISION */
+
+    if (
+        ball.x +
+        ball.radius >=
+        computer.x &&
+
+        ball.y >= computer.y &&
+
+        ball.y <=
+        computer.y +
+        computer.height
+    ) {
+
+        ball.speedX =
+            -Math.abs(ball.speedX);
+
+    }
+
+
+    /* COMPUTER AI */
+
+    const computerCenter =
+        computer.y +
+        computer.height / 2;
+
+
+    if (
+        computerCenter <
+        ball.y
+    ) {
+
+        computer.y +=
+            computer.speed;
+
+    }
+    else {
+
+        computer.y -=
+            computer.speed;
+
+    }
+
+
+    /* LIMIT COMPUTER */
+
+    computer.y =
+        Math.max(
+            0,
+            Math.min(
+                pongCanvas.height -
+                computer.height,
+                computer.y
+            )
+        );
+
+
+    /* PLAYER SCORE */
+
+    if (
+        ball.x < 0
+    ) {
+
+        computerScore++;
+
+        document.getElementById(
+            "computerScore"
+        ).textContent =
+            computerScore;
+
+        resetBall();
+
+    }
+
+
+    /* COMPUTER SCORE */
+
+    if (
+        ball.x >
+        pongCanvas.width
+    ) {
+
+        playerScore++;
+
+        document.getElementById(
+            "playerScore"
+        ).textContent =
+            playerScore;
+
+        resetBall();
+
+    }
+
+
+    /* WIN */
+
+    if (
+        playerScore >= 5 ||
+        computerScore >= 5
+    ) {
+
+        pongRunning = false;
+
+        alert(
+            playerScore >= 5
+            ? "🏆 You Win!"
+            : "Computer Wins!"
+        );
+
+    }
+
+
+    drawPong();
+
+
+    pongAnimation =
+        requestAnimationFrame(
+            updatePong
+        );
+
+}
+
+
+function resetBall() {
+
+    ball.x =
+        pongCanvas.width / 2;
+
+    ball.y =
+        pongCanvas.height / 2;
+
+
+    ball.speedX =
+        Math.random() > 0.5
+        ? 5
+        : -5;
+
+
+    ball.speedY =
+        (Math.random() * 4) - 2;
+
+}
+
+
+function startPong() {
+
+    playerScore = 0;
+
+    computerScore = 0;
+
+    pongPaused = false;
+
+    pongRunning = true;
+
+
+    document.getElementById(
+        "playerScore"
+    ).textContent = 0;
+
+    document.getElementById(
+        "computerScore"
+    ).textContent = 0;
+
+
+    player.y = 120;
+
+    computer.y = 120;
+
+
+    resetBall();
+
+
+    cancelAnimationFrame(
+        pongAnimation
+    );
+
+
+    updatePong();
+
+}
+
+
+function pausePong() {
+
+    pongPaused = true;
+
+}
+
+
+function resumePong() {
+
+    pongPaused = false;
+
+}
+
+
+function restartPong() {
+
+    startPong();
+
+}
+
+
+/* KEYBOARD CONTROL */
+
+document.addEventListener(
+    "keydown",
+    function(event) {
+
+        if (
+            event.key === "ArrowUp"
+        ) {
+
+            player.y -=
+                player.speed;
+
+        }
+
+
+        if (
+            event.key === "ArrowDown"
+        ) {
+
+            player.y +=
+                player.speed;
+
+        }
+
+
+        player.y =
+            Math.max(
+                0,
+                Math.min(
+                    pongCanvas.height -
+                    player.height,
+                    player.y
+                )
+            );
+
+    }
+);
+
+
+/* MOUSE CONTROL */
+
+pongCanvas.addEventListener(
+    "mousemove",
+    function(event) {
+
+        const rect =
+            pongCanvas.getBoundingClientRect();
+
+
+        const mouseY =
+            event.clientY -
+            rect.top;
+
+
+        player.y =
+            mouseY -
+            player.height / 2;
+
+
+        player.y =
+            Math.max(
+                0,
+                Math.min(
+                    pongCanvas.height -
+                    player.height,
+                    player.y
+                )
+            );
+
+    }
+);
+
+
+/* INITIAL DISPLAY */
+
+drawPong();
+
+startSnake();
+
+startMemory();
+
 </script>
 
-
 </body>
-
 </html>
