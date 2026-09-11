@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Games - Student Study Space</title>
+
+    <link rel="stylesheet" href="../styles.css">
+
+    <style>
+
+        .games-container {
+            max-width: 1100px;
+            margin: 30px auto;
+            padding: 20px;
+        }
+
+        .games-grid {
+            display: grid;
+            grid-template-columns:
+                repeat(auto-fit, minmax(200px, 1fr));
+
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .game-card {
+            background: white;
+            padding: 35px 20px;
+            text-align: center;
+            border-radius: 18px;
+            cursor: pointer;
+            box-shadow:
+                0 4px 12px rgba(0,0,0,0.08);
+        }
+
+        .game-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .game-icon {
+            font-size: 55px;
+        }
+
+        #gameArea {
+            margin-top: 30px;
+            padding: 25px;
+            background: white;
+            border-radius: 15px;
+            text-align: center;
+            min-height: 200px;
+        }
+
+        button {
+            padding: 10px 18px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 5px;
+        }
+
+        #snakeCanvas {
+            border: 2px solid #222;
+            background: #f5f5f5;
+        }
+
+        .board {
+            display: grid;
+            grid-template-columns: repeat(3, 80px);
+            gap: 5px;
+            justify-content: center;
+        }
+
+        .cell {
+            width: 80px;
+            height: 80px;
+            font-size: 35px;
+            background: #eee;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="games-container">
+
+    <a href="../index.html">← Back to Home</a>
+
+    <h1>🎮 Games</h1>
+
+    <p>Take a short break and enjoy some mini games.</p>
+
+    <div class="games-grid">
+
+        <div class="game-card" onclick="snakeGame()">
+            <div class="game-icon">🐍</div>
+            <h2>Snake</h2>
+            <p>Classic Snake Game</p>
+        </div>
+
+        <div class="game-card" onclick="blockGame()">
+            <div class="game-icon">🧱</div>
+            <h2>Block Game</h2>
+            <p>Clear the blocks</p>
+        </div>
+
+        <div class="game-card" onclick="ticTacToe()">
+            <div class="game-icon">❌⭕</div>
+            <h2>Tic-Tac-Toe</h2>
+            <p>Play against yourself</p>
+        </div>
+
+        <div class="game-card" onclick="memoryGame()">
+            <div class="game-icon">🧠</div>
+            <h2>Memory Game</h2>
+            <p>Test your memory</p>
+        </div>
+
+    </div>
+
+    <div id="gameArea">
+
+        <h2>Choose a game 🎮</h2>
+
+        <p>Select one of the games above to start.</p>
+
+    </div>
+
+</div>
+
+
+<script>
+
+/* =========================
+   SNAKE GAME
+========================= */
+
+function snakeGame() {
+
+    document.getElementById("gameArea").innerHTML = `
+
+        <h2>🐍 Snake Game</h2>
+
+        <p>Use Arrow Keys to move.</p>
+
+        <canvas id="snakeCanvas"
+                width="400"
+                height="400">
+        </canvas>
+
+        <p>Score: <span id="score">0</span></p>
+
+    `;
+
+    const canvas =
+        document.getElementById("snakeCanvas");
+
+    const ctx = canvas.getContext("2d");
+
+    let snake = [
+        {x: 200, y: 200}
+    ];
+
+    let food = {
+        x: 100,
+        y: 100
+    };
+
+    let direction = "RIGHT";
+
+    let score = 0;
+
+    document.onkeydown = function(e) {
+
+        if (e.key === "ArrowUp" &&
+            direction !== "DOWN") {
+
+            direction = "UP";
+        }
+
+        if (e.key === "ArrowDown" &&
+            direction !== "UP") {
+
+            direction = "DOWN";
+        }
+
+        if (e.key === "ArrowLeft" &&
+            direction !== "RIGHT") {
+
+            direction = "LEFT";
+        }
+
+        if (e.key === "ArrowRight" &&
+            direction !== "LEFT") {
+
+            direction = "RIGHT";
+        }
+
+    };
+
+    function gameLoop() {
+
+        ctx.clearRect(
+            0,
+            0,
+            canvas.width,
+            canvas.height
+        );
+
+        let head = {
+            x: snake[0].x,
+            y: snake[0].y
+        };
+
+        if (direction === "UP")
+            head.y -= 20;
+
+        if (direction === "DOWN")
+            head.y += 20;
+
+        if (direction === "LEFT")
+            head.x -= 20;
+
+        if (direction === "RIGHT")
+            head.x += 20;
+
+        if (
+            head.x < 0 ||
+            head.x >= 400 ||
+            head.y < 0 ||
+            head.y >= 400
+        ) {
+
+            alert("Game Over! Score: " + score);
+
+            snake = [
+                {x: 200, y: 200}
+            ];
+
+            score = 0;
+
+            return;
+        }
+
+        snake.unshift(head);
+
+        if (
+            head.x === food.x &&
+            head.y === food.y
+        ) {
+
+            score++;
+
+            document.getElementById("score")
+                .textContent = score;
+
+            food = {
+                x: Math.floor(Math.random() * 20) * 20,
+                y: Math.floor(Math.random() * 20) * 20
+            };
+
+        } else {
+
+            snake.pop();
+
+        }
+
+        snake.forEach(part => {
+
+            ctx.fillStyle = "#222";
+
+            ctx.fillRect(
+                part.x,
+                part.y,
+                18,
+                18
+            );
+
+        });
+
+        ctx.fillStyle = "red";
+
+        ctx.fillRect(
+            food.x,
+            food.y,
+            18,
+            18
+        );
+
+    }
+
+    setInterval(gameLoop, 120);
+}
+
+
+/* =========================
+   BLOCK GAME
+========================= */
+
+function blockGame() {
+
+    document.getElementById("gameArea").innerHTML = `
+
+        <h2>🧱 Block Game</h2>
+
+        <p>Click the blocks to clear them.</p>
+
+        <button onclick="createBlocks()">
+            Start Game
+        </button>
+
+        <div id="blocks"></div>
+
+    `;
+
+    createBlocks();
+}
+
+function createBlocks() {
+
+    const container =
+        document.getElementById("blocks");
+
+    if (!container) return;
+
+    container.innerHTML = "";
+
+    for (let i = 0; i < 20; i++) {
+
+        const block =
+            document.createElement("button");
+
+        block.textContent = "🧱";
+
+        block.style.fontSize = "25px";
+
+        block.onclick = function() {
+
+            this.style.visibility = "hidden";
+
+        };
+
+        container.appendChild(block);
+    }
+}
+
+
+/* =========================
+   TIC TAC TOE
+========================= */
+
+function ticTacToe() {
+
+    document.getElementById("gameArea").innerHTML = `
+
+        <h2>❌⭕ Tic-Tac-Toe</h2>
+
+        <p>Player X starts.</p>
+
+        <div class="board" id="board"></div>
+
+        <button onclick="ticTacToe()">
+            Restart
+        </button>
+
+    `;
+
+    let board = document.getElementById("board");
+
+    let currentPlayer = "X";
+
+    let cells = Array(9).fill("");
+
+    for (let i = 0; i < 9; i++) {
+
+        const cell =
+            document.createElement("div");
+
+        cell.className = "cell";
+
+        cell.onclick = function() {
+
+            if (cells[i] !== "") return;
+
+            cells[i] = currentPlayer;
+
+            cell.textContent = currentPlayer;
+
+            if (checkWinner()) {
+
+                setTimeout(() => {
+
+                    alert(
+                        "Player " +
+                        currentPlayer +
+                        " wins!"
+                    );
+
+                    ticTacToe();
+
+                }, 100);
+
+                return;
+            }
+
+            currentPlayer =
+                currentPlayer === "X"
+                ? "O"
+                : "X";
+        };
+
+        board.appendChild(cell);
+    }
+
+    function checkWinner() {
+
+        const wins = [
+
+            [0,1,2],
+            [3,4,5],
+            [6,7,8],
+
+            [0,3,6],
+            [1,4,7],
+            [2,5,8],
+
+            [0,4,8],
+            [2,4,6]
+
+        ];
+
+        return wins.some(
+            combination => {
+
+                const [a,b,c] =
+                    combination;
+
+                return (
+                    cells[a] &&
+                    cells[a] === cells[b] &&
+                    cells[a] === cells[c]
+                );
+
+            }
+        );
+    }
+
+}
+
+
+/* =========================
+   MEMORY GAME
+========================= */
+
+function memoryGame() {
+
+    document.getElementById("gameArea").innerHTML = `
+
+        <h2>🧠 Memory Game</h2>
+
+        <p>Find the matching pairs.</p>
+
+        <div id="memoryBoard"
+             class="board">
+        </div>
+
+    `;
+
+    const emojis = [
+        "🍎","🍎",
+        "🌟","🌟",
+        "🐶","🐶",
+        "🚀","🚀"
+    ];
+
+    emojis.sort(
+        () => Math.random() - 0.5
+    );
+
+    let first = null;
+
+    let second = null;
+
+    let lock = false;
+
+    const board =
+        document.getElementById(
+            "memoryBoard"
+        );
+
+    emojis.forEach(emoji => {
+
+        const card =
+            document.createElement("div");
+
+        card.className = "cell";
+
+        card.textContent = "?";
+
+        card.onclick = function() {
+
+            if (lock ||
+                card.textContent !== "?")
+                return;
+
+            card.textContent = emoji;
+
+            if (!first) {
+
+                first = card;
+
+            } else {
+
+                second = card;
+
+                lock = true;
+
+                if (
+                    first.textContent ===
+                    second.textContent
+                ) {
+
+                    first = null;
+                    second = null;
+                    lock = false;
+
+                } else {
+
+                    setTimeout(() => {
+
+                        first.textContent = "?";
+                        second.textContent = "?";
+
+                        first = null;
+                        second = null;
+
+                        lock = false;
+
+                    }, 800);
+                }
+            }
+        };
+
+        board.appendChild(card);
+
+    });
+
+}
+
+</script>
+
+</body>
+</html>
