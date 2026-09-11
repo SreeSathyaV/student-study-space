@@ -17,6 +17,37 @@
     --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     --transition: all 0.3s ease;
 }
+body {
+
+    margin: 0;
+
+    min-height: 100vh;
+
+    font-family: "Poppins", sans-serif;
+
+    background:
+        radial-gradient(
+            circle at 10% 20%,
+            rgba(255,255,255,0.9),
+            transparent 30%
+        ),
+
+        radial-gradient(
+            circle at 90% 80%,
+            rgba(220,235,255,0.8),
+            transparent 35%
+        ),
+
+        linear-gradient(
+            135deg,
+            #eef3ff,
+            #f8f5ff,
+            #eefbf7
+        );
+
+    background-attachment: fixed;
+
+}
 
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -396,4 +427,6 @@ body {
     .hero {
         padding: 2rem 1rem;
     }
+    
 }
+
