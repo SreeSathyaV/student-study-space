@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Documents - Student Study Space</title>
+
+    <link rel="stylesheet" href="../styles.css">
+
+    <style>
+
+        .documents-container {
+            max-width: 1100px;
+            margin: 30px auto;
+            padding: 20px;
+        }
+
+        .categories {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .category {
+            background: white;
+            padding: 30px;
+            text-align: center;
+            border-radius: 15px;
+            cursor: pointer;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+        }
+
+        .category:hover {
+            transform: translateY(-4px);
+        }
+
+        .category-icon {
+            font-size: 45px;
+        }
+
+        #fileInput {
+            display: none;
+        }
+
+        .upload-btn {
+            display: inline-block;
+            padding: 12px 20px;
+            background: #222;
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        #fileList {
+            margin-top: 25px;
+        }
+
+        .file-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background: white;
+            margin: 10px 0;
+            border-radius: 10px;
+        }
+
+        .file-item button {
+            border: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+    </style>
+</head>
+
+<body>
+
+<div class="documents-container">
+
+    <a href="../index.html">← Back to Home</a>
+
+    <h1>📂 Important Documents</h1>
+
+    <p>Keep all your important files organized in one place.</p>
+
+    <div class="categories">
+
+        <div class="category" onclick="selectCategory('pdf')">
+            <div class="category-icon">📄</div>
+            <h3>PDF</h3>
+            <p>PDF files</p>
+        </div>
+
+        <div class="category" onclick="selectCategory('document')">
+            <div class="category-icon">📝</div>
+            <h3>Documents</h3>
+            <p>Word & text files</p>
+        </div>
+
+        <div class="category" onclick="selectCategory('excel')">
+            <div class="category-icon">📊</div>
+            <h3>Excel</h3>
+            <p>Spreadsheet files</p>
+        </div>
+
+        <div class="category" onclick="selectCategory('ppt')">
+            <div class="category-icon">📽️</div>
+            <h3>PPT</h3>
+            <p>Presentation files</p>
+        </div>
+
+        <div class="category" onclick="selectCategory('image')">
+            <div class="category-icon">🖼️</div>
+            <h3>Images</h3>
+            <p>Image files</p>
+        </div>
+
+    </div>
+
+    <h2 id="selectedCategory">Select a category</h2>
+
+    <label class="upload-btn" for="fileInput">
+        + Upload File
+    </label>
+
+    <input type="file" id="fileInput" multiple>
+
+    <div id="fileList"></div>
+
+</div>
+
+<script>
+
+let currentCategory = "";
+
+function selectCategory(category) {
+
+    currentCategory = category;
+
+    const names = {
+        pdf: "📄 PDF Files",
+        document: "📝 Documents",
+        excel: "📊 Excel Files",
+        ppt: "📽️ PPT Files",
+        image: "🖼️ Images"
+    };
+
+    document.getElementById("selectedCategory").textContent =
+        names[category];
+
+    document.getElementById("fileInput").value = "";
+}
+
+document.getElementById("fileInput").addEventListener("change", function() {
+
+    const files = this.files;
+
+    if (!currentCategory) {
+        alert("Please select a category first.");
+        return;
+    }
+
+    const list = document.getElementById("fileList");
+
+    for (let file of files) {
+
+        const item = document.createElement("div");
+
+        item.className = "file-item";
+
+        item.innerHTML = `
+            <span>📎 ${file.name}</span>
+            <button onclick="removeFile(this)">Delete</button>
+        `;
+
+        list.appendChild(item);
+    }
+
+});
+
+function removeFile(button) {
+
+    button.parentElement.remove();
+
+}
+
+</script>
+
+</body>
+</html>
