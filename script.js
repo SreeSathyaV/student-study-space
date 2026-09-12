@@ -1,726 +1,594 @@
-/* =========================================================
-   STUDY SPACE - COMMON JAVASCRIPT
-   Tasks + Events + Planner
-   Uses localStorage
-   ========================================================= */
+/* =========================================
+   STUDY SPACE - MAIN JAVASCRIPT
+========================================= */
 
 
-/* ================= NAVIGATION ================= */
+/* =========================================
+   TASKS
+========================================= */
 
-function setupNavigation() {
+function loadTasks() {
 
-    const currentPage = window.location.pathname.split("/").pop();
+    const taskList = document.getElementById("taskList");
 
-    document.querySelectorAll(".nav-links a").forEach(link => {
+    if (!taskList) return;
 
-        const linkPage = link.getAttribute("href").split("/").pop();
+    const tasks = JSON.parse(localStorage.getItem("studyTasks") || "[]");
 
-        if (linkPage === currentPage) {
-            link.classList.add("active");
-        }
+    taskList.innerHTML = "";
 
-    });
-}
+    if (tasks.length === 0) {
 
+        taskList.innerHTML = `
+            <div class="empty">
+                <div class="empty-icon">📝</div>
+                <p>No tasks yet.</p>
+                <small>Add your first task to get started.</small>
+            </div>
+        `;
 
-/* ================= TASKS ================= */
+    } else {
 
-let tasks = JSON.parse(localStorage.getItem("studyTasks")) || [];
+        tasks.forEach((task, index) => {
 
+            const item = document.createElement("div");
 
-function saveTasks() {
-    localStorage.setItem("studyTasks", JSON.stringify(tasks));
+            item.className = "task-item";
+
+            item.innerHTML = `
+                <input
+                    type="checkbox"
+                    class="task-check"
+                    ${task.completed ? "checked" : ""}
+                    onchange="toggleTask(${index})"
+                >
+
+                <div class="task-info">
+
+                    <div class="task-title ${task.completed ? "completed" : ""}">
+                        ${escapeHTML(task.title)}
+                    </div>
+
+                    <div class="task-meta">
+                        ${task.date || "No date"}
+                    </div>
+
+                </div>
+
+                <span class="priority ${task.priority.toLowerCase()}">
+                    ${task.priority}
+                </span>
+
+                <button
+                    class="delete-task"
+                    onclick="deleteTask(${index})"
+                    title="Delete task">
+                    🗑️
+                </button>
+            `;
+
+            taskList.appendChild(item);
+        });
+    }
+
+    updateTaskStats(tasks);
 }
 
 
 function addTask() {
 
-    const input = document.getElementById("taskInput");
-    const priority = document.getElementById("taskPriority");
+    const title = document.getElementById("taskTitle").value.trim();
+    const priority = document.getElementById("taskPriority").value;
+    const date = document.getElementById("taskDate").value;
 
-    if (!input) return;
-
-    const text = input.value.trim();
-
-    if (!text) {
+    if (!title) {
         alert("Please enter a task.");
         return;
     }
 
-    const task = {
-        id: Date.now(),
-        text: text,
-        priority: priority ? priority.value : "Medium",
+    const tasks = JSON.parse(localStorage.getItem("studyTasks") || "[]");
+
+    tasks.push({
+        title: title,
+        priority: priority,
+        date: date,
         completed: false
-    };
-
-    tasks.push(task);
-
-    saveTasks();
-
-    input.value = "";
-
-    renderTasks();
-}
-
-
-function toggleTask(id) {
-
-    tasks = tasks.map(task => {
-
-        if (task.id === id) {
-            task.completed = !task.completed;
-        }
-
-        return task;
-
     });
 
-    saveTasks();
+    localStorage.setItem("studyTasks", JSON.stringify(tasks));
 
-    renderTasks();
+    document.getElementById("taskTitle").value = "";
+    document.getElementById("taskDate").value = "";
+
+    loadTasks();
 }
 
 
-function deleteTask(id) {
+function toggleTask(index) {
 
-    tasks = tasks.filter(task => task.id !== id);
+    const tasks = JSON.parse(localStorage.getItem("studyTasks") || "[]");
 
-    saveTasks();
+    tasks[index].completed = !tasks[index].completed;
 
-    renderTasks();
+    localStorage.setItem("studyTasks", JSON.stringify(tasks));
+
+    loadTasks();
+}
+
+
+function deleteTask(index) {
+
+    const tasks = JSON.parse(localStorage.getItem("studyTasks") || "[]");
+
+    if (confirm("Delete this task?")) {
+
+        tasks.splice(index, 1);
+
+        localStorage.setItem("studyTasks", JSON.stringify(tasks));
+
+        loadTasks();
+    }
 }
 
 
 function clearCompletedTasks() {
 
+    let tasks = JSON.parse(localStorage.getItem("studyTasks") || "[]");
+
     tasks = tasks.filter(task => !task.completed);
 
-    saveTasks();
+    localStorage.setItem("studyTasks", JSON.stringify(tasks));
 
-    renderTasks();
+    loadTasks();
 }
 
 
-function renderTasks() {
-
-    const list = document.getElementById("taskList");
-
-    if (!list) return;
+function updateTaskStats(tasks) {
 
     const total = tasks.length;
 
-    const completed = tasks.filter(t => t.completed).length;
+    const completed = tasks.filter(task => task.completed).length;
 
     const remaining = total - completed;
 
-    const totalElement = document.getElementById("totalTasks");
-    const completedElement = document.getElementById("completedTasks");
-    const remainingElement = document.getElementById("remainingTasks");
+    const totalEl = document.getElementById("totalTasks");
+    const completedEl = document.getElementById("completedTasks");
+    const remainingEl = document.getElementById("remainingTasks");
 
-    if (totalElement) totalElement.textContent = total;
-    if (completedElement) completedElement.textContent = completed;
-    if (remainingElement) remainingElement.textContent = remaining;
-
-
-    if (tasks.length === 0) {
-
-        list.innerHTML = `
-            <div class="empty-state">
-                <div class="empty-icon">📝</div>
-                <h3>No tasks yet</h3>
-                <p>Add your first task above.</p>
-            </div>
-        `;
-
-        return;
-    }
-
-
-    list.innerHTML = tasks.map(task => {
-
-        const priorityClass =
-            task.priority.toLowerCase() === "high"
-                ? "priority-high"
-                : task.priority.toLowerCase() === "low"
-                    ? "priority-low"
-                    : "priority-medium";
-
-        return `
-            <div class="task-item ${task.completed ? "completed" : ""}">
-
-                <input
-                    class="task-check"
-                    type="checkbox"
-                    ${task.completed ? "checked" : ""}
-                    onchange="toggleTask(${task.id})"
-                >
-
-                <span class="task-text">
-                    ${escapeHTML(task.text)}
-                </span>
-
-                <span class="priority ${priorityClass}">
-                    ${task.priority}
-                </span>
-
-                <button
-                    class="task-delete"
-                    onclick="deleteTask(${task.id})"
-                    title="Delete task"
-                >
-                    🗑️
-                </button>
-
-            </div>
-        `;
-
-    }).join("");
+    if (totalEl) totalEl.textContent = total;
+    if (completedEl) completedEl.textContent = completed;
+    if (remainingEl) remainingEl.textContent = remaining;
 }
 
 
-/* ================= EVENTS ================= */
+/* =========================================
+   EVENTS
+========================================= */
 
-let events = JSON.parse(localStorage.getItem("studyEvents")) || [];
-
-let currentCalendarDate = new Date();
-
-let selectedDate =
-    new Date().toISOString().split("T")[0];
+let currentMonth = new Date().getMonth();
+let currentYear = new Date().getFullYear();
 
 
-function saveEvents() {
+function loadCalendar() {
 
-    localStorage.setItem(
-        "studyEvents",
-        JSON.stringify(events)
-    );
-}
-
-
-function formatDate(date) {
-
-    const year = date.getFullYear();
-
-    const month = String(
-        date.getMonth() + 1
-    ).padStart(2, "0");
-
-    const day = String(
-        date.getDate()
-    ).padStart(2, "0");
-
-    return `${year}-${month}-${day}`;
-}
-
-
-function renderCalendar() {
-
-    const calendar = document.getElementById("calendarGrid");
+    const calendar = document.getElementById("calendar");
 
     if (!calendar) return;
 
-    const monthTitle =
-        document.getElementById("calendarMonth");
+    const date = new Date(currentYear, currentMonth, 1);
 
-    const year = currentCalendarDate.getFullYear();
+    const monthName = date.toLocaleString("default", {
+        month: "long"
+    });
 
-    const month = currentCalendarDate.getMonth();
+    const year = currentYear;
 
-    const monthName =
-        currentCalendarDate.toLocaleString(
-            "default",
-            { month: "long" }
-        );
-
-    if (monthTitle) {
-        monthTitle.textContent =
-            `${monthName} ${year}`;
-    }
-
-
-    const firstDay =
-        new Date(year, month, 1).getDay();
-
-    const daysInMonth =
-        new Date(year, month + 1, 0).getDate();
-
+    document.getElementById("calendarTitle").textContent =
+        `${monthName} ${year}`;
 
     calendar.innerHTML = "";
 
+    const firstDay = date.getDay();
 
-    // Empty spaces
-    for (let i = 0; i < firstDay; i++) {
+    const daysInMonth =
+        new Date(currentYear, currentMonth + 1, 0).getDate();
 
-        const empty = document.createElement("div");
+    const previousMonthDays =
+        new Date(currentYear, currentMonth, 0).getDate();
 
-        empty.className = "empty-day";
+    const events =
+        JSON.parse(localStorage.getItem("studyEvents") || "[]");
 
-        calendar.appendChild(empty);
+    /* Previous month */
+
+    for (let i = firstDay - 1; i >= 0; i--) {
+
+        const day = document.createElement("div");
+
+        day.className = "day muted";
+
+        day.innerHTML = `
+            <div class="day-number">
+                ${previousMonthDays - i}
+            </div>
+        `;
+
+        calendar.appendChild(day);
     }
 
 
-    // Days
-    for (let day = 1; day <= daysInMonth; day++) {
+    /* Current month */
 
-        const date =
-            new Date(year, month, day);
+    for (let dayNumber = 1; dayNumber <= daysInMonth; dayNumber++) {
 
-        const dateString =
-            formatDate(date);
+        const cell = document.createElement("div");
 
-        const button =
-            document.createElement("button");
+        cell.className = "day";
 
-        button.className = "calendar-day";
-
-        button.textContent = day;
+        const today = new Date();
 
         if (
-            dateString ===
-            new Date().toISOString().split("T")[0]
+            dayNumber === today.getDate() &&
+            currentMonth === today.getMonth() &&
+            currentYear === today.getFullYear()
         ) {
-            button.classList.add("today");
+            cell.classList.add("today");
         }
 
-        if (dateString === selectedDate) {
-            button.classList.add("selected");
-        }
+        const eventDate =
+            `${currentYear}-${String(currentMonth + 1).padStart(2, "0")}-${String(dayNumber).padStart(2, "0")}`;
 
-        if (
-            events.some(
-                event => event.date === dateString
-            )
-        ) {
-            button.classList.add("has-event");
-        }
+        const dayEvents =
+            events.filter(event => event.date === eventDate);
 
+        let eventHTML = "";
 
-        button.addEventListener(
-            "click",
-            () => selectCalendarDate(dateString)
-        );
+        dayEvents.slice(0, 2).forEach(event => {
 
-        calendar.appendChild(button);
+            eventHTML += `
+                <div class="event-dot">
+                    • ${escapeHTML(event.title)}
+                </div>
+            `;
+        });
+
+        cell.innerHTML = `
+            <div class="day-number">${dayNumber}</div>
+            ${eventHTML}
+        `;
+
+        calendar.appendChild(cell);
     }
+
+
+    /* Remaining cells */
+
+    const totalCells = firstDay + daysInMonth;
+
+    const remaining = 42 - totalCells;
+
+    for (let i = 1; i <= remaining; i++) {
+
+        const day = document.createElement("div");
+
+        day.className = "day muted";
+
+        day.innerHTML = `
+            <div class="day-number">${i}</div>
+        `;
+
+        calendar.appendChild(day);
+    }
+
+    loadEvents();
 }
 
 
-function selectCalendarDate(date) {
+function previousMonth() {
 
-    selectedDate = date;
+    currentMonth--;
 
-    const dateInput =
-        document.getElementById("eventDate");
+    if (currentMonth < 0) {
 
-    if (dateInput) {
-        dateInput.value = date;
+        currentMonth = 11;
+        currentYear--;
+
     }
 
-    renderCalendar();
-
-    renderEvents();
+    loadCalendar();
 }
 
 
-function changeMonth(direction) {
+function nextMonth() {
 
-    currentCalendarDate.setMonth(
-        currentCalendarDate.getMonth() + direction
-    );
+    currentMonth++;
 
-    renderCalendar();
+    if (currentMonth > 11) {
+
+        currentMonth = 0;
+        currentYear++;
+
+    }
+
+    loadCalendar();
 }
 
 
 function addEvent() {
 
-    const titleInput =
-        document.getElementById("eventTitle");
-
-    const dateInput =
-        document.getElementById("eventDate");
-
-    const timeInput =
-        document.getElementById("eventTime");
-
-    const descriptionInput =
-        document.getElementById("eventDescription");
-
-
-    if (!titleInput || !dateInput) return;
-
-
     const title =
-        titleInput.value.trim();
+        document.getElementById("eventTitle").value.trim();
 
     const date =
-        dateInput.value;
+        document.getElementById("eventDate").value;
 
     const time =
-        timeInput ? timeInput.value : "";
+        document.getElementById("eventTime").value;
 
     const description =
-        descriptionInput
-            ? descriptionInput.value.trim()
-            : "";
-
+        document.getElementById("eventDescription").value.trim();
 
     if (!title || !date) {
 
-        alert(
-            "Please enter event title and date."
-        );
+        alert("Please enter event title and date.");
 
         return;
     }
 
+    const events =
+        JSON.parse(localStorage.getItem("studyEvents") || "[]");
 
     events.push({
-
-        id: Date.now(),
-
-        title: title,
-
-        date: date,
-
-        time: time,
-
-        description: description
-
+        title,
+        date,
+        time,
+        description
     });
 
+    localStorage.setItem(
+        "studyEvents",
+        JSON.stringify(events)
+    );
 
-    saveEvents();
+    document.getElementById("eventTitle").value = "";
+    document.getElementById("eventDate").value = "";
+    document.getElementById("eventTime").value = "";
+    document.getElementById("eventDescription").value = "";
 
-
-    titleInput.value = "";
-
-    if (timeInput) {
-        timeInput.value = "";
-    }
-
-    if (descriptionInput) {
-        descriptionInput.value = "";
-    }
-
-
-    selectedDate = date;
-
-
-    renderCalendar();
-
-    renderEvents();
+    loadCalendar();
 }
 
 
-function deleteEvent(id) {
+function loadEvents() {
 
-    events =
-        events.filter(
-            event => event.id !== id
-        );
+    const eventList = document.getElementById("eventList");
 
-    saveEvents();
+    if (!eventList) return;
 
-    renderCalendar();
+    const events =
+        JSON.parse(localStorage.getItem("studyEvents") || "[]");
 
-    renderEvents();
-}
+    eventList.innerHTML = "";
 
+    if (events.length === 0) {
 
-function renderEvents() {
-
-    const list =
-        document.getElementById("eventList");
-
-    if (!list) return;
-
-
-    const selectedEvents =
-        events
-            .filter(event => event.date === selectedDate)
-            .sort((a, b) =>
-                (a.time || "").localeCompare(
-                    b.time || ""
-                )
-            );
-
-
-    if (selectedEvents.length === 0) {
-
-        list.innerHTML = `
-            <div class="empty-state">
+        eventList.innerHTML = `
+            <div class="empty">
                 <div class="empty-icon">📅</div>
-                <h3>No events</h3>
-                <p>No events scheduled for ${selectedDate}.</p>
+                <p>No events added.</p>
             </div>
         `;
 
         return;
     }
 
+    events.sort((a, b) =>
+        new Date(a.date) - new Date(b.date)
+    );
 
-    list.innerHTML =
-        selectedEvents.map(event => `
+    events.forEach((event, index) => {
 
-            <div class="event-item">
+        const item = document.createElement("div");
 
-                <div class="event-info">
+        item.className = "event-item";
 
-                    <strong>
-                        ${escapeHTML(event.title)}
-                    </strong>
+        item.innerHTML = `
+            <button
+                class="delete-event"
+                onclick="deleteEvent(${index})">
+                🗑️
+            </button>
 
-                    <small>
-                        ${event.date}
-                        ${event.time ? " • " + event.time : ""}
-                    </small>
+            <strong>${escapeHTML(event.title)}</strong>
 
-                    ${
-                        event.description
-                        ? `
-                            <p style="margin-top:6px;">
-                                ${escapeHTML(event.description)}
-                            </p>
-                        `
-                        : ""
-                    }
+            <small>
+                📅 ${event.date}
+                ${event.time ? " • ⏰ " + event.time : ""}
+            </small>
 
-                </div>
+            ${
+                event.description
+                ? `<p style="margin-top:8px;color:#aaa;">
+                    ${escapeHTML(event.description)}
+                   </p>`
+                : ""
+            }
+        `;
 
-                <button
-                    class="btn btn-danger"
-                    onclick="deleteEvent(${event.id})"
-                >
-                    Delete
-                </button>
-
-            </div>
-
-        `).join("");
+        eventList.appendChild(item);
+    });
 }
 
 
-/* ================= PLANNER ================= */
+function deleteEvent(index) {
 
-let schedules =
-    JSON.parse(
-        localStorage.getItem("studySchedules")
-    ) || [];
+    const events =
+        JSON.parse(localStorage.getItem("studyEvents") || "[]");
+
+    if (confirm("Delete this event?")) {
+
+        events.splice(index, 1);
+
+        localStorage.setItem(
+            "studyEvents",
+            JSON.stringify(events)
+        );
+
+        loadCalendar();
+    }
+}
 
 
-function saveSchedules() {
+/* =========================================
+   STUDY PLANNER
+========================================= */
 
-    localStorage.setItem(
-        "studySchedules",
-        JSON.stringify(schedules)
-    );
+function loadPlanner() {
+
+    const list = document.getElementById("scheduleList");
+
+    if (!list) return;
+
+    const schedules =
+        JSON.parse(localStorage.getItem("studySchedules") || "[]");
+
+    list.innerHTML = "";
+
+    if (schedules.length === 0) {
+
+        list.innerHTML = `
+            <div class="empty">
+                <div class="empty-icon">⏰</div>
+                <p>No study sessions yet.</p>
+                <small>Create your first study schedule.</small>
+            </div>
+        `;
+
+        return;
+    }
+
+    schedules.forEach((schedule, index) => {
+
+        const item = document.createElement("div");
+
+        item.className = "schedule-item";
+
+        item.innerHTML = `
+
+            <div class="schedule-time">
+                ${schedule.start} - ${schedule.end}
+            </div>
+
+            <div>
+
+                <div class="schedule-subject">
+                    ${escapeHTML(schedule.subject)}
+                </div>
+
+                <div class="schedule-type">
+                    ${escapeHTML(schedule.type)}
+                </div>
+
+            </div>
+
+            <button
+                class="delete-schedule"
+                onclick="deleteSchedule(${index})">
+                Delete
+            </button>
+        `;
+
+        list.appendChild(item);
+    });
 }
 
 
 function addSchedule() {
 
     const subject =
-        document.getElementById("subjectInput");
+        document.getElementById("subject").value.trim();
 
     const start =
-        document.getElementById("startTime");
+        document.getElementById("startTime").value;
 
     const end =
-        document.getElementById("endTime");
+        document.getElementById("endTime").value;
 
     const type =
-        document.getElementById("scheduleType");
+        document.getElementById("studyType").value;
 
+    if (!subject || !start || !end) {
 
-    if (!subject || !start || !end || !type) {
-        return;
-    }
-
-
-    if (
-        !subject.value.trim() ||
-        !start.value ||
-        !end.value
-    ) {
-
-        alert(
-            "Please fill Subject, Start Time and End Time."
-        );
+        alert("Please fill all schedule details.");
 
         return;
     }
 
-
-    if (start.value >= end.value) {
-
-        alert(
-            "End time must be after start time."
-        );
-
-        return;
-    }
-
+    const schedules =
+        JSON.parse(localStorage.getItem("studySchedules") || "[]");
 
     schedules.push({
-
-        id: Date.now(),
-
-        subject: subject.value.trim(),
-
-        start: start.value,
-
-        end: end.value,
-
-        type: type.value
-
+        subject,
+        start,
+        end,
+        type
     });
 
-
-    schedules.sort(
-        (a, b) =>
-            a.start.localeCompare(b.start)
+    localStorage.setItem(
+        "studySchedules",
+        JSON.stringify(schedules)
     );
 
+    document.getElementById("subject").value = "";
+    document.getElementById("startTime").value = "";
+    document.getElementById("endTime").value = "";
 
-    saveSchedules();
-
-
-    subject.value = "";
-
-    start.value = "";
-
-    end.value = "";
-
-    renderSchedules();
+    loadPlanner();
 }
 
 
-function deleteSchedule(id) {
+function deleteSchedule(index) {
 
-    schedules =
-        schedules.filter(
-            item => item.id !== id
+    const schedules =
+        JSON.parse(localStorage.getItem("studySchedules") || "[]");
+
+    if (confirm("Delete this study session?")) {
+
+        schedules.splice(index, 1);
+
+        localStorage.setItem(
+            "studySchedules",
+            JSON.stringify(schedules)
         );
 
-    saveSchedules();
-
-    renderSchedules();
-}
-
-
-function clearSchedules() {
-
-    if (schedules.length === 0) {
-        return;
-    }
-
-    if (
-        confirm(
-            "Are you sure you want to clear all schedules?"
-        )
-    ) {
-
-        schedules = [];
-
-        saveSchedules();
-
-        renderSchedules();
+        loadPlanner();
     }
 }
 
 
-function renderSchedules() {
+/* =========================================
+   SECURITY HELPER
+========================================= */
 
-    const list =
-        document.getElementById("scheduleList");
+function escapeHTML(value) {
 
-    if (!list) return;
-
-
-    if (schedules.length === 0) {
-
-        list.innerHTML = `
-            <div class="empty-state">
-                <div class="empty-icon">⏰</div>
-                <h3>No study sessions</h3>
-                <p>Create your first study schedule above.</p>
-            </div>
-        `;
-
-        return;
-    }
-
-
-    list.innerHTML =
-        schedules.map(item => `
-
-            <div class="schedule-item">
-
-                <div class="schedule-time">
-
-                    ${item.start}
-                    <br>
-                    ↓
-                    <br>
-                    ${item.end}
-
-                </div>
-
-                <div>
-
-                    <div class="schedule-subject">
-                        ${escapeHTML(item.subject)}
-                    </div>
-
-                    <span class="schedule-type">
-                        ${escapeHTML(item.type)}
-                    </span>
-
-                </div>
-
-                <button
-                    class="btn btn-danger"
-                    onclick="deleteSchedule(${item.id})"
-                >
-                    Delete
-                </button>
-
-            </div>
-
-        `).join("");
+    return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
 }
 
 
-/* ================= SECURITY HELPER ================= */
+/* =========================================
+   PAGE LOAD
+========================================= */
 
-function escapeHTML(text) {
+document.addEventListener("DOMContentLoaded", function () {
 
-    const div =
-        document.createElement("div");
+    loadTasks();
+    loadCalendar();
+    loadPlanner();
 
-    div.textContent = text;
-
-    return div.innerHTML;
-}
-
-
-/* ================= INITIALIZE ================= */
-
-document.addEventListener(
-    "DOMContentLoaded",
-    () => {
-
-        setupNavigation();
-
-        renderTasks();
-
-        renderCalendar();
-
-        renderEvents();
-
-        renderSchedules();
-
-    }
-);
+});
