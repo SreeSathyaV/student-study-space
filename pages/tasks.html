@@ -1,120 +1,222 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
     <title>Tasks - Study Space</title>
-    <link rel="stylesheet" href="../styles.css">
+
+    <link
+        rel="stylesheet"
+        href="../styles.css"
+    >
+
 </head>
+
 <body>
 
-<!-- NAVBAR -->
+<!-- ================= NAVBAR ================= -->
+
 <header class="navbar">
-    <div class="nav-container">
-        <a href="../index.html" class="logo">
-            📚 <span>Study</span> Space
-        </a>
-        <nav class="nav-menu">
-            <a href="../index.html">🏠 Home</a>
-            <a href="notes.html">📝 Notes</a>
-            <a href="tasks.html" class="active">✅ Tasks</a>
-            <a href="events.html">🗓️ Events</a>
-            <a href="planner.html">⏰ Planner</a>
-            <a href="documents.html">📁 Documents</a>
-            <a href="painting.html">🎨 Painting</a>
-            <a href="games.html">🎮 Games</a>
-            <a href="profile.html">👤 Profile</a>
-        </nav>
-    </div>
+
+    <a href="../index.html" class="logo">
+        📚 Study <span>Space</span>
+    </a>
+
+    <nav class="nav-links">
+
+        <a href="../index.html">🏠 Home</a>
+
+        <a href="notes.html">📝 Notes</a>
+
+        <a href="tasks.html">✅ Tasks</a>
+
+        <a href="events.html">📅 Events</a>
+
+        <a href="planner.html">⏰ Planner</a>
+
+        <a href="documents.html">📁 Documents</a>
+
+        <a href="painting.html">🎨 Painting</a>
+
+        <a href="games.html">🎮 Games</a>
+
+        <a href="profile.html">👤 Profile</a>
+
+    </nav>
+
 </header>
 
-<!-- HERO -->
-<main>
-    <section class="page-hero">
-        <div class="hero-wrapper">
-            <div class="hero-content">
-                <div class="hero-icon">✅</div>
-                <h1>My <span>Tasks</span></h1>
-                <p>Plan your day, organize your work, and complete your goals one step at a time.</p>
-            </div>
-        </div>
+
+<!-- ================= MAIN ================= -->
+
+<main class="page">
+
+    <!-- HEADER -->
+
+    <section class="page-header">
+
+        <div class="icon">✅</div>
+
+        <h1>My Tasks</h1>
+
+        <p>
+            Plan your day, complete your goals and stay productive.
+        </p>
+
     </section>
 
-    <!-- TASKS CONTENT -->
-    <section class="content-section">
-        <div class="page-container">
-            <div class="tasks-wrapper">
-                <!-- LEFT: ADD TASK PANEL -->
-                <div class="tasks-sidebar">
-                    <div class="card">
-                        <h2>📋 Add New Task</h2>
-                        <div class="task-input-area">
-                            <div class="form-group">
-                                <label>Task Description</label>
-                                <input type="text" id="taskInput" placeholder="What needs to be done?" class="input-field">
-                            </div>
-                            <div class="form-group">
-                                <label>Priority Level</label>
-                                <select id="priority" class="input-field">
-                                    <option value="Low">🟢 Low Priority</option>
-                                    <option value="Medium" selected>🟡 Medium Priority</option>
-                                    <option value="High">🔴 High Priority</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label>Due Date</label>
-                                <input type="date" id="dueDate" class="input-field">
-                            </div>
-                            <button class="btn primary" onclick="addTask()">+ Add Task</button>
-                        </div>
-                    </div>
-                    <!-- STATS CARD -->
-                    <div class="card stats-card">
-                        <h3>📊 Statistics</h3>
-                        <div class="stat-item">
-                            <span>Total Tasks</span>
-                            <strong id="totalTasks">0</strong>
-                        </div>
-                        <div class="stat-item">
-                            <span>Completed</span>
-                            <strong id="completedTasks">0</strong>
-                        </div>
-                        <div class="stat-item">
-                            <span>Pending</span>
-                            <strong id="pendingTasks">0</strong>
-                        </div>
-                        <div class="progress-bar">
-                            <div class="progress-fill" id="progressFill"></div>
-                        </div>
-                        <small id="progressText">0% Complete</small>
-                    </div>
-                </div>
 
-                <!-- RIGHT: TASKS LIST -->
-                <div class="tasks-main">
-                    <div class="card">
-                        <div class="task-filters">
-                            <button class="filter-btn active" onclick="filterTasks('all')">All</button>
-                            <button class="filter-btn" onclick="filterTasks('pending')">Pending</button>
-                            <button class="filter-btn" onclick="filterTasks('completed')">Completed</button>
-                        </div>
-                        <div id="tasksList" class="tasks-list">
-                            <div class="empty-state">
-                                <div class="empty-icon">✅</div>
-                                <p>No tasks yet. Add your first task!</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+    <!-- TASK FORM -->
+
+    <section class="card">
+
+        <h2>➕ Add a New Task</h2>
+
+        <div class="task-form">
+
+            <div>
+
+                <label for="taskInput">
+                    Task
+                </label>
+
+                <input
+                    id="taskInput"
+                    type="text"
+                    placeholder="What do you need to do?"
+                    onkeydown="
+                        if(event.key === 'Enter') addTask()
+                    "
+                >
+
             </div>
+
+
+            <div>
+
+                <label for="taskPriority">
+                    Priority
+                </label>
+
+                <select id="taskPriority">
+
+                    <option value="High">
+                        🔴 High
+                    </option>
+
+                    <option value="Medium" selected>
+                        🟡 Medium
+                    </option>
+
+                    <option value="Low">
+                        🟢 Low
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <button
+                class="btn btn-primary"
+                onclick="addTask()"
+            >
+                + Add Task
+            </button>
+
         </div>
+
     </section>
+
+
+    <!-- STATISTICS -->
+
+    <section class="card">
+
+        <div class="task-stats">
+
+            <div class="stat-card">
+
+                <strong id="totalTasks">
+                    0
+                </strong>
+
+                <span>Total Tasks</span>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <strong id="completedTasks">
+                    0
+                </strong>
+
+                <span>Completed</span>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <strong id="remainingTasks">
+                    0
+                </strong>
+
+                <span>Remaining</span>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- TASK LIST -->
+
+    <section class="card">
+
+        <div style="
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            gap:15px;
+            margin-bottom:20px;
+        ">
+
+            <h2 style="margin:0;">
+                📋 Your To-Do List
+            </h2>
+
+            <button
+                class="btn btn-secondary"
+                onclick="clearCompletedTasks()"
+            >
+                Clear Completed
+            </button>
+
+        </div>
+
+
+        <div
+            id="taskList"
+            class="task-list"
+        ></div>
+
+    </section>
+
 </main>
 
-<footer>
-    <p>© 2026 Study Space • Learn • Plan • Create • Achieve</p>
-</footer>
 
 <script src="../script.js"></script>
+
 </body>
+
 </html>
