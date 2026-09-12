@@ -1,251 +1,1080 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Painting - Student Study Space</title>
 
-    <link rel="stylesheet" href="../styles.css">
+    <title>Painting - Study Space</title>
 
     <style>
-        .painting-container {
-            max-width: 1000px;
-            margin: 30px auto;
-            padding: 20px;
+
+        /* =====================================================
+           PAINTING PAGE ONLY
+           Nothing here affects other pages
+        ===================================================== */
+
+        .painting-page {
+
+            margin: 0;
+            min-height: 100vh;
+
+            background:
+                radial-gradient(
+                    circle at 80% 15%,
+                    rgba(111, 45, 160, 0.25),
+                    transparent 35%
+                ),
+                radial-gradient(
+                    circle at 15% 20%,
+                    rgba(57, 45, 130, 0.25),
+                    transparent 35%
+                ),
+                linear-gradient(
+                    135deg,
+                    #0b0920,
+                    #120b27 55%,
+                    #1b0d27
+                );
+
+            color: white;
+
+            font-family:
+                "Segoe UI",
+                Arial,
+                Helvetica,
+                sans-serif;
+
         }
 
-        .toolbar {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-            align-items: center;
-            padding: 15px;
-            background: #ffffff;
-            border-radius: 15px;
-            margin-bottom: 20px;
+
+        .painting-page *,
+        .painting-page *::before,
+        .painting-page *::after {
+
+            box-sizing: border-box;
+
         }
 
-        .toolbar button {
-            padding: 10px 16px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            background: #f0f0f0;
-        }
 
-        .toolbar button:hover {
-            background: #ddd;
-        }
+        /* ---------- HEADER ---------- */
 
-        #colorPicker {
-            width: 45px;
-            height: 40px;
-            border: none;
-            cursor: pointer;
-        }
+        .painting-page .paint-header {
 
-        #brushSize {
-            width: 100px;
-        }
-
-        #paintCanvas {
             width: 100%;
-            height: 500px;
-            background: white;
-            border: 2px solid #ddd;
-            border-radius: 15px;
-            cursor: crosshair;
-            touch-action: none;
+            height: 88px;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            padding: 0 6%;
+
+            background: rgba(9, 7, 25, 0.94);
+
+            border-bottom:
+                1px solid rgba(255,255,255,0.08);
+
         }
 
-        .back-btn {
+
+        .painting-page .paint-logo {
+
+            display: flex;
+            align-items: center;
+            gap: 10px;
+
+            color: white;
             text-decoration: none;
-            display: inline-block;
-            margin-bottom: 20px;
+
+            font-size: 22px;
+            font-weight: 700;
+
         }
+
+
+        .painting-page .paint-nav {
+
+            display: flex;
+            align-items: center;
+            gap: 7px;
+
+            flex-wrap: wrap;
+
+        }
+
+
+        .painting-page .paint-nav a {
+
+            padding: 12px 15px;
+
+            border-radius: 12px;
+
+            color: #e8e4f2;
+
+            text-decoration: none;
+
+            font-size: 14px;
+            font-weight: 600;
+
+            transition: 0.25s;
+
+        }
+
+
+        .painting-page .paint-nav a:hover {
+
+            background:
+                rgba(255,255,255,0.08);
+
+            color: white;
+
+        }
+
+
+        .painting-page .paint-nav a.active {
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #8b3dff,
+                    #a43cff
+                );
+
+            color: white;
+
+            box-shadow:
+                0 8px 25px
+                rgba(139,61,255,0.3);
+
+        }
+
+
+        /* ---------- MAIN ---------- */
+
+        .painting-page .painting-container {
+
+            width: min(900px, 90%);
+
+            margin: auto;
+
+            padding:
+                55px 0 80px;
+
+        }
+
+
+        .painting-page .back-home {
+
+            display: inline-block;
+
+            margin-bottom: 18px;
+
+            color: #9b5cff;
+
+            text-decoration: none;
+
+            font-size: 14px;
+
+            font-weight: 600;
+
+        }
+
+
+        .painting-page .back-home:hover {
+
+            color: #c18cff;
+
+        }
+
+
+        .painting-page .painting-title {
+
+            margin: 0;
+
+            color: white;
+
+            font-size: clamp(
+                32px,
+                4vw,
+                44px
+            );
+
+            font-weight: 800;
+
+            letter-spacing: -1px;
+
+        }
+
+
+        .painting-page .painting-subtitle {
+
+            margin:
+                7px 0 25px;
+
+            color: #c9c3d8;
+
+            font-size: 16px;
+
+        }
+
+
+        /* ---------- TOOLBAR ---------- */
+
+        .painting-page .toolbar {
+
+            width: 100%;
+
+            padding: 18px;
+
+            background: white;
+
+            border-radius: 18px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            gap: 10px;
+
+            flex-wrap: wrap;
+
+            box-shadow:
+                0 15px 40px
+                rgba(0,0,0,0.25);
+
+        }
+
+
+        .painting-page .toolbar input[type="color"] {
+
+            width: 44px;
+            height: 40px;
+
+            border: none;
+
+            background: transparent;
+
+            cursor: pointer;
+
+        }
+
+
+        .painting-page .toolbar input[type="range"] {
+
+            width: 90px;
+
+            cursor: pointer;
+
+        }
+
+
+        .painting-page .tool-btn {
+
+            border: none;
+
+            padding: 11px 15px;
+
+            border-radius: 10px;
+
+            background: #f0eef3;
+
+            color: #292431;
+
+            font-family: inherit;
+
+            font-size: 14px;
+
+            font-weight: 700;
+
+            cursor: pointer;
+
+            transition: 0.2s;
+
+        }
+
+
+        .painting-page .tool-btn:hover {
+
+            background: #e2ddec;
+
+            transform: translateY(-2px);
+
+        }
+
+
+        .painting-page .tool-btn.selected {
+
+            background:
+                #7b3ff2;
+
+            color: white;
+
+        }
+
+
+        /* ---------- CANVAS ---------- */
+
+        .painting-page .canvas-wrapper {
+
+            margin-top: 18px;
+
+            width: 100%;
+
+            background: white;
+
+            border-radius: 18px;
+
+            padding: 0;
+
+            overflow: hidden;
+
+            box-shadow:
+                0 18px 45px
+                rgba(0,0,0,0.25);
+
+        }
+
+
+        .painting-page #drawingCanvas {
+
+            display: block;
+
+            width: 100%;
+
+            height: 520px;
+
+            background: white;
+
+            cursor: crosshair;
+
+            touch-action: none;
+
+        }
+
+
+        /* ---------- MOBILE ---------- */
+
+        @media (max-width: 900px) {
+
+            .painting-page .paint-header {
+
+                height: auto;
+
+                padding: 18px 5%;
+
+                flex-direction: column;
+
+                gap: 15px;
+
+            }
+
+            .painting-page .paint-nav {
+
+                justify-content: center;
+
+            }
+
+        }
+
+
+        @media (max-width: 600px) {
+
+            .painting-page .paint-nav a {
+
+                padding: 8px 9px;
+
+                font-size: 12px;
+
+            }
+
+            .painting-page .painting-container {
+
+                width: 92%;
+
+                padding-top: 35px;
+
+            }
+
+            .painting-page #drawingCanvas {
+
+                height: 400px;
+
+            }
+
+        }
+
     </style>
+
 </head>
 
-<body>
 
-<div class="painting-container">
+<body class="painting-page">
 
-    <a href="../index.html" class="back-btn">← Back to Home</a>
 
-    <h1>🎨 Creative Studio</h1>
-    <p>Draw, paint and express your creativity.</p>
+    <!-- HEADER -->
 
-    <div class="toolbar">
+    <header class="paint-header">
 
-        <label>
-            Color:
-            <input type="color" id="colorPicker" value="#000000">
-        </label>
+        <a
+            href="../index.html"
+            class="paint-logo">
 
-        <label>
-            Brush:
-            <input type="range" id="brushSize" min="1" max="40" value="5">
-        </label>
+            <span>📚</span>
 
-        <button onclick="setTool('brush')">🖌 Brush</button>
+            <span>Study Space</span>
 
-        <button onclick="setTool('pencil')">✏️ Pencil</button>
+        </a>
 
-        <button onclick="setTool('eraser')">🧹 Eraser</button>
 
-        <button onclick="undo()">↩ Undo</button>
+        <nav class="paint-nav">
 
-        <button onclick="redo()">↪ Redo</button>
+            <a href="../index.html">
+                🏠 Home
+            </a>
 
-        <button onclick="clearCanvas()">🗑 Clear</button>
+            <a href="notes.html">
+                📄 Notes
+            </a>
 
-        <button onclick="savePainting()">💾 Save</button>
+            <a href="tasks.html">
+                ✅ Tasks
+            </a>
 
-    </div>
+            <a href="events.html">
+                🗓️ Events
+            </a>
 
-    <canvas id="paintCanvas"></canvas>
+            <a href="planner.html">
+                ⏰ Planner
+            </a>
 
-</div>
+            <a href="documents.html">
+                📁 Documents
+            </a>
 
-<script>
+            <a
+                href="painting.html"
+                class="active">
+                🎨 Painting
+            </a>
 
-const canvas = document.getElementById("paintCanvas");
-const ctx = canvas.getContext("2d");
+            <a href="games.html">
+                🎮 Games
+            </a>
 
-let drawing = false;
-let tool = "brush";
+            <a href="profile.html">
+                👤 Profile
+            </a>
 
-let undoStack = [];
-let redoStack = [];
+        </nav>
 
-function resizeCanvas() {
-    const rect = canvas.getBoundingClientRect();
+    </header>
 
-    canvas.width = rect.width;
-    canvas.height = rect.height;
 
-    ctx.fillStyle = "white";
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-}
+    <!-- MAIN -->
 
-resizeCanvas();
+    <main class="painting-container">
 
-function getPosition(e) {
+        <a
+            href="../index.html"
+            class="back-home">
 
-    const rect = canvas.getBoundingClientRect();
+            ← Back to Home
 
-    return {
-        x: e.clientX - rect.left,
-        y: e.clientY - rect.top
-    };
-}
+        </a>
 
-function startDrawing(e) {
 
-    drawing = true;
+        <h1 class="painting-title">
 
-    undoStack.push(canvas.toDataURL());
-    redoStack = [];
+            🎨 Creative Studio
 
-    const pos = getPosition(e);
+        </h1>
 
-    ctx.beginPath();
-    ctx.moveTo(pos.x, pos.y);
-}
 
-function draw(e) {
+        <p class="painting-subtitle">
 
-    if (!drawing) return;
+            Draw, paint and express your creativity.
 
-    const pos = getPosition(e);
+        </p>
 
-    let color = document.getElementById("colorPicker").value;
-    let size = document.getElementById("brushSize").value;
 
-    if (tool === "eraser") {
-        ctx.strokeStyle = "white";
-        ctx.lineWidth = size * 2;
-    } else {
-        ctx.strokeStyle = color;
-        ctx.lineWidth = size;
-    }
+        <!-- TOOLBAR -->
 
-    ctx.lineCap = "round";
-    ctx.lineJoin = "round";
+        <div class="toolbar">
 
-    ctx.lineTo(pos.x, pos.y);
-    ctx.stroke();
-}
+            <input
+                type="color"
+                id="colorPicker"
+                value="#111111"
+                title="Choose Color"
+            >
 
-function stopDrawing() {
-    drawing = false;
-    ctx.closePath();
-}
 
-canvas.addEventListener("pointerdown", startDrawing);
-canvas.addEventListener("pointermove", draw);
-canvas.addEventListener("pointerup", stopDrawing);
-canvas.addEventListener("pointerleave", stopDrawing);
+            <input
+                type="range"
+                id="brushSize"
+                min="1"
+                max="40"
+                value="5"
+                title="Brush Size"
+            >
 
-function setTool(selectedTool) {
-    tool = selectedTool;
-}
 
-function clearCanvas() {
+            <button
+                class="tool-btn selected"
+                id="brushBtn">
 
-    undoStack.push(canvas.toDataURL());
+                🖌️ Brush
 
-    ctx.fillStyle = "white";
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-}
+            </button>
 
-function undo() {
 
-    if (undoStack.length === 0) return;
+            <button
+                class="tool-btn"
+                id="pencilBtn">
 
-    redoStack.push(canvas.toDataURL());
+                ✏️ Pencil
 
-    const previous = undoStack.pop();
+            </button>
 
-    const image = new Image();
 
-    image.onload = function() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
-    };
+            <button
+                class="tool-btn"
+                id="eraserBtn">
 
-    image.src = previous;
-}
+                🧹 Eraser
 
-function redo() {
+            </button>
 
-    if (redoStack.length === 0) return;
 
-    undoStack.push(canvas.toDataURL());
+            <button
+                class="tool-btn"
+                id="undoBtn">
 
-    const next = redoStack.pop();
+                ↶ Undo
 
-    const image = new Image();
+            </button>
 
-    image.onload = function() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
-    };
 
-    image.src = next;
-}
+            <button
+                class="tool-btn"
+                id="redoBtn">
 
-function savePainting() {
+                ↷ Redo
 
-    const link = document.createElement("a");
+            </button>
 
-    link.download = "my-painting.png";
-    link.href = canvas.toDataURL("image/png");
 
-    link.click();
-}
+            <button
+                class="tool-btn"
+                id="clearBtn">
 
-</script>
+                🗑️ Clear
+
+            </button>
+
+
+            <button
+                class="tool-btn"
+                id="saveBtn">
+
+                💾 Save
+
+            </button>
+
+        </div>
+
+
+        <!-- CANVAS -->
+
+        <div class="canvas-wrapper">
+
+            <canvas
+                id="drawingCanvas">
+            </canvas>
+
+        </div>
+
+    </main>
+
+
+    <script>
+
+        /* =====================================================
+           PAINTING PAGE JAVASCRIPT ONLY
+        ===================================================== */
+
+
+        const canvas =
+            document.getElementById(
+                "drawingCanvas"
+            );
+
+        const ctx =
+            canvas.getContext("2d");
+
+
+        const colorPicker =
+            document.getElementById(
+                "colorPicker"
+            );
+
+        const brushSize =
+            document.getElementById(
+                "brushSize"
+            );
+
+
+        let drawing = false;
+
+        let currentTool = "brush";
+
+        let undoStack = [];
+
+        let redoStack = [];
+
+
+        /* ---------- CANVAS SIZE ---------- */
+
+        function resizeCanvas() {
+
+            const oldCanvas =
+                document.createElement("canvas");
+
+            oldCanvas.width =
+                canvas.width;
+
+            oldCanvas.height =
+                canvas.height;
+
+            oldCanvas
+                .getContext("2d")
+                .drawImage(canvas, 0, 0);
+
+
+            const rect =
+                canvas.getBoundingClientRect();
+
+
+            canvas.width =
+                rect.width;
+
+            canvas.height =
+                rect.height;
+
+
+            ctx.fillStyle = "white";
+
+            ctx.fillRect(
+                0,
+                0,
+                canvas.width,
+                canvas.height
+            );
+
+
+            if (
+                oldCanvas.width > 0 &&
+                oldCanvas.height > 0
+            ) {
+
+                ctx.drawImage(
+                    oldCanvas,
+                    0,
+                    0,
+                    oldCanvas.width,
+                    oldCanvas.height,
+                    0,
+                    0,
+                    canvas.width,
+                    canvas.height
+                );
+
+            }
+
+        }
+
+
+        window.addEventListener(
+            "load",
+            resizeCanvas
+        );
+
+
+        /* ---------- SAVE STATE ---------- */
+
+        function saveState() {
+
+            undoStack.push(
+                canvas.toDataURL()
+            );
+
+            if (
+                undoStack.length > 30
+            ) {
+
+                undoStack.shift();
+
+            }
+
+            redoStack = [];
+
+        }
+
+
+        /* ---------- DRAW ---------- */
+
+        function getPosition(e) {
+
+            const rect =
+                canvas.getBoundingClientRect();
+
+            return {
+
+                x:
+                    e.clientX -
+                    rect.left,
+
+                y:
+                    e.clientY -
+                    rect.top
+
+            };
+
+        }
+
+
+        function startDrawing(e) {
+
+            drawing = true;
+
+            saveState();
+
+            const pos =
+                getPosition(e);
+
+            ctx.beginPath();
+
+            ctx.moveTo(
+                pos.x,
+                pos.y
+            );
+
+        }
+
+
+        function draw(e) {
+
+            if (!drawing)
+                return;
+
+
+            const pos =
+                getPosition(e);
+
+
+            ctx.lineWidth =
+                Number(
+                    brushSize.value
+                );
+
+
+            ctx.lineCap =
+                "round";
+
+            ctx.lineJoin =
+                "round";
+
+
+            if (
+                currentTool === "eraser"
+            ) {
+
+                ctx.strokeStyle =
+                    "white";
+
+            }
+
+            else if (
+                currentTool === "pencil"
+            ) {
+
+                ctx.strokeStyle =
+                    colorPicker.value;
+
+                ctx.lineWidth =
+                    Math.max(
+                        1,
+                        Number(
+                            brushSize.value
+                        ) / 2
+                    );
+
+            }
+
+            else {
+
+                ctx.strokeStyle =
+                    colorPicker.value;
+
+            }
+
+
+            ctx.lineTo(
+                pos.x,
+                pos.y
+            );
+
+            ctx.stroke();
+
+        }
+
+
+        function stopDrawing() {
+
+            drawing = false;
+
+            ctx.closePath();
+
+        }
+
+
+        canvas.addEventListener(
+            "pointerdown",
+            startDrawing
+        );
+
+        canvas.addEventListener(
+            "pointermove",
+            draw
+        );
+
+        canvas.addEventListener(
+            "pointerup",
+            stopDrawing
+        );
+
+        canvas.addEventListener(
+            "pointerleave",
+            stopDrawing
+        );
+
+
+        /* ---------- TOOL SELECTION ---------- */
+
+        const buttons = {
+
+            brush:
+                document.getElementById(
+                    "brushBtn"
+                ),
+
+            pencil:
+                document.getElementById(
+                    "pencilBtn"
+                ),
+
+            eraser:
+                document.getElementById(
+                    "eraserBtn"
+                )
+
+        };
+
+
+        function selectTool(tool) {
+
+            currentTool = tool;
+
+
+            Object.values(buttons)
+                .forEach(
+                    button =>
+                        button.classList.remove(
+                            "selected"
+                        )
+                );
+
+
+            buttons[tool]
+                .classList.add(
+                    "selected"
+                );
+
+        }
+
+
+        buttons.brush.onclick =
+            () => selectTool("brush");
+
+
+        buttons.pencil.onclick =
+            () => selectTool("pencil");
+
+
+        buttons.eraser.onclick =
+            () => selectTool("eraser");
+
+
+        /* ---------- UNDO ---------- */
+
+        document
+            .getElementById("undoBtn")
+            .onclick = function () {
+
+                if (
+                    undoStack.length === 0
+                )
+                    return;
+
+
+                redoStack.push(
+                    canvas.toDataURL()
+                );
+
+
+                const previous =
+                    undoStack.pop();
+
+
+                const image =
+                    new Image();
+
+
+                image.onload =
+                    function () {
+
+                        ctx.clearRect(
+                            0,
+                            0,
+                            canvas.width,
+                            canvas.height
+                        );
+
+
+                        ctx.drawImage(
+                            image,
+                            0,
+                            0,
+                            canvas.width,
+                            canvas.height
+                        );
+
+                    };
+
+
+                image.src =
+                    previous;
+
+            };
+
+
+        /* ---------- REDO ---------- */
+
+        document
+            .getElementById("redoBtn")
+            .onclick = function () {
+
+                if (
+                    redoStack.length === 0
+                )
+                    return;
+
+
+                undoStack.push(
+                    canvas.toDataURL()
+                );
+
+
+                const next =
+                    redoStack.pop();
+
+
+                const image =
+                    new Image();
+
+
+                image.onload =
+                    function () {
+
+                        ctx.clearRect(
+                            0,
+                            0,
+                            canvas.width,
+                            canvas.height
+                        );
+
+
+                        ctx.drawImage(
+                            image,
+                            0,
+                            0,
+                            canvas.width,
+                            canvas.height
+                        );
+
+                    };
+
+
+                image.src =
+                    next;
+
+            };
+
+
+        /* ---------- CLEAR ---------- */
+
+        document
+            .getElementById("clearBtn")
+            .onclick = function () {
+
+                saveState();
+
+
+                ctx.fillStyle =
+                    "white";
+
+
+                ctx.fillRect(
+                    0,
+                    0,
+                    canvas.width,
+                    canvas.height
+                );
+
+            };
+
+
+        /* ---------- SAVE IMAGE ---------- */
+
+        document
+            .getElementById("saveBtn")
+            .onclick = function () {
+
+                const link =
+                    document.createElement(
+                        "a"
+                    );
+
+
+                link.download =
+                    "study-space-drawing.png";
+
+
+                link.href =
+                    canvas.toDataURL(
+                        "image/png"
+                    );
+
+
+                link.click();
+
+            };
+
+    </script>
 
 </body>
 </html>
