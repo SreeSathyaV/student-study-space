@@ -1,645 +1,726 @@
-/**
- * Student Study Space - Main JavaScript
- * Enhanced with dark mode, notifications, and robust storage management
- */
+/* =========================================================
+   STUDY SPACE - COMMON JAVASCRIPT
+   Tasks + Events + Planner
+   Uses localStorage
+   ========================================================= */
 
-// ============================================
-// STORAGE MANAGEMENT SYSTEM
-// ============================================
 
-const Storage = {
-    /**
-     * Safely retrieve data from localStorage
-     */
-    get: (key) => {
-        try {
-            const data = localStorage.getItem(key);
-            return data ? JSON.parse(data) : [];
-        } catch (error) {
-            console.error(`Error parsing ${key} from storage:`, error);
-            return [];
-        }
-    },
+/* ================= NAVIGATION ================= */
 
-    /**
-     * Safely store data to localStorage
-     */
-    set: (key, data) => {
-        try {
-            localStorage.setItem(key, JSON.stringify(data));
-            return true;
-        } catch (error) {
-            console.error(`Storage quota exceeded or error for ${key}:`, error);
-            return false;
-        }
-    },
+function setupNavigation() {
 
-    /**
-     * Add new item to collection
-     */
-    add: (key, item) => {
-        const data = Storage.get(key);
-        const newItem = {
-            ...item,
-            id: Date.now() + Math.random(),
-            createdAt: new Date().toISOString(),
-            updatedAt: new Date().toISOString()
-        };
-        data.push(newItem);
-        Storage.set(key, data);
-        return newItem;
-    },
+    const currentPage = window.location.pathname.split("/").pop();
 
-    /**
-     * Remove item by ID
-     */
-    remove: (key, id) => {
-        const data = Storage.get(key).filter(item => item.id !== id);
-        Storage.set(key, data);
-        return data;
-    },
+    document.querySelectorAll(".nav-links a").forEach(link => {
 
-    /**
-     * Update item by ID
-     */
-    update: (key, id, updates) => {
-        const data = Storage.get(key).map(item =>
-            item.id === id ? {
-                ...item,
-                ...updates,
-                updatedAt: new Date().toISOString()
-            } : item
-        );
-        Storage.set(key, data);
-        return data;
-    },
+        const linkPage = link.getAttribute("href").split("/").pop();
 
-    /**
-     * Clear entire collection
-     */
-    clear: (key) => {
-        Storage.set(key, []);
-    },
-
-    /**
-     * Get total items count
-     */
-    count: (key) => {
-        return Storage.get(key).length;
-    },
-
-    /**
-     * Find item by property
-     */
-    find: (key, predicate) => {
-        return Storage.get(key).find(predicate);
-    },
-
-    /**
-     * Filter items by property
-     */
-    filter: (key, predicate) => {
-        return Storage.get(key).filter(predicate);
-    }
-};
-/* =========================================
-   STUDY SPACE MAIN JAVASCRIPT
-========================================= */
-
-document.addEventListener("DOMContentLoaded", function () {
-
-    console.log("Study Space loaded successfully!");
-
-    /* ---------------------------------------
-       NAVBAR ACTIVE LINK
-    --------------------------------------- */
-
-    const currentPage =
-        window.location.pathname.split("/").pop();
-
-    const navLinks =
-        document.querySelectorAll(".nav-links a");
-
-    navLinks.forEach(function (link) {
-
-        const linkPage =
-            link.getAttribute("href")
-                .split("/")
-                .pop();
-
-        if (
-            linkPage === currentPage ||
-            (currentPage === "" &&
-             linkPage === "index.html")
-        ) {
+        if (linkPage === currentPage) {
             link.classList.add("active");
         }
 
     });
-
-
-    /* ---------------------------------------
-       SMOOTH SCROLL
-    --------------------------------------- */
-
-    document.querySelectorAll(
-        'a[href^="#"]'
-    ).forEach(function (anchor) {
-
-        anchor.addEventListener(
-            "click",
-            function (event) {
-
-                const target =
-                    document.querySelector(
-                        this.getAttribute("href")
-                    );
-
-                if (target) {
-
-                    event.preventDefault();
-
-                    target.scrollIntoView({
-                        behavior: "smooth"
-                    });
-
-                }
-
-            }
-        );
-
-    });
-
-});
-
-// ============================================
-// DARK MODE MANAGEMENT
-// ============================================
-
-class DarkMode {
-    static init() {
-        const preference = localStorage.getItem('darkMode');
-        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-
-        // Apply dark mode if user preference exists or system prefers dark
-        if (preference === 'true' || (preference === null && prefersDark)) {
-            this.enable();
-        }
-
-        // Listen for system theme changes
-        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
-            if (localStorage.getItem('darkMode') === null) {
-                e.matches ? this.enable() : this.disable();
-            }
-        });
-
-        // Add dark mode toggle button listener if it exists
-        const darkModeBtn = document.getElementById('darkModeToggle');
-        if (darkModeBtn) {
-            darkModeBtn.addEventListener('click', () => this.toggle());
-        }
-    }
-
-    static toggle() {
-        document.body.classList.toggle('dark-mode');
-        const isDark = document.body.classList.contains('dark-mode');
-        localStorage.setItem('darkMode', isDark);
-        Notification.show(isDark ? '🌙 Dark mode enabled' : '☀️ Light mode enabled');
-    }
-
-    static enable() {
-        document.body.classList.add('dark-mode');
-        localStorage.setItem('darkMode', 'true');
-    }
-
-    static disable() {
-        document.body.classList.remove('dark-mode');
-        localStorage.setItem('darkMode', 'false');
-    }
 }
 
-// ============================================
-// NOTIFICATION SYSTEM
-// ============================================
 
-class Notification {
-    static show(message, type = 'success', duration = 3000) {
-        const notification = document.createElement('div');
-        notification.className = `notification notification-${type}`;
-        notification.setAttribute('role', 'alert');
-        notification.setAttribute('aria-live', 'polite');
+/* ================= TASKS ================= */
 
-        notification.innerHTML = `
-            <div class="notification-content">
-                <span>${message}</span>
-                <button class="notification-close" aria-label="Close notification">&times;</button>
-            </div>
-        `;
-
-        document.body.appendChild(notification);
-
-        // Trigger animation
-        setTimeout(() => notification.classList.add('show'), 10);
-
-        const closeBtn = notification.querySelector('.notification-close');
-        const remove = () => {
-            notification.classList.remove('show');
-            setTimeout(() => notification.remove(), 300);
-        };
-
-        closeBtn.addEventListener('click', remove);
-        setTimeout(remove, duration);
-    }
-
-    static success(msg, duration) {
-        this.show(msg, 'success', duration);
-    }
-
-    static error(msg, duration) {
-        this.show(msg, 'error', duration);
-    }
-
-    static info(msg, duration) {
-        this.show(msg, 'info', duration);
-    }
-
-    static warning(msg, duration) {
-        this.show(msg, 'warning', duration);
-    }
-}
-
-// ============================================
-// NAVIGATION MANAGEMENT
-// ============================================
-
-class Navigation {
-    static init() {
-        const currentPath = window.location.pathname;
-        const links = document.querySelectorAll('.nav-menu a');
-
-        links.forEach(link => {
-            link.classList.remove('active');
-            const href = link.getAttribute('href');
-
-            if (this.isCurrentPage(currentPath, href)) {
-                link.classList.add('active');
-            }
-        });
-    }
-
-    static isCurrentPage(path, href) {
-        if ((path.includes('index.html') || path.endsWith('/')) && href === 'index.html') {
-            return true;
-        }
-        return path.includes(href.replace('.html', ''));
-    }
-}
-
-// ============================================
-// DATA MANAGEMENT
-// ============================================
-
-class DataManager {
-    /**
-     * Export all data as JSON file
-     */
-    static export() {
-        const data = {
-            notes: Storage.get('notes'),
-            tasks: Storage.get('tasks'),
-            events: Storage.get('events'),
-            schedules: Storage.get('schedules'),
-            exportedAt: new Date().toISOString(),
-            version: '1.0'
-        };
-
-        const dataStr = JSON.stringify(data, null, 2);
-        const dataBlob = new Blob([dataStr], { type: 'application/json' });
-        const url = URL.createObjectURL(dataBlob);
-        const link = document.createElement('a');
-
-        link.href = url;
-        link.download = `study-space-backup-${new Date().toISOString().split('T')[0]}.json`;
-        link.click();
-
-        URL.revokeObjectURL(url);
-        Notification.success('📥 Data exported successfully!');
-    }
-
-    /**
-     * Import data from JSON file
-     */
-    static import(file) {
-        const reader = new FileReader();
-
-        reader.onload = (e) => {
-            try {
-                const data = JSON.parse(e.target.result);
-
-                // Validate data structure
-                if (!data.version) {
-                    throw new Error('Invalid backup file format');
-                }
-
-                // Import data collections
-                if (data.notes) Storage.set('notes', data.notes);
-                if (data.tasks) Storage.set('tasks', data.tasks);
-                if (data.events) Storage.set('events', data.events);
-                if (data.schedules) Storage.set('schedules', data.schedules);
-
-                Notification.success('✅ Data imported successfully!');
-                setTimeout(() => location.reload(), 500);
-            } catch (error) {
-                Notification.error('❌ Error importing data: ' + error.message);
-            }
-        };
-
-        reader.onerror = () => {
-            Notification.error('❌ Error reading file');
-        };
-
-        reader.readAsText(file);
-    }
-
-    /**
-     * Get statistics for dashboard
-     */
-    static getStats() {
-        return {
-            notes: Storage.count('notes'),
-            tasks: Storage.count('tasks'),
-            completedTasks: Storage.filter('tasks', t => t.completed).length,
-            events: Storage.count('events'),
-            schedules: Storage.count('schedules'),
-            studyStreak: this.calculateStudyStreak()
-        };
-    }
-
-    /**
-     * Calculate study streak from notes creation dates
-     */
-    static calculateStudyStreak() {
-        const notes = Storage.get('notes');
-        if (notes.length === 0) return 0;
-
-        const dates = new Set(notes.map(n =>
-            new Date(n.createdAt).toISOString().split('T')[0]
-        ));
-
-        return dates.size;
-    }
-
-    /**
-     * Clear all data (with confirmation)
-     */
-    static clearAll() {
-        if (confirm('⚠️ Are you sure? This will delete all your data permanently.')) {
-            Storage.clear('notes');
-            Storage.clear('tasks');
-            Storage.clear('events');
-            Storage.clear('schedules');
-            Notification.success('All data cleared');
-            location.reload();
-        }
-    }
-}
-
-// ============================================
-// KEYBOARD SHORTCUTS
-// ============================================
-
-class KeyboardShortcuts {
-    static init() {
-        document.addEventListener('keydown', (e) => {
-            // Cmd/Ctrl + K: Search
-            if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
-                e.preventDefault();
-                this.handleSearch();
-            }
-
-            // Cmd/Ctrl + D: Dark Mode Toggle
-            if ((e.ctrlKey || e.metaKey) && e.key === 'd') {
-                e.preventDefault();
-                DarkMode.toggle();
-            }
-
-            // Cmd/Ctrl + E: Export Data
-            if ((e.ctrlKey || e.metaKey) && e.key === 'e') {
-                e.preventDefault();
-                DataManager.export();
-            }
-
-            // Escape: Close modals
-            if (e.key === 'Escape') {
-                this.closeModals();
-            }
-        });
-    }
-
-    static handleSearch() {
-        Notification.info('🔍 Search functionality coming soon!');
-    }
-
-    static closeModals() {
-        const modals = document.querySelectorAll('[role="dialog"]');
-        modals.forEach(modal => modal.classList.remove('active'));
-    }
-}
-
-// ============================================
-// UTILITY FUNCTIONS
-// ============================================
-
-/**
- * Escape HTML special characters to prevent XSS
- */
-function escapeHTML(text) {
-    const div = document.createElement('div');
-    div.textContent = text;
-    return div.innerHTML;
-}
-
-/**
- * Sanitize user input
- */
-function sanitizeInput(input) {
-    return input.trim().replace(/[<>]/g, '');
-}
-
-/**
- * Format date for display
- */
-function formatDate(date) {
-    return new Date(date).toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'short',
-        day: 'numeric'
-    });
-}
-
-/**
- * Format time for display
- */
-function formatTime(time) {
-    return new Date(`2000-01-01 ${time}`).toLocaleTimeString('en-US', {
-        hour: '2-digit',
-        minute: '2-digit'
-    });
-}
-
-// ============================================
-// OFFLINE SUPPORT
-// ============================================
-
-class OfflineSupport {
-    static init() {
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('/sw.js').then(reg => {
-                console.log('✅ Service Worker registered');
-            }).catch(err => {
-                console.log('ℹ️ Service Worker registration skipped:', err);
-            });
-        }
-
-        // Listen for online/offline events
-        window.addEventListener('online', () => {
-            Notification.success('📡 Back online!');
-        });
-
-        window.addEventListener('offline', () => {
-            Notification.warning('📡 You are offline - changes will sync when online');
-        });
-    }
-}
-
-// =========================================
-// TASK SYSTEM
-// =========================================
-
-let tasks = JSON.parse(
-    localStorage.getItem("studyTasks")
-) || [];
+let tasks = JSON.parse(localStorage.getItem("studyTasks")) || [];
 
 
 function saveTasks() {
-    localStorage.setItem(
-        "studyTasks",
-        JSON.stringify(tasks)
-    );
+    localStorage.setItem("studyTasks", JSON.stringify(tasks));
 }
 
 
 function addTask() {
-    const input =
-        document.getElementById("taskInput");
 
-    const priority =
-        document.getElementById("priority");
+    const input = document.getElementById("taskInput");
+    const priority = document.getElementById("taskPriority");
 
-    const text =
-        input.value.trim();
+    if (!input) return;
+
+    const text = input.value.trim();
 
     if (!text) {
-        Notification.error("❌ Please enter a task.");
+        alert("Please enter a task.");
         return;
     }
 
     const task = {
         id: Date.now(),
         text: text,
-        priority: priority.value,
+        priority: priority ? priority.value : "Medium",
         completed: false
     };
 
     tasks.push(task);
+
     saveTasks();
+
     input.value = "";
-    Notification.success("✅ Task added successfully!");
+
     renderTasks();
 }
 
 
 function toggleTask(id) {
-    const task =
-        tasks.find(t => t.id === id);
 
-    if (!task) return;
+    tasks = tasks.map(task => {
 
-    task.completed =
-        !task.completed;
+        if (task.id === id) {
+            task.completed = !task.completed;
+        }
+
+        return task;
+
+    });
 
     saveTasks();
+
     renderTasks();
 }
 
 
 function deleteTask(id) {
-    tasks =
-        tasks.filter(
-            task => task.id !== id
-        );
+
+    tasks = tasks.filter(task => task.id !== id);
 
     saveTasks();
-    Notification.success("✅ Task deleted!");
+
+    renderTasks();
+}
+
+
+function clearCompletedTasks() {
+
+    tasks = tasks.filter(task => !task.completed);
+
+    saveTasks();
+
     renderTasks();
 }
 
 
 function renderTasks() {
-    const container =
-        document.getElementById("tasksList");
 
-    if (!container) return;
+    const list = document.getElementById("taskList");
+
+    if (!list) return;
+
+    const total = tasks.length;
+
+    const completed = tasks.filter(t => t.completed).length;
+
+    const remaining = total - completed;
+
+    const totalElement = document.getElementById("totalTasks");
+    const completedElement = document.getElementById("completedTasks");
+    const remainingElement = document.getElementById("remainingTasks");
+
+    if (totalElement) totalElement.textContent = total;
+    if (completedElement) completedElement.textContent = completed;
+    if (remainingElement) remainingElement.textContent = remaining;
+
 
     if (tasks.length === 0) {
-        container.innerHTML = `
+
+        list.innerHTML = `
             <div class="empty-state">
-                <div class="empty-icon">✅</div>
-                <p>No tasks yet. Add your first task!</p>
+                <div class="empty-icon">📝</div>
+                <h3>No tasks yet</h3>
+                <p>Add your first task above.</p>
             </div>
         `;
+
         return;
     }
 
-    container.innerHTML =
-        tasks.map(task => `
+
+    list.innerHTML = tasks.map(task => {
+
+        const priorityClass =
+            task.priority.toLowerCase() === "high"
+                ? "priority-high"
+                : task.priority.toLowerCase() === "low"
+                    ? "priority-low"
+                    : "priority-medium";
+
+        return `
             <div class="task-item ${task.completed ? "completed" : ""}">
-                <div class="task-left">
-                    <input
-                        type="checkbox"
-                        ${task.completed ? "checked" : ""}
-                        onchange="toggleTask(${task.id})"
-                    >
-                    <span>${escapeHTML(task.text)}</span>
-                </div>
-                <div class="task-right">
-                    <small class="priority-badge">${task.priority}</small>
-                    <button
-                        class="danger-btn"
-                        onclick="deleteTask(${task.id})">
-                        🗑️ Delete
-                    </button>
-                </div>
+
+                <input
+                    class="task-check"
+                    type="checkbox"
+                    ${task.completed ? "checked" : ""}
+                    onchange="toggleTask(${task.id})"
+                >
+
+                <span class="task-text">
+                    ${escapeHTML(task.text)}
+                </span>
+
+                <span class="priority ${priorityClass}">
+                    ${task.priority}
+                </span>
+
+                <button
+                    class="task-delete"
+                    onclick="deleteTask(${task.id})"
+                    title="Delete task"
+                >
+                    🗑️
+                </button>
+
             </div>
+        `;
+
+    }).join("");
+}
+
+
+/* ================= EVENTS ================= */
+
+let events = JSON.parse(localStorage.getItem("studyEvents")) || [];
+
+let currentCalendarDate = new Date();
+
+let selectedDate =
+    new Date().toISOString().split("T")[0];
+
+
+function saveEvents() {
+
+    localStorage.setItem(
+        "studyEvents",
+        JSON.stringify(events)
+    );
+}
+
+
+function formatDate(date) {
+
+    const year = date.getFullYear();
+
+    const month = String(
+        date.getMonth() + 1
+    ).padStart(2, "0");
+
+    const day = String(
+        date.getDate()
+    ).padStart(2, "0");
+
+    return `${year}-${month}-${day}`;
+}
+
+
+function renderCalendar() {
+
+    const calendar = document.getElementById("calendarGrid");
+
+    if (!calendar) return;
+
+    const monthTitle =
+        document.getElementById("calendarMonth");
+
+    const year = currentCalendarDate.getFullYear();
+
+    const month = currentCalendarDate.getMonth();
+
+    const monthName =
+        currentCalendarDate.toLocaleString(
+            "default",
+            { month: "long" }
+        );
+
+    if (monthTitle) {
+        monthTitle.textContent =
+            `${monthName} ${year}`;
+    }
+
+
+    const firstDay =
+        new Date(year, month, 1).getDay();
+
+    const daysInMonth =
+        new Date(year, month + 1, 0).getDate();
+
+
+    calendar.innerHTML = "";
+
+
+    // Empty spaces
+    for (let i = 0; i < firstDay; i++) {
+
+        const empty = document.createElement("div");
+
+        empty.className = "empty-day";
+
+        calendar.appendChild(empty);
+    }
+
+
+    // Days
+    for (let day = 1; day <= daysInMonth; day++) {
+
+        const date =
+            new Date(year, month, day);
+
+        const dateString =
+            formatDate(date);
+
+        const button =
+            document.createElement("button");
+
+        button.className = "calendar-day";
+
+        button.textContent = day;
+
+        if (
+            dateString ===
+            new Date().toISOString().split("T")[0]
+        ) {
+            button.classList.add("today");
+        }
+
+        if (dateString === selectedDate) {
+            button.classList.add("selected");
+        }
+
+        if (
+            events.some(
+                event => event.date === dateString
+            )
+        ) {
+            button.classList.add("has-event");
+        }
+
+
+        button.addEventListener(
+            "click",
+            () => selectCalendarDate(dateString)
+        );
+
+        calendar.appendChild(button);
+    }
+}
+
+
+function selectCalendarDate(date) {
+
+    selectedDate = date;
+
+    const dateInput =
+        document.getElementById("eventDate");
+
+    if (dateInput) {
+        dateInput.value = date;
+    }
+
+    renderCalendar();
+
+    renderEvents();
+}
+
+
+function changeMonth(direction) {
+
+    currentCalendarDate.setMonth(
+        currentCalendarDate.getMonth() + direction
+    );
+
+    renderCalendar();
+}
+
+
+function addEvent() {
+
+    const titleInput =
+        document.getElementById("eventTitle");
+
+    const dateInput =
+        document.getElementById("eventDate");
+
+    const timeInput =
+        document.getElementById("eventTime");
+
+    const descriptionInput =
+        document.getElementById("eventDescription");
+
+
+    if (!titleInput || !dateInput) return;
+
+
+    const title =
+        titleInput.value.trim();
+
+    const date =
+        dateInput.value;
+
+    const time =
+        timeInput ? timeInput.value : "";
+
+    const description =
+        descriptionInput
+            ? descriptionInput.value.trim()
+            : "";
+
+
+    if (!title || !date) {
+
+        alert(
+            "Please enter event title and date."
+        );
+
+        return;
+    }
+
+
+    events.push({
+
+        id: Date.now(),
+
+        title: title,
+
+        date: date,
+
+        time: time,
+
+        description: description
+
+    });
+
+
+    saveEvents();
+
+
+    titleInput.value = "";
+
+    if (timeInput) {
+        timeInput.value = "";
+    }
+
+    if (descriptionInput) {
+        descriptionInput.value = "";
+    }
+
+
+    selectedDate = date;
+
+
+    renderCalendar();
+
+    renderEvents();
+}
+
+
+function deleteEvent(id) {
+
+    events =
+        events.filter(
+            event => event.id !== id
+        );
+
+    saveEvents();
+
+    renderCalendar();
+
+    renderEvents();
+}
+
+
+function renderEvents() {
+
+    const list =
+        document.getElementById("eventList");
+
+    if (!list) return;
+
+
+    const selectedEvents =
+        events
+            .filter(event => event.date === selectedDate)
+            .sort((a, b) =>
+                (a.time || "").localeCompare(
+                    b.time || ""
+                )
+            );
+
+
+    if (selectedEvents.length === 0) {
+
+        list.innerHTML = `
+            <div class="empty-state">
+                <div class="empty-icon">📅</div>
+                <h3>No events</h3>
+                <p>No events scheduled for ${selectedDate}.</p>
+            </div>
+        `;
+
+        return;
+    }
+
+
+    list.innerHTML =
+        selectedEvents.map(event => `
+
+            <div class="event-item">
+
+                <div class="event-info">
+
+                    <strong>
+                        ${escapeHTML(event.title)}
+                    </strong>
+
+                    <small>
+                        ${event.date}
+                        ${event.time ? " • " + event.time : ""}
+                    </small>
+
+                    ${
+                        event.description
+                        ? `
+                            <p style="margin-top:6px;">
+                                ${escapeHTML(event.description)}
+                            </p>
+                        `
+                        : ""
+                    }
+
+                </div>
+
+                <button
+                    class="btn btn-danger"
+                    onclick="deleteEvent(${event.id})"
+                >
+                    Delete
+                </button>
+
+            </div>
+
         `).join("");
 }
 
-// ============================================
-// INITIALIZATION
-// ============================================
 
-document.addEventListener('DOMContentLoaded', () => {
-    // Initialize all systems
-    Navigation.init();
-    DarkMode.init();
-    KeyboardShortcuts.init();
-    OfflineSupport.init();
-    renderTasks();
+/* ================= PLANNER ================= */
 
-    console.log('✅ Study Space loaded successfully!');
-});
+let schedules =
+    JSON.parse(
+        localStorage.getItem("studySchedules")
+    ) || [];
 
-// Fallback for older browsers
-if (!window.matchMedia) {
-    window.matchMedia = () => ({ matches: false });
+
+function saveSchedules() {
+
+    localStorage.setItem(
+        "studySchedules",
+        JSON.stringify(schedules)
+    );
 }
+
+
+function addSchedule() {
+
+    const subject =
+        document.getElementById("subjectInput");
+
+    const start =
+        document.getElementById("startTime");
+
+    const end =
+        document.getElementById("endTime");
+
+    const type =
+        document.getElementById("scheduleType");
+
+
+    if (!subject || !start || !end || !type) {
+        return;
+    }
+
+
+    if (
+        !subject.value.trim() ||
+        !start.value ||
+        !end.value
+    ) {
+
+        alert(
+            "Please fill Subject, Start Time and End Time."
+        );
+
+        return;
+    }
+
+
+    if (start.value >= end.value) {
+
+        alert(
+            "End time must be after start time."
+        );
+
+        return;
+    }
+
+
+    schedules.push({
+
+        id: Date.now(),
+
+        subject: subject.value.trim(),
+
+        start: start.value,
+
+        end: end.value,
+
+        type: type.value
+
+    });
+
+
+    schedules.sort(
+        (a, b) =>
+            a.start.localeCompare(b.start)
+    );
+
+
+    saveSchedules();
+
+
+    subject.value = "";
+
+    start.value = "";
+
+    end.value = "";
+
+    renderSchedules();
+}
+
+
+function deleteSchedule(id) {
+
+    schedules =
+        schedules.filter(
+            item => item.id !== id
+        );
+
+    saveSchedules();
+
+    renderSchedules();
+}
+
+
+function clearSchedules() {
+
+    if (schedules.length === 0) {
+        return;
+    }
+
+    if (
+        confirm(
+            "Are you sure you want to clear all schedules?"
+        )
+    ) {
+
+        schedules = [];
+
+        saveSchedules();
+
+        renderSchedules();
+    }
+}
+
+
+function renderSchedules() {
+
+    const list =
+        document.getElementById("scheduleList");
+
+    if (!list) return;
+
+
+    if (schedules.length === 0) {
+
+        list.innerHTML = `
+            <div class="empty-state">
+                <div class="empty-icon">⏰</div>
+                <h3>No study sessions</h3>
+                <p>Create your first study schedule above.</p>
+            </div>
+        `;
+
+        return;
+    }
+
+
+    list.innerHTML =
+        schedules.map(item => `
+
+            <div class="schedule-item">
+
+                <div class="schedule-time">
+
+                    ${item.start}
+                    <br>
+                    ↓
+                    <br>
+                    ${item.end}
+
+                </div>
+
+                <div>
+
+                    <div class="schedule-subject">
+                        ${escapeHTML(item.subject)}
+                    </div>
+
+                    <span class="schedule-type">
+                        ${escapeHTML(item.type)}
+                    </span>
+
+                </div>
+
+                <button
+                    class="btn btn-danger"
+                    onclick="deleteSchedule(${item.id})"
+                >
+                    Delete
+                </button>
+
+            </div>
+
+        `).join("");
+}
+
+
+/* ================= SECURITY HELPER ================= */
+
+function escapeHTML(text) {
+
+    const div =
+        document.createElement("div");
+
+    div.textContent = text;
+
+    return div.innerHTML;
+}
+
+
+/* ================= INITIALIZE ================= */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    () => {
+
+        setupNavigation();
+
+        renderTasks();
+
+        renderCalendar();
+
+        renderEvents();
+
+        renderSchedules();
+
+    }
+);
