@@ -2,213 +2,206 @@
 <html lang="en">
 
 <head>
-
     <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Tasks - Study Space</title>
 
-    <link
-        rel="stylesheet"
-        href="../styles.css"
-    >
-
+    <link rel="stylesheet" href="../styles.css">
 </head>
 
 <body>
 
-<!-- ================= NAVBAR ================= -->
+<!-- NAVBAR -->
 
-<header class="navbar">
+<nav class="navbar">
 
     <a href="../index.html" class="logo">
         📚 Study <span>Space</span>
     </a>
 
-    <nav class="nav-links">
+    <ul class="nav-links">
 
-        <a href="../index.html">🏠 Home</a>
+        <li><a href="../index.html">🏠 Home</a></li>
 
-        <a href="notes.html">📝 Notes</a>
+        <li><a href="notes.html">📝 Notes</a></li>
 
-        <a href="tasks.html">✅ Tasks</a>
+        <li><a href="tasks.html" class="active">✅ Tasks</a></li>
 
-        <a href="events.html">📅 Events</a>
+        <li><a href="events.html">📅 Events</a></li>
 
-        <a href="planner.html">⏰ Planner</a>
+        <li><a href="planner.html">⏰ Planner</a></li>
 
-        <a href="documents.html">📁 Documents</a>
+        <li><a href="documents.html">📁 Documents</a></li>
 
-        <a href="painting.html">🎨 Painting</a>
+        <li><a href="painting.html">🎨 Painting</a></li>
 
-        <a href="games.html">🎮 Games</a>
+        <li><a href="games.html">🎮 Games</a></li>
 
-        <a href="profile.html">👤 Profile</a>
+        <li><a href="profile.html">👤 Profile</a></li>
 
-    </nav>
+    </ul>
 
-</header>
+</nav>
 
-
-<!-- ================= MAIN ================= -->
 
 <main class="page">
 
-    <!-- HEADER -->
+    <!-- HERO -->
 
-    <section class="page-header">
+    <section class="page-hero">
 
-        <div class="icon">✅</div>
+        <div class="hero-content">
 
-        <h1>My Tasks</h1>
+            <div class="hero-icon">✅</div>
 
-        <p>
-            Plan your day, complete your goals and stay productive.
-        </p>
+            <h1>My Tasks</h1>
 
-    </section>
-
-
-    <!-- TASK FORM -->
-
-    <section class="card">
-
-        <h2>➕ Add a New Task</h2>
-
-        <div class="task-form">
-
-            <div>
-
-                <label for="taskInput">
-                    Task
-                </label>
-
-                <input
-                    id="taskInput"
-                    type="text"
-                    placeholder="What do you need to do?"
-                    onkeydown="
-                        if(event.key === 'Enter') addTask()
-                    "
-                >
-
-            </div>
-
-
-            <div>
-
-                <label for="taskPriority">
-                    Priority
-                </label>
-
-                <select id="taskPriority">
-
-                    <option value="High">
-                        🔴 High
-                    </option>
-
-                    <option value="Medium" selected>
-                        🟡 Medium
-                    </option>
-
-                    <option value="Low">
-                        🟢 Low
-                    </option>
-
-                </select>
-
-            </div>
-
-
-            <button
-                class="btn btn-primary"
-                onclick="addTask()"
-            >
-                + Add Task
-            </button>
+            <p>
+                Plan your day, complete your goals and stay productive.
+            </p>
 
         </div>
 
     </section>
 
 
-    <!-- STATISTICS -->
+    <!-- TASK CONTENT -->
 
-    <section class="card">
+    <section class="task-layout">
 
-        <div class="task-stats">
 
-            <div class="stat-card">
+        <!-- ADD TASK -->
 
-                <strong id="totalTasks">
-                    0
-                </strong>
+        <div class="card">
 
-                <span>Total Tasks</span>
+            <h2>➕ Add a New Task</h2>
+
+            <div class="task-form">
+
+                <div class="form-group">
+
+                    <label>Task</label>
+
+                    <input
+                        type="text"
+                        id="taskTitle"
+                        placeholder="What do you need to do?">
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>Priority</label>
+
+                    <select id="taskPriority">
+
+                        <option value="High">
+                            🔴 High
+                        </option>
+
+                        <option value="Medium" selected>
+                            🟡 Medium
+                        </option>
+
+                        <option value="Low">
+                            🟢 Low
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>Due Date</label>
+
+                    <input
+                        type="date"
+                        id="taskDate">
+
+                </div>
+
+
+                <button
+                    class="btn"
+                    onclick="addTask()">
+
+                    + Add Task
+
+                </button>
 
             </div>
 
 
-            <div class="stat-card">
+            <!-- STATS -->
 
-                <strong id="completedTasks">
-                    0
-                </strong>
+            <div class="stats">
 
-                <span>Completed</span>
+                <div class="stat">
 
-            </div>
+                    <strong id="totalTasks">0</strong>
 
+                    <span>Total</span>
 
-            <div class="stat-card">
+                </div>
 
-                <strong id="remainingTasks">
-                    0
-                </strong>
+                <div class="stat">
 
-                <span>Remaining</span>
+                    <strong id="completedTasks">0</strong>
+
+                    <span>Completed</span>
+
+                </div>
+
+                <div class="stat">
+
+                    <strong id="remainingTasks">0</strong>
+
+                    <span>Remaining</span>
+
+                </div>
 
             </div>
 
         </div>
 
-    </section>
+
+        <!-- TASK LIST -->
+
+        <div class="card">
+
+            <div style="
+                display:flex;
+                justify-content:space-between;
+                align-items:center;
+                gap:15px;
+                margin-bottom:20px;
+            ">
+
+                <h2 style="margin:0;">
+                    📋 Your To-Do List
+                </h2>
+
+                <button
+                    class="btn secondary"
+                    onclick="clearCompletedTasks()">
+
+                    Clear Completed
+
+                </button>
+
+            </div>
 
 
-    <!-- TASK LIST -->
-
-    <section class="card">
-
-        <div style="
-            display:flex;
-            justify-content:space-between;
-            align-items:center;
-            gap:15px;
-            margin-bottom:20px;
-        ">
-
-            <h2 style="margin:0;">
-                📋 Your To-Do List
-            </h2>
-
-            <button
-                class="btn btn-secondary"
-                onclick="clearCompletedTasks()"
-            >
-                Clear Completed
-            </button>
+            <div
+                id="taskList"
+                class="task-list">
+            </div>
 
         </div>
-
-
-        <div
-            id="taskList"
-            class="task-list"
-        ></div>
 
     </section>
 
@@ -218,5 +211,4 @@
 <script src="../script.js"></script>
 
 </body>
-
 </html>
