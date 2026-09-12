@@ -7,73 +7,77 @@
 
     <meta
         name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+        content="width=device-width, initial-scale=1.0">
 
     <title>Events - Study Space</title>
 
-    <link
-        rel="stylesheet"
-        href="../styles.css"
-    >
+    <link rel="stylesheet" href="../styles.css">
 
 </head>
 
+
 <body>
 
-<!-- ================= NAVBAR ================= -->
 
-<header class="navbar">
+<nav class="navbar">
 
     <a href="../index.html" class="logo">
         📚 Study <span>Space</span>
     </a>
 
-    <nav class="nav-links">
+    <ul class="nav-links">
 
-        <a href="../index.html">🏠 Home</a>
+        <li><a href="../index.html">🏠 Home</a></li>
 
-        <a href="notes.html">📝 Notes</a>
+        <li><a href="notes.html">📝 Notes</a></li>
 
-        <a href="tasks.html">✅ Tasks</a>
+        <li><a href="tasks.html">✅ Tasks</a></li>
 
-        <a href="events.html">📅 Events</a>
+        <li><a href="events.html" class="active">
+            📅 Events
+        </a></li>
 
-        <a href="planner.html">⏰ Planner</a>
+        <li><a href="planner.html">⏰ Planner</a></li>
 
-        <a href="documents.html">📁 Documents</a>
+        <li><a href="documents.html">📁 Documents</a></li>
 
-        <a href="painting.html">🎨 Painting</a>
+        <li><a href="painting.html">🎨 Painting</a></li>
 
-        <a href="games.html">🎮 Games</a>
+        <li><a href="games.html">🎮 Games</a></li>
 
-        <a href="profile.html">👤 Profile</a>
+        <li><a href="profile.html">👤 Profile</a></li>
 
-    </nav>
+    </ul>
 
-</header>
+</nav>
 
 
 <main class="page">
 
-    <!-- HEADER -->
 
-    <section class="page-header">
+    <!-- HERO -->
 
-        <div class="icon">📅</div>
+    <section class="page-hero">
 
-        <h1>My Events</h1>
+        <div class="hero-content">
 
-        <p>
-            Keep track of exams, assignments and important dates.
-        </p>
+            <div class="hero-icon">📅</div>
+
+            <h1>My Events</h1>
+
+            <p>
+                Keep track of assignments, exams and important dates.
+            </p>
+
+        </div>
 
     </section>
 
 
-    <!-- CALENDAR + FORM -->
+    <!-- EVENTS -->
 
     <section class="events-layout">
+
 
         <!-- CALENDAR -->
 
@@ -81,22 +85,22 @@
 
             <div class="calendar-header">
 
-                <h2 id="calendarMonth">
-                    Month Year
+                <h2 id="calendarTitle">
+                    September 2026
                 </h2>
 
-                <div class="calendar-nav">
+                <div class="calendar-buttons">
 
                     <button
-                        onclick="changeMonth(-1)"
-                    >
-                        ‹
+                        class="small-btn"
+                        onclick="previousMonth()">
+                        ←
                     </button>
 
                     <button
-                        onclick="changeMonth(1)"
-                    >
-                        ›
+                        class="small-btn"
+                        onclick="nextMonth()">
+                        →
                     </button>
 
                 </div>
@@ -104,99 +108,87 @@
             </div>
 
 
-            <div class="calendar-weekdays">
+            <div class="weekdays">
 
-                <div>Sun</div>
-                <div>Mon</div>
-                <div>Tue</div>
-                <div>Wed</div>
-                <div>Thu</div>
-                <div>Fri</div>
-                <div>Sat</div>
+                <div class="weekday">SUN</div>
+                <div class="weekday">MON</div>
+                <div class="weekday">TUE</div>
+                <div class="weekday">WED</div>
+                <div class="weekday">THU</div>
+                <div class="weekday">FRI</div>
+                <div class="weekday">SAT</div>
 
             </div>
 
 
             <div
-                id="calendarGrid"
-                class="calendar-grid"
-            ></div>
+                id="calendar"
+                class="calendar-grid">
+            </div>
 
         </div>
 
 
-        <!-- EVENT FORM -->
+        <!-- ADD EVENT -->
 
         <div class="card">
 
-            <h2>➕ Create Event</h2>
+            <h2>➕ Add Event</h2>
 
-            <div class="event-form">
+            <div class="task-form">
 
 
                 <div class="form-group">
 
-                    <label for="eventTitle">
-                        Event Title
-                    </label>
+                    <label>Event Title</label>
 
                     <input
-                        id="eventTitle"
                         type="text"
-                        placeholder="e.g. Deep Learning Assignment"
-                    >
+                        id="eventTitle"
+                        placeholder="e.g. Deep Learning Assignment">
 
                 </div>
 
 
                 <div class="form-group">
 
-                    <label for="eventDate">
-                        Date
-                    </label>
+                    <label>Date</label>
 
                     <input
-                        id="eventDate"
                         type="date"
-                    >
+                        id="eventDate">
 
                 </div>
 
 
                 <div class="form-group">
 
-                    <label for="eventTime">
-                        Time
-                    </label>
+                    <label>Time</label>
 
                     <input
-                        id="eventTime"
                         type="time"
-                    >
+                        id="eventTime">
 
                 </div>
 
 
                 <div class="form-group">
 
-                    <label for="eventDescription">
-                        Description
-                    </label>
+                    <label>Description</label>
 
                     <textarea
                         id="eventDescription"
-                        rows="4"
-                        placeholder="Add some details..."
-                    ></textarea>
+                        placeholder="Add some details..."></textarea>
 
                 </div>
 
 
                 <button
-                    class="btn btn-primary"
-                    onclick="addEvent()"
-                >
-                    📅 Save Event
+                    class="btn"
+                    onclick="addEvent()">
+
+                    + Save Event
+
                 </button>
 
             </div>
@@ -206,45 +198,26 @@
     </section>
 
 
-    <!-- EVENTS -->
+    <!-- EVENT LIST -->
 
-    <section class="card">
+    <section
+        class="card"
+        style="margin-top:25px;">
 
-        <h2>
-            📌 Events for Selected Date
-        </h2>
+        <h2>📌 Upcoming Events</h2>
 
         <div
             id="eventList"
-            class="event-list"
-        ></div>
+            class="event-list">
+        </div>
 
     </section>
+
 
 </main>
 
 
 <script src="../script.js"></script>
 
-<script>
-
-    // Set today's date when page opens
-    document.addEventListener("DOMContentLoaded", () => {
-
-        const dateInput =
-            document.getElementById("eventDate");
-
-        if (dateInput) {
-
-            dateInput.value =
-                new Date().toISOString().split("T")[0];
-
-        }
-
-    });
-
-</script>
-
 </body>
-
 </html>
