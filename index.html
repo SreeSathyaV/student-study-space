@@ -1,978 +1,131 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
     <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0">
-
-    <title>Student Study Space</title>
-
-    <link
-        rel="stylesheet"
-        href="styles.css">
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Study Space - Your All-in-One Study Platform</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
-
-
 <body>
-
-
-<!-- ================= NAVBAR ================= -->
-
-<header class="navbar">
-
-    <div class="logo">
-
-        <div class="logo-icon">
-            S
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">📚 Study Space</div>
+            <ul class="nav-menu">
+                <li><a href="index.html" class="active">🏠 Home</a></li>
+                <li><a href="pages/notes.html">📝 Notes</a></li>
+                <li><a href="pages/tasks.html">✅ Tasks</a></li>
+                <li><a href="pages/events.html">📅 Events</a></li>
+                <li><a href="pages/planner.html">⏰ Planner</a></li>
+                <li><a href="pages/documents.html">📂 Documents</a></li>
+                <li><a href="pages/painting.html">🎨 Painting</a></li>
+                <li><a href="pages/games.html">🎮 Games</a></li>
+                <li><a href="pages/profile.html">👤 Profile</a></li>
+            </ul>
         </div>
-
-        <span>
-            Student<span>Space</span>
-        </span>
-
-    </div>
-
-
-    <nav>
-
-        <a href="#home">Home</a>
-
-        <a href="#features">Features</a>
-
-        <a href="#tools">Tools</a>
-
-        <a href="pages/profile.html">
-            Profile
-        </a>
-
     </nav>
 
-
-    <button
-        class="menu-btn"
-        onclick="toggleMenu()">
-
-        ☰
-
-    </button>
-
-</header>
-
-
-
-<!-- ================= MOBILE MENU ================= -->
-
-<div
-    id="mobileMenu"
-    class="mobile-menu">
-
-    <a href="#home">
-        Home
-    </a>
-
-    <a href="#features">
-        Features
-    </a>
-
-    <a href="#tools">
-        Tools
-    </a>
-
-    <a href="pages/profile.html">
-        Profile
-    </a>
-
-</div>
-
-
-
-<!-- ================= HERO ================= -->
-
-<section
-    id="home"
-    class="hero">
-
-
-    <div class="hero-content">
-
-
-        <div class="small-label">
-
-            ✦ YOUR PERSONAL STUDY SPACE
-
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Hi, <span id="userName">Sree Sathya</span>! 👋</h1>
+            <p class="tagline">"Small steps every day lead to big achievements."</p>
+            <h2>Your Study Space — Everything you need in one place.</h2>
         </div>
+    </section>
 
-
-        <h1>
-
-            STUDY SMARTER.
-            <br>
-
-            <span>
-                CREATE BETTER.
-            </span>
-
-        </h1>
-
-
-        <p>
-
-            A beautiful digital space to organize
-            your notes, tasks, events, study schedules,
-            documents and creative ideas — all in one place.
-
-        </p>
-
-
-        <div class="hero-buttons">
-
-            <a
-                href="pages/notes.html"
-                class="primary-btn">
-
-                Start Studying
-                <span>→</span>
-
-            </a>
-
-
-            <a
-                href="#features"
-                class="secondary-btn">
-
-                Explore Features
-
-            </a>
-
-        </div>
-
-
-        <div class="hero-stats">
-
-            <div>
-
-                <strong>
-                    08+
-                </strong>
-
-                <span>
-                    Study Tools
-                </span>
-
-            </div>
-
-
-            <div>
-
-                <strong>
-                    ∞
-                </strong>
-
-                <span>
-                    Notes
-                </span>
-
-            </div>
-
-
-            <div>
-
-                <strong>
-                    24/7
-                </strong>
-
-                <span>
-                    Your Space
-                </span>
-
-            </div>
-
-        </div>
-
-    </div>
-
-
-
-    <!-- HERO VISUAL -->
-
-    <div class="hero-visual">
-
-
-        <div class="glow-circle"></div>
-
-
-        <div class="dashboard-card">
-
-
-            <div class="dashboard-top">
-
-                <div>
-
-                    <span>
-                        Good Morning
-                    </span>
-
-                    <h3>
-                        Hi, Student 👋
-                    </h3>
-
+    <!-- Quick Access Cards -->
+    <section class="quick-access">
+        <div class="container">
+            <h2>Quick Access</h2>
+            <div class="cards-grid">
+                <div class="card">
+                    <div class="card-icon">📝</div>
+                    <h3>Notes</h3>
+                    <p>Create and organize your study notes</p>
+                    <a href="pages/notes.html" class="card-btn">Go to Notes</a>
                 </div>
-
-
-                <div class="avatar">
-                    S
+                <div class="card">
+                    <div class="card-icon">✅</div>
+                    <h3>Tasks</h3>
+                    <p>Manage your daily to-do list</p>
+                    <a href="pages/tasks.html" class="card-btn">Go to Tasks</a>
                 </div>
-
-            </div>
-
-
-            <div class="quote">
-
-                <span>
-                    ✦ Today's thought
-                </span>
-
-                <p>
-                    "Small progress every day
-                    creates big results."
-                </p>
-
-            </div>
-
-
-            <div class="mini-grid">
-
-
-                <a
-                    href="pages/notes.html"
-                    class="mini-card">
-
-                    <div class="mini-icon">
-                        📝
-                    </div>
-
-                    <strong>
-                        Notes
-                    </strong>
-
-                    <small>
-                        Write & organize
-                    </small>
-
-                </a>
-
-
-                <a
-                    href="pages/tasks.html"
-                    class="mini-card">
-
-                    <div class="mini-icon">
-                        ✓
-                    </div>
-
-                    <strong>
-                        Tasks
-                    </strong>
-
-                    <small>
-                        Stay productive
-                    </small>
-
-                </a>
-
-
-                <a
-                    href="pages/events.html"
-                    class="mini-card">
-
-                    <div class="mini-icon">
-                        📅
-                    </div>
-
-                    <strong>
-                        Events
-                    </strong>
-
-                    <small>
-                        Never miss
-                    </small>
-
-                </a>
-
-
-                <a
-                    href="pages/planner.html"
-                    class="mini-card">
-
-                    <div class="mini-icon">
-                        ⏱
-                    </div>
-
-                    <strong>
-                        Planner
-                    </strong>
-
-                    <small>
-                        Plan your day
-                    </small>
-
-                </a>
-
-            </div>
-
-
-        </div>
-
-    </div>
-
-</section>
-
-
-
-<!-- ================= FEATURE INTRO ================= -->
-
-<section
-    id="features"
-    class="section">
-
-
-    <div class="section-heading">
-
-        <div class="small-label">
-            ✦ EVERYTHING IN ONE PLACE
-        </div>
-
-
-        <h2>
-            YOUR STUDY LIFE,
-            <span>ORGANIZED.</span>
-        </h2>
-
-
-        <p>
-
-            Stop switching between different apps.
-            StudentSpace brings your everyday study
-            activities into one simple workspace.
-
-        </p>
-
-    </div>
-
-
-
-    <div class="feature-layout">
-
-
-        <!-- LARGE CARD -->
-
-        <div class="feature-large">
-
-            <div class="feature-number">
-                01
-            </div>
-
-
-            <div class="feature-icon">
-                📝
-            </div>
-
-
-            <h3>
-                Notes that stay organized.
-            </h3>
-
-
-            <p>
-
-                Create detailed notes for your subjects,
-                save important information and easily
-                edit or delete existing notes.
-
-            </p>
-
-
-            <a href="pages/notes.html">
-                Open Notes →
-            </a>
-
-
-            <div class="floating-lines"></div>
-
-        </div>
-
-
-
-        <!-- SIDE CARDS -->
-
-        <div class="feature-small">
-
-            <div class="feature-number">
-                02
-            </div>
-
-
-            <div class="feature-icon">
-                ✓
-            </div>
-
-
-            <h3>
-                Tasks & To-Do
-            </h3>
-
-
-            <p>
-                Keep track of assignments,
-                projects and daily tasks.
-            </p>
-
-
-            <a href="pages/tasks.html">
-                Manage Tasks →
-            </a>
-
-        </div>
-
-
-        <div class="feature-small">
-
-            <div class="feature-number">
-                03
-            </div>
-
-
-            <div class="feature-icon">
-                📅
-            </div>
-
-
-            <h3>
-                Events & Calendar
-            </h3>
-
-
-            <p>
-                Mark exams, meetings and
-                important college events.
-            </p>
-
-
-            <a href="pages/events.html">
-                View Calendar →
-            </a>
-
-        </div>
-
-    </div>
-
-</section>
-
-
-
-<!-- ================= TOOLS ================= -->
-
-<section
-    id="tools"
-    class="tools-section">
-
-
-    <div class="section-heading">
-
-        <div class="small-label">
-            ✦ STUDENT TOOLKIT
-        </div>
-
-
-        <h2>
-
-            MORE THAN
-            <span>JUST NOTES.</span>
-
-        </h2>
-
-
-        <p>
-
-            Everything you need for studying,
-            organizing and expressing your creativity.
-
-        </p>
-
-    </div>
-
-
-
-    <div class="tools-grid">
-
-
-        <!-- PLANNER -->
-
-        <a
-            href="pages/planner.html"
-            class="tool-card">
-
-            <div class="tool-top">
-
-                <span class="tool-icon">
-                    ⏱
-                </span>
-
-                <span class="tool-number">
-                    01
-                </span>
-
-            </div>
-
-
-            <h3>
-                Study Planner
-            </h3>
-
-
-            <p>
-                Create your personalized
-                daily study schedule.
-            </p>
-
-
-            <span class="tool-link">
-                Create Schedule →
-            </span>
-
-        </a>
-
-
-
-        <!-- DOCUMENTS -->
-
-        <a
-            href="pages/documents.html"
-            class="tool-card">
-
-            <div class="tool-top">
-
-                <span class="tool-icon">
-                    📁
-                </span>
-
-                <span class="tool-number">
-                    02
-                </span>
-
-            </div>
-
-
-            <h3>
-                Documents
-            </h3>
-
-
-            <p>
-                Keep PDFs, PPTs, Excel files,
-                documents and images organized.
-            </p>
-
-
-            <span class="tool-link">
-                Open Documents →
-            </span>
-
-        </a>
-
-
-
-        <!-- GAMES -->
-
-        <a
-            href="pages/games.html"
-            class="tool-card">
-
-            <div class="tool-top">
-
-                <span class="tool-icon">
-                    🎮
-                </span>
-
-                <span class="tool-number">
-                    03
-                </span>
-
-            </div>
-
-
-            <h3>
-                Games
-            </h3>
-
-
-            <p>
-                Take a short break with simple
-                realistic mini games.
-            </p>
-
-
-            <span class="tool-link">
-                Play Games →
-            </span>
-
-        </a>
-
-
-
-        <!-- PAINTING -->
-
-        <a
-            href="pages/painting.html"
-            class="tool-card">
-
-            <div class="tool-top">
-
-                <span class="tool-icon">
-                    🎨
-                </span>
-
-                <span class="tool-number">
-                    04
-                </span>
-
-            </div>
-
-
-            <h3>
-                Digital Painting
-            </h3>
-
-
-            <p>
-                Draw, paint and experiment with
-                colors and different brushes.
-            </p>
-
-
-            <span class="tool-link">
-                Start Painting →
-            </span>
-
-        </a>
-
-
-    </div>
-
-</section>
-
-
-
-<!-- ================= WORKFLOW ================= -->
-
-<section class="workflow">
-
-
-    <div class="workflow-content">
-
-
-        <div class="small-label">
-            ✦ SIMPLE WORKFLOW
-        </div>
-
-
-        <h2>
-
-            PLAN.
-            <span>FOCUS.</span>
-            CREATE.
-
-        </h2>
-
-
-        <p>
-
-            Start your day by checking your tasks,
-            follow your study planner, write notes
-            and finish the day with everything organized.
-
-        </p>
-
-
-        <div class="workflow-list">
-
-
-            <div class="workflow-item">
-
-                <span>
-                    01
-                </span>
-
-                <div>
-
-                    <h4>
-                        Plan your day
-                    </h4>
-
-                    <p>
-                        Create your study schedule.
-                    </p>
-
+                <div class="card">
+                    <div class="card-icon">📅</div>
+                    <h3>Events</h3>
+                    <p>Keep track of important dates and events</p>
+                    <a href="pages/events.html" class="card-btn">Go to Events</a>
                 </div>
-
-            </div>
-
-
-            <div class="workflow-item">
-
-                <span>
-                    02
-                </span>
-
-                <div>
-
-                    <h4>
-                        Stay focused
-                    </h4>
-
-                    <p>
-                        Manage tasks and events.
-                    </p>
-
+                <div class="card">
+                    <div class="card-icon">⏰</div>
+                    <h3>Study Planner</h3>
+                    <p>Create your personalized study schedule</p>
+                    <a href="pages/planner.html" class="card-btn">Go to Planner</a>
                 </div>
-
-            </div>
-
-
-            <div class="workflow-item">
-
-                <span>
-                    03
-                </span>
-
-                <div>
-
-                    <h4>
-                        Save everything
-                    </h4>
-
-                    <p>
-                        Keep your notes and documents safe.
-                    </p>
-
+                <div class="card">
+                    <div class="card-icon">📂</div>
+                    <h3>Documents</h3>
+                    <p>Store your important academic files</p>
+                    <a href="pages/documents.html" class="card-btn">Go to Documents</a>
                 </div>
-
+                <div class="card">
+                    <div class="card-icon">🎨</div>
+                    <h3>Painting</h3>
+                    <p>Draw, sketch and express your creativity</p>
+                    <a href="pages/painting.html" class="card-btn">Go to Painting</a>
+                </div>
+                <div class="card">
+                    <div class="card-icon">🎮</div>
+                    <h3>Games</h3>
+                    <p>Take a short break and play mini games</p>
+                    <a href="pages/games.html" class="card-btn">Go to Games</a>
+                </div>
             </div>
-
         </div>
+    </section>
 
-    </div>
-
-
-
-    <div class="workflow-visual">
-
-
-        <div class="circle-glow"></div>
-
-
-        <div class="focus-card">
-
-            <div class="focus-header">
-
-                <span>
-                    TODAY
-                </span>
-
-                <span>
-                    09:30 AM
-                </span>
-
+    <!-- Features Section -->
+    <section class="features">
+        <div class="container">
+            <h2>Why Choose Study Space?</h2>
+            <div class="features-grid">
+                <div class="feature">
+                    <h3>📚 All-in-One Platform</h3>
+                    <p>Everything you need for studying in one place</p>
+                </div>
+                <div class="feature">
+                    <h3>🎯 Stay Organized</h3>
+                    <p>Keep your notes, tasks, and schedule organized</p>
+                </div>
+                <div class="feature">
+                    <h3>🚀 Boost Productivity</h3>
+                    <p>Manage your time and achieve your goals</p>
+                </div>
+                <div class="feature">
+                    <h3>🎨 Be Creative</h3>
+                    <p>Express yourself with our painting tools</p>
+                </div>
+                <div class="feature">
+                    <h3>🧠 Take Breaks</h3>
+                    <p>Play games and refresh your mind</p>
+                </div>
+                <div class="feature">
+                    <h3>📱 Mobile Friendly</h3>
+                    <p>Access from any device, anywhere</p>
+                </div>
             </div>
-
-
-            <h3>
-                Study Session
-            </h3>
-
-
-            <div class="progress">
-
-                <div></div>
-
-            </div>
-
-
-            <div class="focus-bottom">
-
-                <span>
-                    Deep Learning
-                </span>
-
-                <strong>
-                    75%
-                </strong>
-
-            </div>
-
         </div>
+    </section>
 
-    </div>
-
-</section>
-
-
-
-<!-- ================= CREATIVE SECTION ================= -->
-
-<section class="creative-section">
-
-
-    <div class="creative-card">
-
-
-        <div class="creative-text">
-
-            <div class="small-label">
-                ✦ YOUR CREATIVE SPACE
-            </div>
-
-
-            <h2>
-
-                STUDY HARD.
-                <br>
-
-                <span>CREATE FREELY.</span>
-
-            </h2>
-
-
-            <p>
-
-                When you need a break, switch from
-                studying to creativity. Paint, play
-                and explore your ideas.
-
-            </p>
-
-
-            <div class="creative-buttons">
-
-                <a
-                    href="pages/painting.html"
-                    class="primary-btn">
-
-                    🎨 Paint
-
-                </a>
-
-
-                <a
-                    href="pages/games.html"
-                    class="secondary-btn">
-
-                    🎮 Play Games
-
-                </a>
-
-            </div>
-
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 Student Study Space. All rights reserved.</p>
+            <p>✨ Study. Organize. Create. Enjoy.</p>
         </div>
+    </footer>
 
-
-        <div class="creative-visual">
-
-            <div class="art-circle">
-
-                ✦
-
-            </div>
-
-            <div class="art-small one">
-                ✧
-            </div>
-
-            <div class="art-small two">
-                +
-            </div>
-
-            <div class="art-small three">
-                •
-            </div>
-
-        </div>
-
-    </div>
-
-</section>
-
-
-
-<!-- ================= FOOTER ================= -->
-
-<footer>
-
-
-    <div class="footer-logo">
-
-        <div class="logo-icon">
-            S
-        </div>
-
-        <span>
-            Student<span>Space</span>
-        </span>
-
-    </div>
-
-
-    <p>
-
-        Your personal digital study space.
-
-    </p>
-
-
-    <div class="footer-links">
-
-        <a href="pages/notes.html">
-            Notes
-        </a>
-
-        <a href="pages/tasks.html">
-            Tasks
-        </a>
-
-        <a href="pages/events.html">
-            Events
-        </a>
-
-        <a href="pages/planner.html">
-            Planner
-        </a>
-
-        <a href="pages/profile.html">
-            Profile
-        </a>
-
-    </div>
-
-
-    <div class="copyright">
-
-        © 2026 StudentSpace.
-        Built for students.
-
-    </div>
-
-
-</footer>
-
-
-
-<script src="script.js"></script>
-
+    <script src="script.js"></script>
 </body>
-
 </html>
