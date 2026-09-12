@@ -9,25 +9,29 @@
     <style>
         /* =====================================================
            DOCUMENTS PAGE ONLY
-           Nothing here affects other pages
-        ===================================================== */
+           All styles are scoped to .documents-page
+           So other pages will NOT be affected.
+        ====================================================== */
 
         .documents-page {
+            --doc-bg: #0b0920;
+            --doc-bg-2: #17102f;
+            --doc-card: #ffffff;
+            --doc-text: #17142f;
+            --doc-muted: #77738d;
+            --doc-purple: #8b3dff;
+            --doc-purple-dark: #6d20e8;
+            --doc-border: #e4e0ee;
+            --doc-danger: #e5484d;
+
             margin: 0;
             min-height: 100vh;
             background:
-                radial-gradient(circle at 80% 15%, rgba(111, 45, 160, 0.25), transparent 35%),
-                radial-gradient(circle at 15% 20%, rgba(57, 45, 130, 0.25), transparent 35%),
-                linear-gradient(135deg, #0b0920, #120b27 55%, #1b0d27);
-
-            color: #ffffff;
-
-            font-family:
-                "Segoe UI",
-                Arial,
-                Helvetica,
-                sans-serif;
-
+                radial-gradient(circle at 15% 20%, rgba(102, 45, 180, 0.20), transparent 30%),
+                radial-gradient(circle at 85% 20%, rgba(190, 40, 140, 0.16), transparent 30%),
+                linear-gradient(135deg, var(--doc-bg), var(--doc-bg-2));
+            color: white;
+            font-family: Arial, Helvetica, sans-serif;
             box-sizing: border-box;
         }
 
@@ -37,400 +41,472 @@
             box-sizing: border-box;
         }
 
-        /* ---------- HEADER ---------- */
+        /* =========================
+           HEADER
+        ========================== */
 
-        .documents-page .ds-header {
+        .documents-page .doc-header {
             width: 100%;
-            height: 88px;
-
+            height: 76px;
+            background: rgba(8, 6, 24, 0.96);
+            border-bottom: 1px solid rgba(255,255,255,0.08);
             display: flex;
             align-items: center;
-            justify-content: space-between;
-
             padding: 0 6%;
-
-            background: rgba(9, 7, 25, 0.94);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-
             position: sticky;
             top: 0;
             z-index: 100;
         }
 
-        .documents-page .ds-logo {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-
-            font-size: 22px;
-            font-weight: 700;
-            color: #ffffff;
-
+        .documents-page .doc-logo {
+            font-size: 21px;
+            font-weight: 800;
+            color: white;
             text-decoration: none;
             white-space: nowrap;
         }
 
-        .documents-page .ds-logo-icon {
+        .documents-page .doc-logo span {
+            color: #a65cff;
+        }
+
+        .documents-page .doc-nav {
+            margin-left: auto;
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            flex-wrap: wrap;
+        }
+
+        .documents-page .doc-nav a {
+            text-decoration: none;
+            color: #d8d3e6;
+            font-size: 14px;
+            font-weight: 600;
+            padding: 11px 15px;
+            border-radius: 12px;
+            transition: 0.2s ease;
+        }
+
+        .documents-page .doc-nav a:hover {
+            background: rgba(139, 61, 255, 0.18);
+            color: white;
+        }
+
+        .documents-page .doc-nav a.active {
+            background: linear-gradient(135deg, #8b3dff, #a948ff);
+            color: white;
+            box-shadow: 0 8px 22px rgba(139,61,255,0.30);
+        }
+
+        /* =========================
+           MAIN
+        ========================== */
+
+        .documents-page .doc-main {
+            width: min(1100px, 92%);
+            margin: 0 auto;
+            padding: 52px 0 80px;
+        }
+
+        .documents-page .doc-back {
+            display: inline-block;
+            color: #a978ff;
+            text-decoration: none;
+            font-size: 14px;
+            margin-bottom: 18px;
+        }
+
+        .documents-page .doc-back:hover {
+            color: white;
+        }
+
+        .documents-page .doc-title-row {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            margin-bottom: 8px;
+        }
+
+        .documents-page .doc-title-icon {
+            font-size: 47px;
+            line-height: 1;
+        }
+
+        .documents-page .doc-title {
+            margin: 0;
+            font-size: clamp(32px, 4vw, 45px);
+            line-height: 1.1;
+            font-weight: 800;
+            color: white;
+        }
+
+        .documents-page .doc-subtitle {
+            margin: 0 0 35px 66px;
+            color: #d0ccdc;
+            font-size: 15px;
+        }
+
+        /* =========================
+           CATEGORY CARDS
+        ========================== */
+
+        .documents-page .doc-categories {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 16px;
+            margin-bottom: 28px;
+        }
+
+        .documents-page .doc-category {
+            border: 2px solid transparent;
+            background: white;
+            color: var(--doc-text);
+            border-radius: 18px;
+            min-height: 175px;
+            padding: 25px 14px 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.2s ease,
+                        box-shadow 0.2s ease,
+                        border-color 0.2s ease;
+        }
+
+        .documents-page .doc-category:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 14px 35px rgba(0,0,0,0.25);
+        }
+
+        .documents-page .doc-category.selected {
+            border-color: var(--doc-purple);
+            box-shadow: 0 0 0 3px rgba(139,61,255,0.20);
+        }
+
+        .documents-page .doc-category-icon {
+            font-size: 46px;
+            margin-bottom: 13px;
+        }
+
+        .documents-page .doc-category-name {
+            font-size: 15px;
+            font-weight: 800;
+        }
+
+        .documents-page .doc-category-count {
+            margin-top: 6px;
+            color: var(--doc-muted);
+            font-size: 12px;
+        }
+
+        /* =========================
+           FILE SECTION
+        ========================== */
+
+        .documents-page .doc-files-box {
+            background: rgba(255,255,255,0.98);
+            color: var(--doc-text);
+            border-radius: 22px;
+            padding: 28px;
+            box-shadow: 0 18px 55px rgba(0,0,0,0.22);
+        }
+
+        .documents-page .doc-section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 22px;
+        }
+
+        .documents-page .doc-section-heading {
+            margin: 0;
+            font-size: 23px;
+            font-weight: 800;
+        }
+
+        .documents-page .doc-section-description {
+            margin: 5px 0 0;
+            color: #77738d;
+            font-size: 13px;
+        }
+
+        /* =========================
+           UPLOAD BUTTON
+        ========================== */
+
+        .documents-page .doc-upload-label {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
+            padding: 12px 18px;
+            background: #17142f;
+            color: white;
+            border-radius: 11px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 700;
+            transition: 0.2s ease;
+            white-space: nowrap;
+        }
+
+        .documents-page .doc-upload-label:hover {
+            background: var(--doc-purple);
+            transform: translateY(-1px);
+        }
+
+        .documents-page #documentsFileInput {
+            display: none;
+        }
+
+        /* =========================
+           EMPTY STATE
+        ========================== */
+
+        .documents-page .doc-empty {
+            border: 2px dashed #ddd8e8;
+            border-radius: 17px;
+            padding: 48px 20px;
+            text-align: center;
+            color: #77738d;
+        }
+
+        .documents-page .doc-empty-icon {
+            font-size: 44px;
+            margin-bottom: 10px;
+        }
+
+        .documents-page .doc-empty h3 {
+            margin: 0 0 7px;
+            color: #353148;
+            font-size: 17px;
+        }
+
+        .documents-page .doc-empty p {
+            margin: 0;
+            font-size: 13px;
+        }
+
+        /* =========================
+           FILE LIST
+        ========================== */
+
+        .documents-page .doc-file-list {
+            display: flex;
+            flex-direction: column;
+            gap: 11px;
+        }
+
+        .documents-page .doc-file-item {
+            border: 1px solid var(--doc-border);
+            border-radius: 14px;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            background: #fcfbfe;
+            transition: 0.2s ease;
+        }
+
+        .documents-page .doc-file-item:hover {
+            border-color: #cfc3e8;
+            box-shadow: 0 6px 20px rgba(35,20,70,0.08);
+        }
+
+        .documents-page .doc-file-icon {
+            width: 48px;
+            height: 48px;
+            min-width: 48px;
+            border-radius: 12px;
+            background: #eee9fa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             font-size: 25px;
         }
 
-        .documents-page .ds-nav {
+        .documents-page .doc-file-info {
+            min-width: 0;
+            flex: 1;
+        }
+
+        .documents-page .doc-file-name {
+            margin: 0 0 5px;
+            color: #252139;
+            font-size: 14px;
+            font-weight: 800;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .documents-page .doc-file-meta {
+            color: #858095;
+            font-size: 12px;
+        }
+
+        .documents-page .doc-file-actions {
             display: flex;
             align-items: center;
             gap: 7px;
         }
 
-        .documents-page .ds-nav a {
-            text-decoration: none;
-
-            color: #e8e4f2;
-
-            padding: 12px 15px;
-            border-radius: 12px;
-
-            font-size: 14px;
-            font-weight: 600;
-
-            transition: 0.25s ease;
-        }
-
-        .documents-page .ds-nav a:hover {
-            background: rgba(255, 255, 255, 0.08);
-            color: #ffffff;
-        }
-
-        .documents-page .ds-nav a.active {
-            background: linear-gradient(135deg, #8b3dff, #a43cff);
-            color: white;
-
-            box-shadow: 0 8px 25px rgba(139, 61, 255, 0.3);
-        }
-
-        /* ---------- MAIN ---------- */
-
-        .documents-page .documents-container {
-            width: min(1000px, 90%);
-            margin: 0 auto;
-
-            padding: 55px 0 80px;
-        }
-
-        .documents-page .back-home {
-            display: inline-block;
-
-            margin-bottom: 12px;
-
-            color: #9b5cff;
-            text-decoration: none;
-
-            font-size: 14px;
-            font-weight: 600;
-        }
-
-        .documents-page .back-home:hover {
-            color: #c18cff;
-        }
-
-        .documents-page .page-title {
-            margin: 0;
-
-            font-size: clamp(32px, 4vw, 46px);
-            font-weight: 800;
-            letter-spacing: -1px;
-
-            color: #ffffff;
-        }
-
-        .documents-page .page-subtitle {
-            margin: 8px 0 35px;
-
-            font-size: 16px;
-            line-height: 1.6;
-
-            color: #c9c3d8;
-        }
-
-        /* ---------- CATEGORY CARDS ---------- */
-
-        .documents-page .category-grid {
-            display: grid;
-
-            grid-template-columns: repeat(5, 1fr);
-
-            gap: 18px;
-
-            margin-bottom: 30px;
-        }
-
-        .documents-page .category-card {
-            min-height: 145px;
-
-            background: rgba(255, 255, 255, 0.97);
-
-            border-radius: 17px;
-
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-
-            text-decoration: none;
-
-            border: 1px solid rgba(255, 255, 255, 0.7);
-
-            box-shadow:
-                0 15px 35px rgba(0, 0, 0, 0.20);
-
-            transition:
-                transform 0.25s ease,
-                box-shadow 0.25s ease;
-        }
-
-        .documents-page .category-card:hover {
-            transform: translateY(-6px);
-
-            box-shadow:
-                0 20px 45px rgba(0, 0, 0, 0.30);
-        }
-
-        .documents-page .category-icon {
-            font-size: 40px;
-            margin-bottom: 12px;
-        }
-
-        .documents-page .category-name {
-            color: #28233d;
-
-            font-size: 15px;
-            font-weight: 700;
-        }
-
-        /* ---------- DOCUMENT SECTION ---------- */
-
-        .documents-page .documents-section {
-            margin-top: 20px;
-
-            background: rgba(255, 255, 255, 0.97);
-
-            border-radius: 20px;
-
-            padding: 28px;
-
-            color: #27233a;
-
-            box-shadow:
-                0 18px 45px rgba(0, 0, 0, 0.22);
-        }
-
-        .documents-page .section-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-
-            gap: 20px;
-
-            margin-bottom: 22px;
-        }
-
-        .documents-page .section-title {
-            margin: 0;
-
-            font-size: 24px;
-            font-weight: 800;
-
-            color: #27233a;
-        }
-
-        .documents-page .upload-btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-
-            padding: 11px 18px;
-
-            border: none;
-            border-radius: 10px;
-
-            background: #252238;
-            color: white;
-
-            font-family: inherit;
-            font-size: 14px;
-            font-weight: 700;
-
+        .documents-page .doc-action {
+            border: 0;
+            padding: 9px 12px;
+            border-radius: 9px;
             cursor: pointer;
-
+            font-size: 12px;
+            font-weight: 700;
+            background: #eeeaf5;
+            color: #302b45;
             transition: 0.2s ease;
         }
 
-        .documents-page .upload-btn:hover {
-            background: #7134d6;
-            transform: translateY(-2px);
+        .documents-page .doc-action:hover {
+            background: #ded6ee;
         }
 
-        .documents-page #documentInput {
-            display: none;
+        .documents-page .doc-action.delete {
+            color: var(--doc-danger);
+            background: #fff0f0;
         }
 
-        /* ---------- FILE LIST ---------- */
-
-        .documents-page .file-list {
-            display: grid;
-            gap: 12px;
+        .documents-page .doc-action.delete:hover {
+            background: #ffe0e0;
         }
 
-        .documents-page .empty-message {
-            padding: 35px 20px;
+        /* =========================
+           TOAST
+        ========================== */
 
-            text-align: center;
-
-            border: 2px dashed #ddd7e8;
-            border-radius: 14px;
-
-            color: #777188;
-
-            font-size: 15px;
-        }
-
-        .documents-page .file-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-
-            gap: 15px;
-
-            padding: 15px 17px;
-
-            border-radius: 13px;
-
-            background: #f5f2fa;
-
-            border: 1px solid #e5dfef;
-        }
-
-        .documents-page .file-info {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-
-            min-width: 0;
-        }
-
-        .documents-page .file-icon {
-            font-size: 27px;
-        }
-
-        .documents-page .file-name {
-            color: #2a2637;
-
-            font-size: 14px;
-            font-weight: 700;
-
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-
-        .documents-page .file-actions {
-            display: flex;
-            gap: 8px;
-        }
-
-        .documents-page .open-btn,
-        .documents-page .delete-btn {
-            border: none;
-            border-radius: 8px;
-
-            padding: 8px 12px;
-
-            font-family: inherit;
-            font-size: 13px;
-            font-weight: 600;
-
-            cursor: pointer;
-        }
-
-        .documents-page .open-btn {
-            background: #7b3ff2;
+        .documents-page .doc-toast {
+            position: fixed;
+            right: 25px;
+            bottom: 25px;
+            background: #17142f;
             color: white;
+            padding: 14px 18px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.30);
+            font-size: 13px;
+            font-weight: 700;
+            opacity: 0;
+            transform: translateY(15px);
+            pointer-events: none;
+            transition: 0.25s ease;
+            z-index: 999;
         }
 
-        .documents-page .delete-btn {
-            background: #eee9f3;
-            color: #6b6075;
+        .documents-page .doc-toast.show {
+            opacity: 1;
+            transform: translateY(0);
         }
 
-        .documents-page .delete-btn:hover {
-            background: #ffdede;
-            color: #c73535;
-        }
+        /* =========================
+           RESPONSIVE
+        ========================== */
 
-        /* ---------- RESPONSIVE ---------- */
-
-        @media (max-width: 900px) {
-
-            .documents-page .ds-header {
-                height: auto;
-                padding: 18px 5%;
-
-                flex-direction: column;
-                gap: 15px;
+        @media (max-width: 950px) {
+            .documents-page .doc-categories {
+                grid-template-columns: repeat(3, 1fr);
             }
 
-            .documents-page .ds-nav {
-                flex-wrap: wrap;
+            .documents-page .doc-header {
+                height: auto;
+                min-height: 76px;
+                padding: 14px 4%;
+            }
+
+            .documents-page .doc-nav {
+                gap: 3px;
+            }
+
+            .documents-page .doc-nav a {
+                padding: 9px 10px;
+                font-size: 12px;
+            }
+        }
+
+        @media (max-width: 650px) {
+            .documents-page .doc-header {
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .documents-page .doc-nav {
+                margin-left: 0;
                 justify-content: center;
             }
 
-            .documents-page .category-grid {
-                grid-template-columns: repeat(3, 1fr);
-            }
-        }
-
-        @media (max-width: 600px) {
-
-            .documents-page .ds-nav a {
-                padding: 8px 9px;
-                font-size: 12px;
+            .documents-page .doc-main {
+                width: 94%;
+                padding-top: 32px;
             }
 
-            .documents-page .documents-container {
-                width: 92%;
-                padding-top: 35px;
-            }
-
-            .documents-page .category-grid {
+            .documents-page .doc-categories {
                 grid-template-columns: repeat(2, 1fr);
             }
 
-            .documents-page .section-header {
-                flex-direction: column;
-                align-items: flex-start;
+            .documents-page .doc-subtitle {
+                margin-left: 0;
             }
 
-            .documents-page .file-item {
-                flex-direction: column;
-                align-items: flex-start;
+            .documents-page .doc-files-box {
+                padding: 18px;
             }
 
-            .documents-page .file-actions {
+            .documents-page .doc-section-header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .documents-page .doc-upload-label {
                 width: 100%;
+            }
+
+            .documents-page .doc-file-item {
+                align-items: flex-start;
+                flex-wrap: wrap;
+            }
+
+            .documents-page .doc-file-info {
+                width: calc(100% - 65px);
+            }
+
+            .documents-page .doc-file-actions {
+                width: 100%;
+                margin-left: 62px;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .documents-page .doc-categories {
+                grid-template-columns: 1fr;
             }
         }
     </style>
 </head>
 
-<body class="documents-page">
+<body>
 
-    <!-- HEADER -->
-    <header class="ds-header">
+<div class="documents-page">
 
-        <a href="../index.html" class="ds-logo">
-            <span class="ds-logo-icon">📚</span>
-            <span>Study Space</span>
+    <!-- =========================
+         HEADER
+    ========================== -->
+
+    <header class="doc-header">
+
+        <a href="../index.html" class="doc-logo">
+            📚 <span>Study Space</span>
         </a>
 
-        <nav class="ds-nav">
+        <nav class="doc-nav">
             <a href="../index.html">🏠 Home</a>
             <a href="notes.html">📄 Notes</a>
             <a href="tasks.html">✅ Tasks</a>
@@ -445,80 +521,207 @@
     </header>
 
 
-    <!-- MAIN -->
-    <main class="documents-container">
+    <!-- =========================
+         MAIN CONTENT
+    ========================== -->
 
-        <a href="../index.html" class="back-home">
+    <main class="doc-main">
+
+        <a href="../index.html" class="doc-back">
             ← Back to Home
         </a>
 
-        <h1 class="page-title">
-            📁 Important Documents
-        </h1>
+        <div class="doc-title-row">
+            <div class="doc-title-icon">📁</div>
 
-        <p class="page-subtitle">
+            <h1 class="doc-title">
+                Important Documents
+            </h1>
+        </div>
+
+        <p class="doc-subtitle">
             Keep all your important files organized in one place.
         </p>
 
 
-        <!-- CATEGORY CARDS -->
-        <section class="category-grid">
+        <!-- =========================
+             CATEGORY CARDS
+        ========================== -->
 
-            <a href="#" class="category-card">
-                <span class="category-icon">📄</span>
-                <span class="category-name">Documents</span>
-            </a>
+        <section class="doc-categories">
 
-            <a href="#" class="category-card">
-                <span class="category-icon">📝</span>
-                <span class="category-name">Notes</span>
-            </a>
+            <button
+                type="button"
+                class="doc-category selected"
+                data-category="all">
 
-            <a href="#" class="category-card">
-                <span class="category-icon">📊</span>
-                <span class="category-name">Presentations</span>
-            </a>
+                <div class="doc-category-icon">📂</div>
 
-            <a href="#" class="category-card">
-                <span class="category-icon">🎥</span>
-                <span class="category-name">Videos</span>
-            </a>
+                <div class="doc-category-name">
+                    All Files
+                </div>
 
-            <a href="#" class="category-card">
-                <span class="category-icon">🖼️</span>
-                <span class="category-name">Images</span>
-            </a>
+                <div class="doc-category-count"
+                     id="countAll">
+                    0 files
+                </div>
+
+            </button>
+
+
+            <button
+                type="button"
+                class="doc-category"
+                data-category="pdf">
+
+                <div class="doc-category-icon">📕</div>
+
+                <div class="doc-category-name">
+                    PDF
+                </div>
+
+                <div class="doc-category-count"
+                     id="countPdf">
+                    0 files
+                </div>
+
+            </button>
+
+
+            <button
+                type="button"
+                class="doc-category"
+                data-category="word">
+
+                <div class="doc-category-icon">📝</div>
+
+                <div class="doc-category-name">
+                    Word
+                </div>
+
+                <div class="doc-category-count"
+                     id="countWord">
+                    0 files
+                </div>
+
+            </button>
+
+
+            <button
+                type="button"
+                class="doc-category"
+                data-category="excel">
+
+                <div class="doc-category-icon">📊</div>
+
+                <div class="doc-category-name">
+                    Excel
+                </div>
+
+                <div class="doc-category-count"
+                     id="countExcel">
+                    0 files
+                </div>
+
+            </button>
+
+
+            <button
+                type="button"
+                class="doc-category"
+                data-category="powerpoint">
+
+                <div class="doc-category-icon">📑</div>
+
+                <div class="doc-category-name">
+                    PowerPoint
+                </div>
+
+                <div class="doc-category-count"
+                     id="countPowerpoint">
+                    0 files
+                </div>
+
+            </button>
+
+
+            <button
+                type="button"
+                class="doc-category"
+                data-category="image">
+
+                <div class="doc-category-icon">🖼️</div>
+
+                <div class="doc-category-name">
+                    Images
+                </div>
+
+                <div class="doc-category-count"
+                     id="countImage">
+                    0 files
+                </div>
+
+            </button>
 
         </section>
 
 
-        <!-- DOCUMENTS -->
-        <section class="documents-section">
+        <!-- =========================
+             FILE AREA
+        ========================== -->
 
-            <div class="section-header">
+        <section class="doc-files-box">
 
-                <h2 class="section-title">
-                    📑 Documents
-                </h2>
+            <div class="doc-section-header">
 
-                <label for="documentInput" class="upload-btn">
-                    + Upload File
+                <div>
+                    <h2 class="doc-section-heading"
+                        id="documentSectionTitle">
+                        📁 All Files
+                    </h2>
+
+                    <p class="doc-section-description"
+                       id="documentSectionDescription">
+                        All your uploaded files
+                    </p>
+                </div>
+
+
+                <label
+                    for="documentsFileInput"
+                    class="doc-upload-label">
+
+                    ＋ Upload File
+
                 </label>
 
                 <input
                     type="file"
-                    id="documentInput"
-                    multiple
+                    id="documentsFileInput"
+                    accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.jpg,.jpeg,.png,.gif,.webp,.svg"
                 >
 
             </div>
 
 
-            <div id="fileList" class="file-list">
+            <!-- FILE LIST -->
 
-                <div class="empty-message">
-                    No files uploaded yet.<br>
-                    Click <b>+ Upload File</b> to add your documents.
+            <div id="documentsFileList">
+
+                <div class="doc-empty">
+
+                    <div class="doc-empty-icon">
+                        📂
+                    </div>
+
+                    <h3>
+                        No files uploaded yet
+                    </h3>
+
+                    <p>
+                        Click <strong>+ Upload File</strong> to add your documents.
+                    </p>
+
                 </div>
 
             </div>
@@ -528,201 +731,1123 @@
     </main>
 
 
-    <script>
-        /* =====================================================
-           DOCUMENTS PAGE JAVASCRIPT ONLY
-        ===================================================== */
+    <!-- Toast -->
 
-        const documentInput =
-            document.getElementById("documentInput");
+    <div
+        class="doc-toast"
+        id="documentsToast">
+    </div>
 
-        const fileList =
-            document.getElementById("fileList");
+</div>
 
 
-        let savedFiles =
-            JSON.parse(
-                localStorage.getItem("studySpaceDocuments") || "[]"
-            );
+<script>
+/* ==========================================================
+   DOCUMENTS PAGE JAVASCRIPT
+   Uses IndexedDB
+   Files are stored separately by category.
+
+   This JavaScript only works inside this documents page.
+========================================================== */
+
+(function () {
+
+    "use strict";
 
 
-        function saveFiles() {
+    /* ============================================
+       DATABASE SETTINGS
+    ============================================ */
 
-            localStorage.setItem(
-                "studySpaceDocuments",
-                JSON.stringify(savedFiles)
-            );
+    const DB_NAME = "StudySpaceDocumentsDB";
+    const DB_VERSION = 1;
+    const STORE_NAME = "documents";
 
+    let db = null;
+
+    let currentCategory = "all";
+
+
+    /* ============================================
+       CATEGORY INFORMATION
+    ============================================ */
+
+    const categoryInfo = {
+
+        all: {
+            title: "📁 All Files",
+            description: "All your uploaded files"
+        },
+
+        pdf: {
+            title: "📕 PDF Files",
+            description: "Your PDF documents"
+        },
+
+        word: {
+            title: "📝 Word Files",
+            description: "Your Word documents"
+        },
+
+        excel: {
+            title: "📊 Excel Files",
+            description: "Your Excel spreadsheets"
+        },
+
+        powerpoint: {
+            title: "📑 PowerPoint Files",
+            description: "Your PowerPoint presentations"
+        },
+
+        image: {
+            title: "🖼️ Images",
+            description: "Your uploaded images"
+        }
+
+    };
+
+
+    /* ============================================
+       OPEN DATABASE
+    ============================================ */
+
+    function openDatabase() {
+
+        return new Promise(function (resolve, reject) {
+
+            const request =
+                indexedDB.open(DB_NAME, DB_VERSION);
+
+
+            request.onupgradeneeded = function (event) {
+
+                const database = event.target.result;
+
+                if (!database.objectStoreNames.contains(STORE_NAME)) {
+
+                    const store =
+                        database.createObjectStore(
+                            STORE_NAME,
+                            {
+                                keyPath: "id",
+                                autoIncrement: true
+                            }
+                        );
+
+                    store.createIndex(
+                        "category",
+                        "category",
+                        { unique: false }
+                    );
+
+                    store.createIndex(
+                        "name",
+                        "name",
+                        { unique: false }
+                    );
+                }
+            };
+
+
+            request.onsuccess = function (event) {
+
+                db = event.target.result;
+
+                resolve(db);
+            };
+
+
+            request.onerror = function () {
+
+                reject(request.error);
+            };
+
+        });
+
+    }
+
+
+    /* ============================================
+       DETERMINE FILE CATEGORY
+    ============================================ */
+
+    function getFileCategory(file) {
+
+        const name =
+            file.name.toLowerCase();
+
+        const extension =
+            name.includes(".")
+                ? name.substring(name.lastIndexOf(".") + 1)
+                : "";
+
+
+        /* PDF */
+
+        if (
+            extension === "pdf" ||
+            file.type === "application/pdf"
+        ) {
+            return "pdf";
         }
 
 
-        function getFileIcon(fileName) {
+        /* WORD */
 
-            const extension =
-                fileName.split(".").pop().toLowerCase();
-
-            if (extension === "pdf") return "📕";
-
-            if (
-                extension === "doc" ||
-                extension === "docx"
-            ) return "📘";
-
-            if (
-                extension === "ppt" ||
-                extension === "pptx"
-            ) return "📊";
-
-            if (
-                extension === "xls" ||
-                extension === "xlsx"
-            ) return "📗";
-
-            if (
-                ["jpg", "jpeg", "png", "gif", "webp"]
-                    .includes(extension)
-            ) return "🖼️";
-
-            if (
-                ["mp4", "mov", "avi"]
-                    .includes(extension)
-            ) return "🎥";
-
-            return "📄";
+        if (
+            extension === "doc" ||
+            extension === "docx" ||
+            file.type === "application/msword" ||
+            file.type ===
+                "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+        ) {
+            return "word";
         }
 
 
-        function renderFiles() {
+        /* EXCEL */
 
-            fileList.innerHTML = "";
+        if (
+            extension === "xls" ||
+            extension === "xlsx" ||
+            file.type === "application/vnd.ms-excel" ||
+            file.type ===
+                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        ) {
+            return "excel";
+        }
 
-            if (savedFiles.length === 0) {
 
-                fileList.innerHTML = `
-                    <div class="empty-message">
-                        No files uploaded yet.<br>
-                        Click <b>+ Upload File</b> to add your documents.
-                    </div>
-                `;
+        /* POWERPOINT */
+
+        if (
+            extension === "ppt" ||
+            extension === "pptx" ||
+            file.type === "application/vnd.ms-powerpoint" ||
+            file.type ===
+                "application/vnd.openxmlformats-officedocument.presentationml.presentation"
+        ) {
+            return "powerpoint";
+        }
+
+
+        /* IMAGES */
+
+        if (
+            file.type.startsWith("image/") ||
+            [
+                "jpg",
+                "jpeg",
+                "png",
+                "gif",
+                "webp",
+                "svg"
+            ].includes(extension)
+        ) {
+            return "image";
+        }
+
+
+        return null;
+    }
+
+
+    /* ============================================
+       SAVE FILE
+    ============================================ */
+
+    function saveFile(file) {
+
+        return new Promise(function (resolve, reject) {
+
+            const category =
+                getFileCategory(file);
+
+
+            if (!category) {
+
+                reject(
+                    new Error(
+                        "Unsupported file type."
+                    )
+                );
 
                 return;
             }
 
 
-            savedFiles.forEach((file, index) => {
-
-                const item =
-                    document.createElement("div");
-
-                item.className = "file-item";
-
-
-                item.innerHTML = `
-
-                    <div class="file-info">
-
-                        <span class="file-icon">
-                            ${getFileIcon(file.name)}
-                        </span>
-
-                        <span class="file-name">
-                            ${file.name}
-                        </span>
-
-                    </div>
+            const transaction =
+                db.transaction(
+                    [STORE_NAME],
+                    "readwrite"
+                );
 
 
-                    <div class="file-actions">
-
-                        <button
-                            class="open-btn"
-                            onclick="openFile(${index})">
-                            Open
-                        </button>
-
-                        <button
-                            class="delete-btn"
-                            onclick="deleteFile(${index})">
-                            Delete
-                        </button>
-
-                    </div>
-                `;
+            const store =
+                transaction.objectStore(
+                    STORE_NAME
+                );
 
 
-                fileList.appendChild(item);
+            const fileData = {
 
-            });
+                name: file.name,
 
+                type: file.type || "application/octet-stream",
+
+                size: file.size,
+
+                category: category,
+
+                file: file,
+
+                createdAt: new Date().toISOString()
+
+            };
+
+
+            const request =
+                store.add(fileData);
+
+
+            request.onsuccess = function () {
+
+                resolve();
+            };
+
+
+            request.onerror = function () {
+
+                reject(request.error);
+            };
+
+        });
+
+    }
+
+
+    /* ============================================
+       GET ALL FILES
+    ============================================ */
+
+    function getAllFiles() {
+
+        return new Promise(function (resolve, reject) {
+
+            const transaction =
+                db.transaction(
+                    [STORE_NAME],
+                    "readonly"
+                );
+
+
+            const store =
+                transaction.objectStore(
+                    STORE_NAME
+                );
+
+
+            const request =
+                store.getAll();
+
+
+            request.onsuccess = function () {
+
+                resolve(request.result || []);
+            };
+
+
+            request.onerror = function () {
+
+                reject(request.error);
+            };
+
+        });
+
+    }
+
+
+    /* ============================================
+       DELETE FILE
+    ============================================ */
+
+    function deleteFile(id) {
+
+        return new Promise(function (resolve, reject) {
+
+            const transaction =
+                db.transaction(
+                    [STORE_NAME],
+                    "readwrite"
+                );
+
+
+            const store =
+                transaction.objectStore(
+                    STORE_NAME
+                );
+
+
+            const request =
+                store.delete(id);
+
+
+            request.onsuccess = function () {
+
+                resolve();
+            };
+
+
+            request.onerror = function () {
+
+                reject(request.error);
+            };
+
+        });
+
+    }
+
+
+    /* ============================================
+       FORMAT FILE SIZE
+    ============================================ */
+
+    function formatFileSize(bytes) {
+
+        if (bytes === 0) {
+            return "0 Bytes";
         }
 
 
-        documentInput.addEventListener(
-            "change",
-            function () {
+        const units = [
+            "Bytes",
+            "KB",
+            "MB",
+            "GB"
+        ];
 
-                const files =
-                    Array.from(this.files);
+
+        const index =
+            Math.floor(
+                Math.log(bytes) /
+                Math.log(1024)
+            );
 
 
-                files.forEach(file => {
+        return (
+            parseFloat(
+                (
+                    bytes /
+                    Math.pow(1024, index)
+                ).toFixed(2)
+            )
+            + " "
+            + units[index]
+        );
+    }
 
-                    savedFiles.push({
 
-                        name: file.name,
+    /* ============================================
+       GET FILE ICON
+    ============================================ */
 
-                        size: file.size,
+    function getFileIcon(category) {
 
-                        type: file.type
+        const icons = {
 
-                    });
+            pdf: "📕",
+
+            word: "📝",
+
+            excel: "📊",
+
+            powerpoint: "📑",
+
+            image: "🖼️"
+
+        };
+
+        return icons[category] || "📄";
+    }
+
+
+    /* ============================================
+       SHOW TOAST
+    ============================================ */
+
+    function showToast(message) {
+
+        const toast =
+            document.getElementById(
+                "documentsToast"
+            );
+
+
+        toast.textContent = message;
+
+        toast.classList.add("show");
+
+
+        setTimeout(function () {
+
+            toast.classList.remove("show");
+
+        }, 2500);
+    }
+
+
+    /* ============================================
+       UPDATE CATEGORY COUNTS
+    ============================================ */
+
+    async function updateCounts() {
+
+        const files =
+            await getAllFiles();
+
+
+        const counts = {
+
+            all: files.length,
+
+            pdf: 0,
+
+            word: 0,
+
+            excel: 0,
+
+            powerpoint: 0,
+
+            image: 0
+
+        };
+
+
+        files.forEach(function (file) {
+
+            if (counts[file.category] !== undefined) {
+
+                counts[file.category]++;
+            }
+
+        });
+
+
+        document.getElementById("countAll")
+            .textContent =
+            counts.all + " files";
+
+
+        document.getElementById("countPdf")
+            .textContent =
+            counts.pdf + " files";
+
+
+        document.getElementById("countWord")
+            .textContent =
+            counts.word + " files";
+
+
+        document.getElementById("countExcel")
+            .textContent =
+            counts.excel + " files";
+
+
+        document.getElementById("countPowerpoint")
+            .textContent =
+            counts.powerpoint + " files";
+
+
+        document.getElementById("countImage")
+            .textContent =
+            counts.image + " files";
+    }
+
+
+    /* ============================================
+       RENDER FILES
+    ============================================ */
+
+    async function renderFiles() {
+
+        const files =
+            await getAllFiles();
+
+
+        let filteredFiles;
+
+
+        if (currentCategory === "all") {
+
+            filteredFiles = files;
+
+        } else {
+
+            filteredFiles =
+                files.filter(function (file) {
+
+                    return (
+                        file.category ===
+                        currentCategory
+                    );
 
                 });
+        }
 
 
-                saveFiles();
+        /* newest first */
 
-                renderFiles();
+        filteredFiles.sort(function (a, b) {
 
-                this.value = "";
+            return (
+                new Date(b.createdAt) -
+                new Date(a.createdAt)
+            );
+
+        });
+
+
+        const container =
+            document.getElementById(
+                "documentsFileList"
+            );
+
+
+        container.innerHTML = "";
+
+
+        if (filteredFiles.length === 0) {
+
+            container.innerHTML = `
+
+                <div class="doc-empty">
+
+                    <div class="doc-empty-icon">
+                        ${getFileIcon(currentCategory)}
+                    </div>
+
+                    <h3>
+                        No files here yet
+                    </h3>
+
+                    <p>
+                        Click <strong>+ Upload File</strong>
+                        to add a file.
+                    </p>
+
+                </div>
+
+            `;
+
+            return;
+        }
+
+
+        const list =
+            document.createElement("div");
+
+
+        list.className =
+            "doc-file-list";
+
+
+        filteredFiles.forEach(function (fileData) {
+
+
+            const item =
+                document.createElement("div");
+
+
+            item.className =
+                "doc-file-item";
+
+
+            const icon =
+                document.createElement("div");
+
+
+            icon.className =
+                "doc-file-icon";
+
+
+            icon.textContent =
+                getFileIcon(
+                    fileData.category
+                );
+
+
+            const info =
+                document.createElement("div");
+
+
+            info.className =
+                "doc-file-info";
+
+
+            const name =
+                document.createElement("p");
+
+
+            name.className =
+                "doc-file-name";
+
+
+            name.textContent =
+                fileData.name;
+
+
+            name.title =
+                fileData.name;
+
+
+            const meta =
+                document.createElement("div");
+
+
+            meta.className =
+                "doc-file-meta";
+
+
+            const date =
+                new Date(
+                    fileData.createdAt
+                );
+
+
+            meta.textContent =
+                formatFileSize(
+                    fileData.size
+                )
+                + " • "
+                + date.toLocaleDateString();
+
+
+            info.appendChild(name);
+
+            info.appendChild(meta);
+
+
+            /* ACTIONS */
+
+            const actions =
+                document.createElement("div");
+
+
+            actions.className =
+                "doc-file-actions";
+
+
+            /* OPEN */
+
+            const openButton =
+                document.createElement("button");
+
+
+            openButton.className =
+                "doc-action";
+
+
+            openButton.textContent =
+                "Open";
+
+
+            openButton.type =
+                "button";
+
+
+            openButton.addEventListener(
+                "click",
+                function () {
+
+                    openFile(fileData);
+
+                }
+            );
+
+
+            /* DOWNLOAD */
+
+            const downloadButton =
+                document.createElement("button");
+
+
+            downloadButton.className =
+                "doc-action";
+
+
+            downloadButton.textContent =
+                "Download";
+
+
+            downloadButton.type =
+                "button";
+
+
+            downloadButton.addEventListener(
+                "click",
+                function () {
+
+                    downloadFile(
+                        fileData
+                    );
+
+                }
+            );
+
+
+            /* DELETE */
+
+            const deleteButton =
+                document.createElement("button");
+
+
+            deleteButton.className =
+                "doc-action delete";
+
+
+            deleteButton.textContent =
+                "Delete";
+
+
+            deleteButton.type =
+                "button";
+
+
+            deleteButton.addEventListener(
+                "click",
+                async function () {
+
+                    const confirmDelete =
+                        confirm(
+                            "Delete this file?"
+                        );
+
+
+                    if (!confirmDelete) {
+                        return;
+                    }
+
+
+                    await deleteFile(
+                        fileData.id
+                    );
+
+
+                    showToast(
+                        "File deleted successfully."
+                    );
+
+
+                    await updateCounts();
+
+                    await renderFiles();
+
+                }
+            );
+
+
+            actions.appendChild(openButton);
+
+            actions.appendChild(
+                downloadButton
+            );
+
+            actions.appendChild(
+                deleteButton
+            );
+
+
+            item.appendChild(icon);
+
+            item.appendChild(info);
+
+            item.appendChild(actions);
+
+
+            list.appendChild(item);
+
+        });
+
+
+        container.appendChild(list);
+    }
+
+
+    /* ============================================
+       OPEN FILE
+    ============================================ */
+
+    function openFile(fileData) {
+
+        const blob =
+            new Blob(
+                [fileData.file],
+                {
+                    type:
+                        fileData.type ||
+                        "application/octet-stream"
+                }
+            );
+
+
+        const url =
+            URL.createObjectURL(blob);
+
+
+        window.open(
+            url,
+            "_blank"
+        );
+
+
+        setTimeout(function () {
+
+            URL.revokeObjectURL(url);
+
+        }, 60000);
+
+    }
+
+
+    /* ============================================
+       DOWNLOAD FILE
+    ============================================ */
+
+    function downloadFile(fileData) {
+
+        const blob =
+            new Blob(
+                [fileData.file],
+                {
+                    type:
+                        fileData.type ||
+                        "application/octet-stream"
+                }
+            );
+
+
+        const url =
+            URL.createObjectURL(blob);
+
+
+        const link =
+            document.createElement("a");
+
+
+        link.href = url;
+
+        link.download =
+            fileData.name;
+
+
+        document.body.appendChild(link);
+
+        link.click();
+
+        link.remove();
+
+
+        setTimeout(function () {
+
+            URL.revokeObjectURL(url);
+
+        }, 1000);
+
+    }
+
+
+    /* ============================================
+       CATEGORY CLICK
+    ============================================ */
+
+    document
+        .querySelectorAll(
+            ".doc-category"
+        )
+        .forEach(function (button) {
+
+
+            button.addEventListener(
+                "click",
+                async function () {
+
+                    currentCategory =
+                        button.dataset.category;
+
+
+                    document
+                        .querySelectorAll(
+                            ".doc-category"
+                        )
+                        .forEach(
+                            function (item) {
+
+                                item.classList.remove(
+                                    "selected"
+                                );
+
+                            }
+                        );
+
+
+                    button.classList.add(
+                        "selected"
+                    );
+
+
+                    const info =
+                        categoryInfo[
+                            currentCategory
+                        ];
+
+
+                    document.getElementById(
+                        "documentSectionTitle"
+                    ).textContent =
+                        info.title;
+
+
+                    document.getElementById(
+                        "documentSectionDescription"
+                    ).textContent =
+                        info.description;
+
+
+                    await renderFiles();
+
+                }
+            );
+
+        });
+
+
+    /* ============================================
+       FILE UPLOAD
+    ============================================ */
+
+    document
+        .getElementById(
+            "documentsFileInput"
+        )
+        .addEventListener(
+            "change",
+            async function (event) {
+
+
+                const files =
+                    Array.from(
+                        event.target.files
+                    );
+
+
+                if (files.length === 0) {
+                    return;
+                }
+
+
+                let uploadedCount = 0;
+
+
+                for (const file of files) {
+
+                    try {
+
+                        await saveFile(file);
+
+                        uploadedCount++;
+
+                    } catch (error) {
+
+                        console.error(
+                            error
+                        );
+
+                    }
+
+                }
+
+
+                if (uploadedCount > 0) {
+
+                    showToast(
+                        uploadedCount +
+                        " file(s) uploaded successfully."
+                    );
+
+                } else {
+
+                    showToast(
+                        "Unsupported file type."
+                    );
+
+                }
+
+
+                event.target.value = "";
+
+
+                await updateCounts();
+
+                await renderFiles();
 
             }
         );
 
 
-        function deleteFile(index) {
+    /* ============================================
+       INITIALIZE
+    ============================================ */
 
-            if (
-                confirm(
-                    "Are you sure you want to delete this file?"
-                )
-            ) {
+    async function initializeDocumentsPage() {
 
-                savedFiles.splice(index, 1);
+        try {
 
-                saveFiles();
+            await openDatabase();
 
-                renderFiles();
+            await updateCounts();
 
-            }
+            await renderFiles();
 
-        }
+        } catch (error) {
 
-
-        function openFile(index) {
-
-            alert(
-                "File: " +
-                savedFiles[index].name +
-                "\n\nFor security, browser localStorage stores the file information only."
+            console.error(
+                "Database error:",
+                error
             );
 
+
+            document.getElementById(
+                "documentsFileList"
+            ).innerHTML = `
+
+                <div class="doc-empty">
+
+                    <div class="doc-empty-icon">
+                        ⚠️
+                    </div>
+
+                    <h3>
+                        Storage could not be opened
+                    </h3>
+
+                    <p>
+                        Please refresh the page and try again.
+                    </p>
+
+                </div>
+
+            `;
+
         }
 
+    }
 
-        renderFiles();
 
-    </script>
+    initializeDocumentsPage();
+
+
+})();
+</script>
 
 </body>
 </html>
