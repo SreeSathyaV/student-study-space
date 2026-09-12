@@ -1,251 +1,1543 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Painting - Student Study Space</title>
 
-    <link rel="stylesheet" href="../styles.css">
+<meta charset="UTF-8">
 
-    <style>
-        .painting-container {
-            max-width: 1000px;
-            margin: 30px auto;
-            padding: 20px;
-        }
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
 
-        .toolbar {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-            align-items: center;
-            padding: 15px;
-            background: #ffffff;
-            border-radius: 15px;
-            margin-bottom: 20px;
-        }
+<title>StudentSpace - Painting</title>
 
-        .toolbar button {
-            padding: 10px 16px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            background: #f0f0f0;
-        }
+<style>
 
-        .toolbar button:hover {
-            background: #ddd;
-        }
+/* =========================
+   RESET
+========================= */
 
-        #colorPicker {
-            width: 45px;
-            height: 40px;
-            border: none;
-            cursor: pointer;
-        }
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
-        #brushSize {
-            width: 100px;
-        }
+body {
 
-        #paintCanvas {
-            width: 100%;
-            height: 500px;
-            background: white;
-            border: 2px solid #ddd;
-            border-radius: 15px;
-            cursor: crosshair;
-            touch-action: none;
-        }
+    min-height: 100vh;
 
-        .back-btn {
-            text-decoration: none;
-            display: inline-block;
-            margin-bottom: 20px;
-        }
-    </style>
+    font-family:
+        "Segoe UI",
+        Arial,
+        sans-serif;
+
+    color: white;
+
+    background:
+        radial-gradient(
+            circle at 10% 10%,
+            rgba(122, 57, 255, .25),
+            transparent 30%
+        ),
+        radial-gradient(
+            circle at 90% 80%,
+            rgba(194, 69, 255, .20),
+            transparent 30%
+        ),
+        #080617;
+
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+.header {
+
+    height: 75px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    padding: 0 5%;
+
+    background:
+        rgba(10, 7, 28, .85);
+
+    backdrop-filter:
+        blur(15px);
+
+    border-bottom:
+        1px solid
+        rgba(255,255,255,.08);
+
+}
+
+
+.header h1 {
+
+    font-size: 22px;
+
+}
+
+
+.header h1 span {
+
+    color: #a86cff;
+
+}
+
+
+.back-btn {
+
+    text-decoration: none;
+
+    color: white;
+
+    padding:
+        10px 17px;
+
+    border-radius: 10px;
+
+    background:
+        rgba(255,255,255,.06);
+
+    border:
+        1px solid
+        rgba(255,255,255,.1);
+
+}
+
+
+/* =========================
+   MAIN
+========================= */
+
+.painting-container {
+
+    width: 94%;
+
+    max-width: 1400px;
+
+    margin: auto;
+
+    padding: 25px 0 40px;
+
+}
+
+
+/* =========================
+   TOOLBAR
+========================= */
+
+.toolbar {
+
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 15px;
+
+    align-items: center;
+
+    padding: 15px;
+
+    margin-bottom: 15px;
+
+    border-radius: 16px;
+
+    background:
+        rgba(255,255,255,.05);
+
+    border:
+        1px solid
+        rgba(255,255,255,.08);
+
+    backdrop-filter:
+        blur(15px);
+
+}
+
+
+.tool-group {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+}
+
+
+.tool-label {
+
+    color: #aaa3b8;
+
+    font-size: 12px;
+
+}
+
+
+/* =========================
+   COLOR
+========================= */
+
+#colorPicker {
+
+    width: 45px;
+
+    height: 38px;
+
+    border: none;
+
+    padding: 2px;
+
+    background: transparent;
+
+    cursor: pointer;
+
+}
+
+
+/* =========================
+   BRUSH SELECT
+========================= */
+
+#brushType {
+
+    min-width: 150px;
+
+    padding: 10px 12px;
+
+    border-radius: 9px;
+
+    border:
+        1px solid
+        rgba(255,255,255,.12);
+
+    background:
+        #17112c;
+
+    color: white;
+
+    outline: none;
+
+    cursor: pointer;
+
+}
+
+
+#brushType option {
+
+    background: #17112c;
+
+    color: white;
+
+}
+
+
+/* =========================
+   RANGE
+========================= */
+
+input[type="range"] {
+
+    width: 130px;
+
+    accent-color: #9c63ff;
+
+}
+
+
+/* =========================
+   BUTTONS
+========================= */
+
+.tool-btn {
+
+    border: none;
+
+    padding:
+        10px 14px;
+
+    border-radius: 9px;
+
+    color: white;
+
+    background:
+        rgba(255,255,255,.07);
+
+    border:
+        1px solid
+        rgba(255,255,255,.1);
+
+    cursor: pointer;
+
+    transition: .25s;
+
+}
+
+
+.tool-btn:hover {
+
+    background:
+        rgba(139,74,255,.25);
+
+    transform:
+        translateY(-2px);
+
+}
+
+
+.clear-btn {
+
+    background:
+        rgba(220,70,90,.15);
+
+}
+
+
+.save-btn {
+
+    background:
+        linear-gradient(
+            135deg,
+            #713cff,
+            #bb51ff
+        );
+
+}
+
+
+/* =========================
+   CANVAS AREA
+========================= */
+
+.canvas-wrapper {
+
+    width: 100%;
+
+    height:
+        calc(100vh - 190px);
+
+    min-height: 500px;
+
+    border-radius: 20px;
+
+    padding: 10px;
+
+    background:
+        rgba(255,255,255,.05);
+
+    border:
+        1px solid
+        rgba(255,255,255,.1);
+
+    box-shadow:
+        0 20px 70px
+        rgba(0,0,0,.35);
+
+}
+
+
+canvas {
+
+    display: block;
+
+    width: 100%;
+
+    height: 100%;
+
+    background:
+        #fffdf8;
+
+    border-radius: 12px;
+
+    cursor: crosshair;
+
+    touch-action: none;
+
+}
+
+
+/* =========================
+   BRUSH INFO
+========================= */
+
+.brush-info {
+
+    margin-top: 12px;
+
+    color: #8d869b;
+
+    font-size: 12px;
+
+}
+
+
+#brushName {
+
+    color: #b784ff;
+
+    font-weight: 600;
+
+}
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media(max-width: 700px) {
+
+    .toolbar {
+
+        gap: 10px;
+
+    }
+
+    .tool-group {
+
+        width: 100%;
+
+    }
+
+    #brushType {
+
+        flex: 1;
+
+    }
+
+    .canvas-wrapper {
+
+        height: 65vh;
+
+        min-height: 400px;
+
+    }
+
+}
+
+</style>
+
 </head>
+
 
 <body>
 
-<div class="painting-container">
 
-    <a href="../index.html" class="back-btn">← Back to Home</a>
+<!-- ================= HEADER ================= -->
 
-    <h1>🎨 Creative Studio</h1>
-    <p>Draw, paint and express your creativity.</p>
+<header class="header">
+
+    <h1>
+        🎨 Student<span>Space</span> Painting
+    </h1>
+
+    <a
+        href="../index.html"
+        class="back-btn">
+
+        ← Home
+
+    </a>
+
+</header>
+
+
+
+<!-- ================= MAIN ================= -->
+
+<main class="painting-container">
+
+
+    <!-- ================= TOOLBAR ================= -->
 
     <div class="toolbar">
 
-        <label>
-            Color:
-            <input type="color" id="colorPicker" value="#000000">
-        </label>
 
-        <label>
-            Brush:
-            <input type="range" id="brushSize" min="1" max="40" value="5">
-        </label>
+        <!-- COLOR -->
 
-        <button onclick="setTool('brush')">🖌 Brush</button>
+        <div class="tool-group">
 
-        <button onclick="setTool('pencil')">✏️ Pencil</button>
+            <span class="tool-label">
+                Color
+            </span>
 
-        <button onclick="setTool('eraser')">🧹 Eraser</button>
+            <input
+                type="color"
+                id="colorPicker"
+                value="#7c3cff">
 
-        <button onclick="undo()">↩ Undo</button>
+        </div>
 
-        <button onclick="redo()">↪ Redo</button>
 
-        <button onclick="clearCanvas()">🗑 Clear</button>
 
-        <button onclick="savePainting()">💾 Save</button>
+        <!-- BRUSH -->
+
+        <div class="tool-group">
+
+            <span class="tool-label">
+                Brush
+            </span>
+
+            <select id="brushType">
+
+                <option value="round">
+                    🖌️ Round Brush
+                </option>
+
+                <option value="pencil">
+                    ✏️ Pencil
+                </option>
+
+                <option value="crayon">
+                    🖍️ Crayon
+                </option>
+
+                <option value="marker">
+                    🖊️ Marker
+                </option>
+
+                <option value="airbrush">
+                    🌫️ Airbrush
+                </option>
+
+                <option value="watercolor">
+                    🎨 Watercolor
+                </option>
+
+                <option value="glow">
+                    ✨ Glow Brush
+                </option>
+
+                <option value="eraser">
+                    🧹 Eraser
+                </option>
+
+            </select>
+
+        </div>
+
+
+
+        <!-- SIZE -->
+
+        <div class="tool-group">
+
+            <span class="tool-label">
+                Size
+            </span>
+
+            <input
+                type="range"
+                id="brushSize"
+                min="1"
+                max="80"
+                value="12">
+
+            <span id="sizeValue">
+                12
+            </span>
+
+        </div>
+
+
+
+        <!-- OPACITY -->
+
+        <div class="tool-group">
+
+            <span class="tool-label">
+                Opacity
+            </span>
+
+            <input
+                type="range"
+                id="opacity"
+                min="0.1"
+                max="1"
+                step="0.05"
+                value="1">
+
+            <span id="opacityValue">
+                100%
+            </span>
+
+        </div>
+
+
+
+        <!-- UNDO -->
+
+        <button
+            class="tool-btn"
+            onclick="undo()">
+
+            ↶ Undo
+
+        </button>
+
+
+
+        <!-- REDO -->
+
+        <button
+            class="tool-btn"
+            onclick="redo()">
+
+            ↷ Redo
+
+        </button>
+
+
+
+        <!-- CLEAR -->
+
+        <button
+            class="tool-btn clear-btn"
+            onclick="clearCanvas()">
+
+            🗑 Clear
+
+        </button>
+
+
+
+        <!-- SAVE -->
+
+        <button
+            class="tool-btn save-btn"
+            onclick="savePainting()">
+
+            💾 Save
+
+        </button>
 
     </div>
 
-    <canvas id="paintCanvas"></canvas>
 
-</div>
+
+    <!-- ================= CANVAS ================= -->
+
+    <div class="canvas-wrapper">
+
+        <canvas id="paintCanvas"></canvas>
+
+    </div>
+
+
+    <div class="brush-info">
+
+        Current Brush:
+
+        <span id="brushName">
+            Round Brush
+        </span>
+
+    </div>
+
+
+</main>
+
+
 
 <script>
 
-const canvas = document.getElementById("paintCanvas");
-const ctx = canvas.getContext("2d");
+/* ==========================================
+   CANVAS
+========================================== */
+
+const canvas =
+    document.getElementById(
+        "paintCanvas"
+    );
+
+const ctx =
+    canvas.getContext("2d");
+
+
+/* ==========================================
+   VARIABLES
+========================================== */
 
 let drawing = false;
-let tool = "brush";
 
-let undoStack = [];
-let redoStack = [];
+let lastX = 0;
+
+let lastY = 0;
+
+let history = [];
+
+let historyIndex = -1;
+
+
+/* ==========================================
+   CONTROLS
+========================================== */
+
+const colorPicker =
+    document.getElementById(
+        "colorPicker"
+    );
+
+const brushType =
+    document.getElementById(
+        "brushType"
+    );
+
+const brushSize =
+    document.getElementById(
+        "brushSize"
+    );
+
+const opacity =
+    document.getElementById(
+        "opacity"
+    );
+
+
+/* ==========================================
+   CANVAS SIZE
+========================================== */
 
 function resizeCanvas() {
-    const rect = canvas.getBoundingClientRect();
 
-    canvas.width = rect.width;
-    canvas.height = rect.height;
+    const oldImage =
+        canvas.width
+        ?
+        canvas.toDataURL()
+        :
+        null;
 
-    ctx.fillStyle = "white";
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    const rect =
+        canvas.getBoundingClientRect();
+
+
+    canvas.width =
+        rect.width * devicePixelRatio;
+
+
+    canvas.height =
+        rect.height * devicePixelRatio;
+
+
+    ctx.scale(
+        devicePixelRatio,
+        devicePixelRatio
+    );
+
+
+    canvas.style.width =
+        rect.width + "px";
+
+
+    canvas.style.height =
+        rect.height + "px";
+
+
+    ctx.fillStyle =
+        "#fffdf8";
+
+    ctx.fillRect(
+        0,
+        0,
+        rect.width,
+        rect.height
+    );
+
+
+    if (!oldImage) {
+
+        saveState();
+
+    }
+
 }
 
-resizeCanvas();
+
+window.addEventListener(
+    "load",
+    resizeCanvas
+);
+
+
+
+/* ==========================================
+   GET MOUSE / TOUCH POSITION
+========================================== */
 
 function getPosition(e) {
 
-    const rect = canvas.getBoundingClientRect();
+    const rect =
+        canvas.getBoundingClientRect();
+
+
+    if (
+        e.touches &&
+        e.touches.length
+    ) {
+
+        return {
+
+            x:
+                e.touches[0].clientX
+                - rect.left,
+
+            y:
+                e.touches[0].clientY
+                - rect.top
+
+        };
+
+    }
+
 
     return {
-        x: e.clientX - rect.left,
-        y: e.clientY - rect.top
+
+        x:
+            e.clientX
+            - rect.left,
+
+        y:
+            e.clientY
+            - rect.top
+
     };
+
 }
+
+
+
+/* ==========================================
+   START DRAW
+========================================== */
 
 function startDrawing(e) {
 
+    e.preventDefault();
+
     drawing = true;
 
-    undoStack.push(canvas.toDataURL());
-    redoStack = [];
+    const pos =
+        getPosition(e);
 
-    const pos = getPosition(e);
+    lastX = pos.x;
 
-    ctx.beginPath();
-    ctx.moveTo(pos.x, pos.y);
+    lastY = pos.y;
+
 }
+
+
+/* ==========================================
+   DRAW
+========================================== */
 
 function draw(e) {
 
-    if (!drawing) return;
+    if (!drawing)
+        return;
 
-    const pos = getPosition(e);
 
-    let color = document.getElementById("colorPicker").value;
-    let size = document.getElementById("brushSize").value;
+    e.preventDefault();
 
-    if (tool === "eraser") {
-        ctx.strokeStyle = "white";
-        ctx.lineWidth = size * 2;
-    } else {
-        ctx.strokeStyle = color;
-        ctx.lineWidth = size;
+
+    const pos =
+        getPosition(e);
+
+
+    const x = pos.x;
+
+    const y = pos.y;
+
+
+    const size =
+        Number(
+            brushSize.value
+        );
+
+
+    const color =
+        colorPicker.value;
+
+
+    const alpha =
+        Number(
+            opacity.value
+        );
+
+
+    const brush =
+        brushType.value;
+
+
+    ctx.save();
+
+
+    /* ======================================
+       ERASER
+    ====================================== */
+
+    if (brush === "eraser") {
+
+        ctx.globalCompositeOperation =
+            "destination-out";
+
+        ctx.globalAlpha = 1;
+
+        ctx.lineWidth =
+            size * 2;
+
+        ctx.lineCap =
+            "round";
+
+        ctx.lineJoin =
+            "round";
+
     }
 
-    ctx.lineCap = "round";
-    ctx.lineJoin = "round";
 
-    ctx.lineTo(pos.x, pos.y);
+    /* ======================================
+       ROUND BRUSH
+    ====================================== */
+
+    else if (brush === "round") {
+
+        ctx.globalCompositeOperation =
+            "source-over";
+
+        ctx.globalAlpha =
+            alpha;
+
+        ctx.strokeStyle =
+            color;
+
+        ctx.lineWidth =
+            size;
+
+        ctx.lineCap =
+            "round";
+
+        ctx.lineJoin =
+            "round";
+
+    }
+
+
+    /* ======================================
+       PENCIL
+    ====================================== */
+
+    else if (brush === "pencil") {
+
+        ctx.globalCompositeOperation =
+            "source-over";
+
+        ctx.globalAlpha =
+            alpha;
+
+        ctx.strokeStyle =
+            color;
+
+        ctx.lineWidth =
+            Math.max(
+                1,
+                size * .35
+            );
+
+        ctx.lineCap =
+            "round";
+
+        ctx.lineJoin =
+            "round";
+
+    }
+
+
+    /* ======================================
+       MARKER
+    ====================================== */
+
+    else if (brush === "marker") {
+
+        ctx.globalCompositeOperation =
+            "source-over";
+
+        ctx.globalAlpha =
+            alpha * .55;
+
+        ctx.strokeStyle =
+            color;
+
+        ctx.lineWidth =
+            size * 1.5;
+
+        ctx.lineCap =
+            "round";
+
+        ctx.lineJoin =
+            "round";
+
+    }
+
+
+    /* ======================================
+       CRAYON
+    ====================================== */
+
+    else if (brush === "crayon") {
+
+        ctx.globalCompositeOperation =
+            "source-over";
+
+        ctx.globalAlpha =
+            alpha * .8;
+
+        ctx.strokeStyle =
+            color;
+
+        ctx.lineWidth =
+            size;
+
+        ctx.lineCap =
+            "round";
+
+        ctx.lineJoin =
+            "round";
+
+    }
+
+
+    /* ======================================
+       WATERCOLOR
+    ====================================== */
+
+    else if (brush === "watercolor") {
+
+        ctx.globalCompositeOperation =
+            "source-over";
+
+        ctx.globalAlpha =
+            alpha * .18;
+
+        ctx.strokeStyle =
+            color;
+
+        ctx.lineWidth =
+            size * 2.5;
+
+        ctx.lineCap =
+            "round";
+
+        ctx.lineJoin =
+            "round";
+
+    }
+
+
+    /* ======================================
+       AIRBRUSH
+    ====================================== */
+
+    else if (brush === "airbrush") {
+
+        ctx.globalCompositeOperation =
+            "source-over";
+
+        ctx.globalAlpha =
+            alpha * .08;
+
+        ctx.fillStyle =
+            color;
+
+
+        const radius =
+            size * 2;
+
+
+        for (
+            let i = 0;
+            i < 12;
+            i++
+        ) {
+
+            const offsetX =
+                (Math.random() - .5)
+                * radius;
+
+            const offsetY =
+                (Math.random() - .5)
+                * radius;
+
+
+            ctx.beginPath();
+
+            ctx.arc(
+                x + offsetX,
+                y + offsetY,
+                Math.random() * size,
+                0,
+                Math.PI * 2
+            );
+
+            ctx.fill();
+
+        }
+
+
+        ctx.restore();
+
+
+        lastX = x;
+        lastY = y;
+
+        return;
+
+    }
+
+
+    /* ======================================
+       GLOW BRUSH
+    ====================================== */
+
+    else if (brush === "glow") {
+
+        ctx.globalCompositeOperation =
+            "source-over";
+
+        ctx.globalAlpha =
+            alpha;
+
+        ctx.strokeStyle =
+            color;
+
+        ctx.lineWidth =
+            size;
+
+        ctx.lineCap =
+            "round";
+
+        ctx.lineJoin =
+            "round";
+
+        ctx.shadowBlur =
+            size * 2;
+
+        ctx.shadowColor =
+            color;
+
+    }
+
+
+    /* ======================================
+       DRAW LINE
+    ====================================== */
+
+    ctx.beginPath();
+
+    ctx.moveTo(
+        lastX,
+        lastY
+    );
+
+    ctx.lineTo(
+        x,
+        y
+    );
+
     ctx.stroke();
+
+
+    ctx.restore();
+
+
+    lastX = x;
+
+    lastY = y;
+
 }
+
+
+/* ==========================================
+   STOP DRAW
+========================================== */
 
 function stopDrawing() {
+
+    if (!drawing)
+        return;
+
+
     drawing = false;
-    ctx.closePath();
+
+    saveState();
+
 }
 
-canvas.addEventListener("pointerdown", startDrawing);
-canvas.addEventListener("pointermove", draw);
-canvas.addEventListener("pointerup", stopDrawing);
-canvas.addEventListener("pointerleave", stopDrawing);
 
-function setTool(selectedTool) {
-    tool = selectedTool;
+
+/* ==========================================
+   MOUSE
+========================================== */
+
+canvas.addEventListener(
+    "mousedown",
+    startDrawing
+);
+
+
+canvas.addEventListener(
+    "mousemove",
+    draw
+);
+
+
+canvas.addEventListener(
+    "mouseup",
+    stopDrawing
+);
+
+
+canvas.addEventListener(
+    "mouseleave",
+    stopDrawing
+);
+
+
+
+/* ==========================================
+   TOUCH
+========================================== */
+
+canvas.addEventListener(
+    "touchstart",
+    startDrawing,
+    { passive: false }
+);
+
+
+canvas.addEventListener(
+    "touchmove",
+    draw,
+    { passive: false }
+);
+
+
+canvas.addEventListener(
+    "touchend",
+    stopDrawing
+);
+
+
+
+/* ==========================================
+   BRUSH NAME
+========================================== */
+
+brushType.addEventListener(
+    "change",
+    () => {
+
+        const names = {
+
+            round:
+                "Round Brush",
+
+            pencil:
+                "Pencil",
+
+            crayon:
+                "Crayon",
+
+            marker:
+                "Marker",
+
+            airbrush:
+                "Airbrush",
+
+            watercolor:
+                "Watercolor",
+
+            glow:
+                "Glow Brush",
+
+            eraser:
+                "Eraser"
+
+        };
+
+
+        document.getElementById(
+            "brushName"
+        ).textContent =
+            names[
+                brushType.value
+            ];
+
+    }
+);
+
+
+
+/* ==========================================
+   SIZE DISPLAY
+========================================== */
+
+brushSize.addEventListener(
+    "input",
+    () => {
+
+        document.getElementById(
+            "sizeValue"
+        ).textContent =
+            brushSize.value;
+
+    }
+);
+
+
+
+/* ==========================================
+   OPACITY DISPLAY
+========================================== */
+
+opacity.addEventListener(
+    "input",
+    () => {
+
+        document.getElementById(
+            "opacityValue"
+        ).textContent =
+            Math.round(
+                opacity.value * 100
+            ) + "%";
+
+    }
+);
+
+
+
+/* ==========================================
+   SAVE STATE
+========================================== */
+
+function saveState() {
+
+    if (
+        historyIndex <
+        history.length - 1
+    ) {
+
+        history =
+            history.slice(
+                0,
+                historyIndex + 1
+            );
+
+    }
+
+
+    history.push(
+        canvas.toDataURL()
+    );
+
+
+    historyIndex =
+        history.length - 1;
+
+
+    if (
+        history.length > 30
+    ) {
+
+        history.shift();
+
+        historyIndex--;
+
+    }
+
 }
 
-function clearCanvas() {
 
-    undoStack.push(canvas.toDataURL());
 
-    ctx.fillStyle = "white";
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+/* ==========================================
+   RESTORE STATE
+========================================== */
+
+function restoreState(
+    imageData
+) {
+
+    const image =
+        new Image();
+
+
+    image.onload = () => {
+
+        const rect =
+            canvas.getBoundingClientRect();
+
+
+        ctx.clearRect(
+            0,
+            0,
+            rect.width,
+            rect.height
+        );
+
+
+        ctx.drawImage(
+            image,
+            0,
+            0,
+            rect.width,
+            rect.height
+        );
+
+    };
+
+
+    image.src =
+        imageData;
+
 }
+
+
+
+/* ==========================================
+   UNDO
+========================================== */
 
 function undo() {
 
-    if (undoStack.length === 0) return;
+    if (
+        historyIndex <= 0
+    )
+        return;
 
-    redoStack.push(canvas.toDataURL());
 
-    const previous = undoStack.pop();
+    historyIndex--;
 
-    const image = new Image();
+    restoreState(
+        history[
+            historyIndex
+        ]
+    );
 
-    image.onload = function() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
-    };
-
-    image.src = previous;
 }
+
+
+
+/* ==========================================
+   REDO
+========================================== */
 
 function redo() {
 
-    if (redoStack.length === 0) return;
+    if (
+        historyIndex >=
+        history.length - 1
+    )
+        return;
 
-    undoStack.push(canvas.toDataURL());
 
-    const next = redoStack.pop();
+    historyIndex++;
 
-    const image = new Image();
+    restoreState(
+        history[
+            historyIndex
+        ]
+    );
 
-    image.onload = function() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
-    };
-
-    image.src = next;
 }
+
+
+
+/* ==========================================
+   CLEAR
+========================================== */
+
+function clearCanvas() {
+
+    const confirmClear =
+        confirm(
+            "Clear your entire painting?"
+        );
+
+
+    if (!confirmClear)
+        return;
+
+
+    const rect =
+        canvas.getBoundingClientRect();
+
+
+    ctx.save();
+
+
+    ctx.globalCompositeOperation =
+        "source-over";
+
+
+    ctx.fillStyle =
+        "#fffdf8";
+
+
+    ctx.fillRect(
+        0,
+        0,
+        rect.width,
+        rect.height
+    );
+
+
+    ctx.restore();
+
+
+    saveState();
+
+}
+
+
+
+/* ==========================================
+   SAVE PAINTING
+========================================== */
 
 function savePainting() {
 
-    const link = document.createElement("a");
+    const link =
+        document.createElement(
+            "a"
+        );
 
-    link.download = "my-painting.png";
-    link.href = canvas.toDataURL("image/png");
+
+    link.download =
+        "StudentSpace-Painting-" +
+        Date.now() +
+        ".png";
+
+
+    link.href =
+        canvas.toDataURL(
+            "image/png"
+        );
+
 
     link.click();
+
 }
 
 </script>
 
+
 </body>
+
 </html>
