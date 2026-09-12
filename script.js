@@ -443,6 +443,118 @@ class OfflineSupport {
     }
 }
 
+// =========================================
+// TASK SYSTEM
+// =========================================
+
+let tasks = JSON.parse(
+    localStorage.getItem("studyTasks")
+) || [];
+
+
+function saveTasks() {
+    localStorage.setItem(
+        "studyTasks",
+        JSON.stringify(tasks)
+    );
+}
+
+
+function addTask() {
+    const input =
+        document.getElementById("taskInput");
+
+    const priority =
+        document.getElementById("priority");
+
+    const text =
+        input.value.trim();
+
+    if (!text) {
+        Notification.error("❌ Please enter a task.");
+        return;
+    }
+
+    const task = {
+        id: Date.now(),
+        text: text,
+        priority: priority.value,
+        completed: false
+    };
+
+    tasks.push(task);
+    saveTasks();
+    input.value = "";
+    Notification.success("✅ Task added successfully!");
+    renderTasks();
+}
+
+
+function toggleTask(id) {
+    const task =
+        tasks.find(t => t.id === id);
+
+    if (!task) return;
+
+    task.completed =
+        !task.completed;
+
+    saveTasks();
+    renderTasks();
+}
+
+
+function deleteTask(id) {
+    tasks =
+        tasks.filter(
+            task => task.id !== id
+        );
+
+    saveTasks();
+    Notification.success("✅ Task deleted!");
+    renderTasks();
+}
+
+
+function renderTasks() {
+    const container =
+        document.getElementById("tasksList");
+
+    if (!container) return;
+
+    if (tasks.length === 0) {
+        container.innerHTML = `
+            <div class="empty-state">
+                <div class="empty-icon">✅</div>
+                <p>No tasks yet. Add your first task!</p>
+            </div>
+        `;
+        return;
+    }
+
+    container.innerHTML =
+        tasks.map(task => `
+            <div class="task-item ${task.completed ? "completed" : ""}">
+                <div class="task-left">
+                    <input
+                        type="checkbox"
+                        ${task.completed ? "checked" : ""}
+                        onchange="toggleTask(${task.id})"
+                    >
+                    <span>${escapeHTML(task.text)}</span>
+                </div>
+                <div class="task-right">
+                    <small class="priority-badge">${task.priority}</small>
+                    <button
+                        class="danger-btn"
+                        onclick="deleteTask(${task.id})">
+                        🗑️ Delete
+                    </button>
+                </div>
+            </div>
+        `).join("");
+}
+
 // ============================================
 // INITIALIZATION
 // ============================================
@@ -453,6 +565,7 @@ document.addEventListener('DOMContentLoaded', () => {
     DarkMode.init();
     KeyboardShortcuts.init();
     OfflineSupport.init();
+    renderTasks();
 
     console.log('✅ Study Space loaded successfully!');
 });

@@ -1,195 +1,622 @@
-/* =========================================
-   TASK SYSTEM
-   ========================================= */
-
-let tasks = JSON.parse(
-    localStorage.getItem("studyTasks")
-) || [];
-
-
-function saveTasks() {
-
-    localStorage.setItem(
-        "studyTasks",
-        JSON.stringify(tasks)
-    );
-
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
+:root {
+    --primary-color: #6366f1;
+    --secondary-color: #ec4899;
+    --success-color: #10b981;
+    --warning-color: #f59e0b;
+    --danger-color: #ef4444;
+    --dark-color: #1f2937;
+    --light-color: #f9fafb;
+    --gray-color: #6b7280;
+    --border-radius: 12px;
+    --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --transition: all 0.3s ease;
+}
 
-function addTask() {
+body.dark-mode {
+    --light-color: #1f2937;
+    --dark-color: #f9fafb;
+    --gray-color: #d1d5db;
+    --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
 
-    const input =
-        document.getElementById("taskInput");
+body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: "Poppins", sans-serif;
+    background: radial-gradient(circle at 10% 20%, rgba(255,255,255,0.9), transparent 30%),
+                radial-gradient(circle at 90% 80%, rgba(220,235,255,0.8), transparent 35%),
+                linear-gradient(135deg, #eef3ff, #f8f5ff, #eefbf7);
+    background-attachment: fixed;
+    color: var(--dark-color);
+    transition: background 0.3s ease;
+}
 
-    const priority =
-        document.getElementById("priority");
+body.dark-mode {
+    background: linear-gradient(135deg, #1a1f3a, #2d1b4e, #0f2a2e);
+    background-attachment: fixed;
+}
 
+/* ==========================================
+   NOTIFICATIONS
+========================================== */
 
-    const text =
-        input.value.trim();
+.notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 1rem 1.5rem;
+    border-radius: var(--border-radius);
+    color: white;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    min-width: 300px;
+    z-index: 10000;
+    opacity: 0;
+    transform: translateX(400px);
+    transition: var(--transition);
+    box-shadow: var(--box-shadow);
+}
 
+.notification.show {
+    opacity: 1;
+    transform: translateX(0);
+}
 
-    if (!text) {
+.notification-success {
+    background: linear-gradient(135deg, var(--success-color), #059669);
+}
 
-        alert("Please enter a task.");
+.notification-error {
+    background: linear-gradient(135deg, var(--danger-color), #dc2626);
+}
 
-        return;
+.notification-info {
+    background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+}
 
+.notification-warning {
+    background: linear-gradient(135deg, var(--warning-color), #d97706);
+}
+
+.notification-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.notification-close {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.notification-close:hover {
+    opacity: 0.8;
+}
+
+/* ==========================================
+   NAVBAR WITH DARK MODE TOGGLE
+========================================== */
+
+.navbar {
+    animation: navSlide 0.8s ease forwards;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    padding: 1rem 0;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: var(--box-shadow);
+}
+
+.navbar.dark-mode {
+    background: linear-gradient(135deg, #3730a3, #7c2d12);
+}
+
+@keyframes navSlide {
+    from {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.nav-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: white;
+}
+
+.nav-menu {
+    display: flex;
+    list-style: none;
+    gap: 2rem;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.nav-menu a {
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+    transition: var(--transition);
+    padding: 0.5rem 1rem;
+    border-radius: var(--border-radius);
+    position: relative;
+}
+
+.nav-menu a::after {
+    content: "";
+    position: absolute;
+    bottom: -7px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(90deg, #743cff, #c151ff);
+    transition: width 0.3s ease;
+}
+
+.nav-menu a:hover::after,
+.nav-menu a.active::after {
+    width: 100%;
+}
+
+.nav-menu a:hover,
+.nav-menu a.active {
+    background-color: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+}
+
+.dark-mode-btn {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: white;
+    font-size: 1.2rem;
+    cursor: pointer;
+    padding: 0.5rem 1rem;
+    border-radius: var(--border-radius);
+    transition: var(--transition);
+}
+
+.dark-mode-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(1.1);
+}
+
+/* ==========================================
+   HERO SECTION
+========================================== */
+
+.hero {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: white;
+    padding: 4rem 2rem;
+    text-align: center;
+    animation: fadeIn 0.6s ease-in;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.hero-content h1 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.hero-content .tagline {
+    font-size: 1.3rem;
+    font-style: italic;
+    margin-bottom: 2rem;
+    opacity: 0.9;
+}
+
+.hero-content h2 {
+    font-size: 1.8rem;
+    font-weight: 400;
+}
+
+/* ==========================================
+   CONTAINER
+========================================== */
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+/* ==========================================
+   QUICK ACCESS CARDS
+========================================== */
+
+.quick-access {
+    padding: 4rem 2rem;
+    background-color: var(--light-color);
+}
+
+.quick-access h2 {
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 3rem;
+    color: var(--dark-color);
+}
+
+.cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    margin-bottom: 3rem;
+}
+
+.card {
+    background: white;
+    border-radius: var(--border-radius);
+    padding: 2rem;
+    text-align: center;
+    box-shadow: var(--box-shadow);
+    transition: var(--transition);
+    border: 2px solid transparent;
+}
+
+body.dark-mode .card {
+    background: #2d3748;
+    color: white;
+}
+
+.card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+    border-color: var(--primary-color);
+}
+
+.card-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.card h3 {
+    color: var(--primary-color);
+    margin-bottom: 0.5rem;
+    font-size: 1.3rem;
+}
+
+.card p {
+    color: var(--gray-color);
+    margin-bottom: 1.5rem;
+}
+
+.card-btn {
+    display: inline-block;
+    background: var(--primary-color);
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--border-radius);
+    text-decoration: none;
+    transition: var(--transition);
+    font-weight: 500;
+}
+
+.card-btn:hover {
+    background: var(--secondary-color);
+    transform: scale(1.05);
+}
+
+/* ==========================================
+   FEATURES SECTION
+========================================== */
+
+.features {
+    padding: 4rem 2rem;
+    background: linear-gradient(135deg, #f0f4ff, #fff0f8);
+}
+
+body.dark-mode .features {
+    background: linear-gradient(135deg, #1a1f3a, #2d1b4e);
+}
+
+.features h2 {
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 3rem;
+    color: var(--dark-color);
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+}
+
+.feature {
+    background: white;
+    padding: 2rem;
+    border-radius: var(--border-radius);
+    text-align: center;
+    box-shadow: var(--box-shadow);
+    transition: var(--transition);
+}
+
+body.dark-mode .feature {
+    background: #2d3748;
+    color: white;
+}
+
+.feature:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+.feature h3 {
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
+}
+
+.feature p {
+    color: var(--gray-color);
+}
+
+/* ==========================================
+   FOOTER
+========================================== */
+
+.footer {
+    background: var(--dark-color);
+    color: white;
+    text-align: center;
+    padding: 2rem;
+    margin-top: 4rem;
+}
+
+.footer p {
+    margin: 0.5rem 0;
+}
+
+/* ==========================================
+   BUTTONS
+========================================== */
+
+.btn {
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    font-weight: 500;
+    transition: var(--transition);
+    font-size: 1rem;
+}
+
+.btn:hover {
+    background: var(--secondary-color);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+}
+
+.btn-danger {
+    background: var(--danger-color);
+}
+
+.btn-danger:hover {
+    background: #dc2626;
+}
+
+/* ==========================================
+   ACCESSIBILITY
+========================================== */
+
+a:focus,
+button:focus,
+input:focus,
+textarea:focus,
+select:focus {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+}
+
+/* ==========================================
+   ANIMATIONS
+========================================== */
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+section {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.loading {
+    position: relative;
+    pointer-events: none;
+    opacity: 0.6;
+}
+
+.loading::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    margin: -10px 0 0 -10px;
+    border: 2px solid var(--primary-color);
+    border-radius: 50%;
+    border-top-color: transparent;
+    animation: spin 0.6s linear infinite;
+}
+
+/* ==========================================
+   MOBILE RESPONSIVENESS
+========================================== */
+
+@media (max-width: 768px) {
+    .notification {
+        min-width: 90%;
+        right: 5%;
+        left: 5%;
     }
 
-
-    const task = {
-
-        id: Date.now(),
-
-        text: text,
-
-        priority: priority.value,
-
-        completed: false
-
-    };
-
-
-    tasks.push(task);
-
-    saveTasks();
-
-    input.value = "";
-
-    renderTasks();
-
-}
-
-
-function toggleTask(id) {
-
-    const task =
-        tasks.find(t => t.id === id);
-
-    if (!task) return;
-
-    task.completed =
-        !task.completed;
-
-    saveTasks();
-
-    renderTasks();
-
-}
-
-
-function deleteTask(id) {
-
-    tasks =
-        tasks.filter(
-            task => task.id !== id
-        );
-
-    saveTasks();
-
-    renderTasks();
-
-}
-
-
-function renderTasks() {
-
-    const container =
-        document.getElementById("tasksList");
-
-
-    if (!container) return;
-
-
-    if (tasks.length === 0) {
-
-        container.innerHTML = `
-
-            <div class="empty-state">
-
-                <div class="empty-icon">
-                    ✅
-                </div>
-
-                <p>
-                    No tasks yet.
-                    Add your first task!
-                </p>
-
-            </div>
-
-        `;
-
-        return;
-
+    .nav-menu {
+        gap: 1rem;
+        font-size: 0.9rem;
     }
 
+    .cards-grid,
+    .features-grid {
+        grid-template-columns: 1fr;
+    }
 
-    container.innerHTML =
-        tasks.map(task => `
+    .hero-content h1 {
+        font-size: 2rem;
+    }
 
-            <div class="
-                task-item
-                ${task.completed ? "completed" : ""}
-            ">
+    .hero-content h2 {
+        font-size: 1.3rem;
+    }
 
-                <div class="task-left">
-
-                    <input
-                        type="checkbox"
-                        ${task.completed ? "checked" : ""}
-                        onchange="
-                            toggleTask(${task.id})
-                        "
-                    >
-
-                    <span>
-                        ${escapeHTML(task.text)}
-                    </span>
-
-                </div>
-
-
-                <div>
-
-                    <small>
-                        ${task.priority}
-                    </small>
-
-                    <button
-                        class="danger-btn"
-                        onclick="
-                            deleteTask(${task.id})
-                        ">
-
-                        🗑️ Delete
-
-                    </button>
-
-                </div>
-
-            </div>
-
-        `).join("");
-
+    .quick-access h2,
+    .features h2 {
+        font-size: 1.5rem;
+    }
 }
 
+@media (max-width: 480px) {
+    .nav-menu {
+        gap: 0.5rem;
+        font-size: 0.8rem;
+    }
 
-function escapeHTML(text) {
+    .card,
+    .feature {
+        padding: 1.5rem;
+    }
 
-    const div =
-        document.createElement("div");
+    .card-icon {
+        font-size: 2rem;
+    }
 
-    div.textContent = text;
+    .hero-content h1 {
+        font-size: 1.5rem;
+    }
 
-    return div.innerHTML;
-
+    .container {
+        padding: 0 1rem;
+    }
 }
 
+/* ==========================================
+   REDUCE MOTION
+========================================== */
 
-document.addEventListener(
-    "DOMContentLoaded",
-    renderTasks
-);
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+/* ==========================================
+   SMOOTH SCROLL
+========================================== */
+
+html {
+    scroll-behavior: smooth;
+}
+
+/* ==========================================
+   FORM STYLES
+========================================== */
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: var(--dark-color);
+}
+
+input,
+textarea,
+select {
+    width: 100%;
+    padding: 0.75rem;
+    border: 2px solid #e5e7eb;
+    border-radius: var(--border-radius);
+    font-family: inherit;
+    font-size: 1rem;
+    transition: var(--transition);
+}
+
+body.dark-mode input,
+body.dark-mode textarea,
+body.dark-mode select {
+    background: #2d3748;
+    color: white;
+    border-color: #4a5568;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
