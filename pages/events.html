@@ -1,356 +1,191 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
     <title>Events - Study Space</title>
+
     <link rel="stylesheet" href="../styles.css">
-    <style>
-        .events-wrapper {
-            padding: 2rem;
-            display: grid;
-            grid-template-columns: 1fr 2fr;
-            gap: 2rem;
-        }
 
-        .calendar-card {
-            background: white;
-            border-radius: 12px;
-            padding: 1.5rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        .calendar {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            gap: 0.5rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .calendar-day {
-            text-align: center;
-            padding: 0.5rem;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-weight: 500;
-            font-size: 0.9rem;
-        }
-
-        .calendar-day.header {
-            background: #f3f4f6;
-            color: #6b7280;
-            cursor: default;
-        }
-
-        .calendar-day.other-month {
-            color: #d1d5db;
-        }
-
-        .calendar-day:not(.header):not(.other-month):hover {
-            background: #e0e7ff;
-        }
-
-        .calendar-day.active {
-            background: #6366f1;
-            color: white;
-        }
-
-        .event-form {
-            background: white;
-            border-radius: 12px;
-            padding: 2rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 500;
-            color: #1f2937;
-        }
-
-        .form-group input,
-        .form-group textarea {
-            width: 100%;
-            padding: 0.75rem;
-            border: 2px solid #e5e7eb;
-            border-radius: 8px;
-            font-family: inherit;
-            font-size: 1rem;
-        }
-
-        .form-group input:focus,
-        .form-group textarea:focus {
-            outline: none;
-            border-color: #6366f1;
-            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
-        }
-
-        .events-list {
-            background: white;
-            border-radius: 12px;
-            padding: 2rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            margin-top: 2rem;
-        }
-
-        .event-item {
-            padding: 1.5rem;
-            border-left: 4px solid #6366f1;
-            background: #f9fafb;
-            margin-bottom: 1rem;
-            border-radius: 6px;
-            transition: all 0.3s ease;
-        }
-
-        .event-item:hover {
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        }
-
-        .event-title {
-            font-weight: bold;
-            color: #1f2937;
-            margin-bottom: 0.5rem;
-        }
-
-        .event-time {
-            color: #6b7280;
-            font-size: 0.9rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .event-description {
-            color: #6b7280;
-            font-size: 0.9rem;
-        }
-
-        .event-actions {
-            display: flex;
-            gap: 0.5rem;
-            margin-top: 1rem;
-        }
-
-        .event-actions button {
-            padding: 0.4rem 0.8rem;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 0.9rem;
-            transition: all 0.3s ease;
-        }
-
-        .delete-btn {
-            background: #fee2e2;
-            color: #991b1b;
-        }
-
-        .delete-btn:hover {
-            background: #fecaca;
-        }
-
-        @media (max-width: 1024px) {
-            .events-wrapper {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
 </head>
+
 <body>
-    <!-- Navigation -->
-    <nav class="navbar">
-        <div class="nav-container">
-            <div class="logo">📚 Study Space</div>
-            <ul class="nav-menu">
-                <li><a href="../index.html">🏠 Home</a></li>
-                <li><a href="notes.html">📝 Notes</a></li>
-                <li><a href="tasks.html">✅ Tasks</a></li>
-                <li><a href="events.html" class="active">📅 Events</a></li>
-                <li><a href="planner.html">⏰ Planner</a></li>
-                <li><a href="documents.html">📂 Documents</a></li>
-                <li><a href="painting.html">🎨 Painting</a></li>
-                <li><a href="games.html">🎮 Games</a></li>
-                <li><a href="profile.html">👤 Profile</a></li>
-            </ul>
-        </div>
-    </nav>
 
-    <!-- Hero -->
-    <section class="hero">
+
+<header class="navbar">
+
+    <a href="../index.html" class="logo">
+        📚 Study <span>Space</span>
+    </a>
+
+    <ul class="nav-links">
+
+        <li><a href="../index.html">🏠 Home</a></li>
+
+        <li><a href="notes.html">📝 Notes</a></li>
+
+        <li><a href="tasks.html">✅ Tasks</a></li>
+
+        <li>
+            <a href="events.html" class="active">
+                🗓️ Events
+            </a>
+        </li>
+
+        <li><a href="planner.html">⏰ Planner</a></li>
+
+        <li><a href="documents.html">📁 Documents</a></li>
+
+        <li><a href="painting.html">🎨 Painting</a></li>
+
+        <li><a href="games.html">🎮 Games</a></li>
+
+        <li><a href="profile.html">👤 Profile</a></li>
+
+    </ul>
+
+</header>
+
+
+<main>
+
+<section class="page-hero">
+
+    <div class="page-container">
+
         <div class="hero-content">
-            <h1>📅 My Events</h1>
-            <p class="tagline">Never miss an important date.</p>
-        </div>
-    </section>
 
-    <!-- Main Content -->
-    <div class="container">
-        <div class="events-wrapper">
-            <!-- Calendar -->
-            <div class="calendar-card">
-                <h3 style="margin-bottom: 1.5rem;">📆 Calendar</h3>
-                <div id="monthYear" style="text-align: center; font-weight: bold; margin-bottom: 1rem;"></div>
-                <div class="calendar" id="calendar"></div>
-                <button class="btn" style="width: 100%;" onclick="goToToday()">Today</button>
+            <div class="hero-icon">
+                🗓️
             </div>
 
-            <!-- Event Form -->
-            <div>
-                <div class="event-form">
-                    <h3 style="margin-bottom: 1.5rem;">+ Add Event</h3>
-                    <div class="form-group">
-                        <label>Event Title</label>
-                        <input type="text" id="eventTitle" placeholder="e.g., Deep Learning Assignment">
-                    </div>
-                    <div class="form-group">
-                        <label>Date</label>
-                        <input type="date" id="eventDate">
-                    </div>
-                    <div class="form-group">
-                        <label>Time</label>
-                        <input type="time" id="eventTime">
-                    </div>
-                    <div class="form-group">
-                        <label>Description</label>
-                        <textarea id="eventDescription" placeholder="Add details about this event" rows="3"></textarea>
-                    </div>
-                    <button class="btn" style="width: 100%;" onclick="addEvent()">+ Add Event</button>
-                </div>
+            <h1>
+                My <span>Events</span>
+            </h1>
 
-                <!-- Events List -->
-                <div class="events-list">
-                    <h3 style="margin-bottom: 1.5rem;">Upcoming Events</h3>
-                    <div id="eventsList"></div>
-                </div>
-            </div>
+            <p>
+                Keep track of assignments, exams,
+                meetings and important dates.
+            </p>
+
         </div>
+
     </div>
 
-    <script src="../script.js"></script>
-    <script>
-        let selectedDate = new Date();
+</section>
 
-        function generateCalendar() {
-            const year = selectedDate.getFullYear();
-            const month = selectedDate.getMonth();
-            const firstDay = new Date(year, month, 1);
-            const lastDay = new Date(year, month + 1, 0);
-            const daysInMonth = lastDay.getDate();
-            const startingDayOfWeek = firstDay.getDay();
 
-            document.getElementById('monthYear').textContent = selectedDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+<section class="content-section">
 
-            const calendar = document.getElementById('calendar');
-            calendar.innerHTML = '';
+    <div class="page-container">
 
-            const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-            days.forEach(day => {
-                const dayHeader = document.createElement('div');
-                dayHeader.className = 'calendar-day header';
-                dayHeader.textContent = day;
-                calendar.appendChild(dayHeader);
-            });
+        <div class="events-layout">
 
-            for (let i = 0; i < startingDayOfWeek; i++) {
-                const emptyDay = document.createElement('div');
-                emptyDay.className = 'calendar-day other-month';
-                emptyDay.textContent = new Date(year, month, -startingDayOfWeek + i + 1).getDate();
-                calendar.appendChild(emptyDay);
-            }
 
-            for (let day = 1; day <= daysInMonth; day++) {
-                const dayCell = document.createElement('div');
-                dayCell.className = 'calendar-day';
-                dayCell.textContent = day;
-                
-                const today = new Date();
-                if (day === today.getDate() && month === today.getMonth() && year === today.getFullYear()) {
-                    dayCell.classList.add('active');
-                }
-                
-                dayCell.onclick = () => selectDate(day);
-                calendar.appendChild(dayCell);
-            }
-        }
+            <!-- CALENDAR -->
 
-        function selectDate(day) {
-            selectedDate.setDate(day);
-            document.getElementById('eventDate').value = selectedDate.toISOString().split('T')[0];
-            generateCalendar();
-        }
+            <div class="calendar-box">
 
-        function goToToday() {
-            selectedDate = new Date();
-            document.getElementById('eventDate').value = selectedDate.toISOString().split('T')[0];
-            generateCalendar();
-        }
+                <h2>📅 Calendar</h2>
 
-        function addEvent() {
-            const title = document.getElementById('eventTitle').value.trim();
-            const date = document.getElementById('eventDate').value;
-            const time = document.getElementById('eventTime').value;
-            const description = document.getElementById('eventDescription').value.trim();
+                <input
+                    type="date"
+                    id="eventDate">
 
-            if (!title || !date) {
-                showNotification('Please fill in title and date', 'error');
-                return;
-            }
+                <div
+                    id="calendarEvents"
+                    class="event-list">
 
-            const event = {
-                title,
-                date,
-                time,
-                description
-            };
-
-            Storage.add('events', event);
-            document.getElementById('eventTitle').value = '';
-            document.getElementById('eventDate').value = '';
-            document.getElementById('eventTime').value = '';
-            document.getElementById('eventDescription').value = '';
-            showNotification('Event added successfully!');
-            loadEvents();
-        }
-
-        function deleteEvent(id) {
-            if (confirm('Delete this event?')) {
-                Storage.remove('events', id);
-                showNotification('Event deleted');
-                loadEvents();
-            }
-        }
-
-        function loadEvents() {
-            const events = Storage.get('events');
-            const eventsList = document.getElementById('eventsList');
-            
-            const sorted = events.sort((a, b) => new Date(a.date) - new Date(b.date));
-            
-            if (sorted.length === 0) {
-                eventsList.innerHTML = '<p style="color: #9ca3af;">No events scheduled</p>';
-                return;
-            }
-
-            eventsList.innerHTML = sorted.map(event => `
-                <div class="event-item">
-                    <div class="event-title">📌 ${event.title}</div>
-                    <div class="event-time">⏰ ${new Date(event.date).toLocaleDateString()} ${event.time ? 'at ' + event.time : ''}</div>
-                    ${event.description ? `<div class="event-description">${event.description}</div>` : ''}
-                    <div class="event-actions">
-                        <button class="delete-btn" onclick="deleteEvent(${event.id})">🗑️ Delete</button>
-                    </div>
                 </div>
-            `).join('');
-        }
 
-        // Initialize
-        document.getElementById('eventDate').value = new Date().toISOString().split('T')[0];
-        generateCalendar();
-        loadEvents();
-    </script>
+            </div>
+
+
+            <!-- EVENT FORM -->
+
+            <div class="event-form">
+
+                <h2>➕ Add Event</h2>
+
+                <div class="form-group">
+
+                    <label>
+                        Event Title
+                    </label>
+
+                    <input
+                        type="text"
+                        id="eventTitle"
+                        placeholder="e.g. Deep Learning Assignment">
+
+                </div>
+
+                <br>
+
+                <div class="form-group">
+
+                    <label>
+                        Date
+                    </label>
+
+                    <input
+                        type="date"
+                        id="eventDateInput">
+
+                </div>
+
+                <br>
+
+                <div class="form-group">
+
+                    <label>
+                        Description
+                    </label>
+
+                    <textarea
+                        id="eventDescription"
+                        placeholder="Add event details...">
+                    </textarea>
+
+                </div>
+
+                <br>
+
+                <button
+                    class="primary-btn"
+                    onclick="addEvent()">
+
+                    + Save Event
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+</main>
+
+
+<footer>
+
+    <p>
+        © 2026 Study Space • Learn • Plan • Create
+    </p>
+
+</footer>
+
+
+<script src="../script.js"></script>
+
 </body>
 </html>
