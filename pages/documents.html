@@ -4,191 +4,725 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Documents - Student Study Space</title>
-
-    <link rel="stylesheet" href="../styles.css">
+    <title>Documents - Study Space</title>
 
     <style>
+        /* =====================================================
+           DOCUMENTS PAGE ONLY
+           Nothing here affects other pages
+        ===================================================== */
 
-        .documents-container {
-            max-width: 1100px;
-            margin: 30px auto;
-            padding: 20px;
+        .documents-page {
+            margin: 0;
+            min-height: 100vh;
+            background:
+                radial-gradient(circle at 80% 15%, rgba(111, 45, 160, 0.25), transparent 35%),
+                radial-gradient(circle at 15% 20%, rgba(57, 45, 130, 0.25), transparent 35%),
+                linear-gradient(135deg, #0b0920, #120b27 55%, #1b0d27);
+
+            color: #ffffff;
+
+            font-family:
+                "Segoe UI",
+                Arial,
+                Helvetica,
+                sans-serif;
+
+            box-sizing: border-box;
         }
 
-        .categories {
+        .documents-page *,
+        .documents-page *::before,
+        .documents-page *::after {
+            box-sizing: border-box;
+        }
+
+        /* ---------- HEADER ---------- */
+
+        .documents-page .ds-header {
+            width: 100%;
+            height: 88px;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            padding: 0 6%;
+
+            background: rgba(9, 7, 25, 0.94);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .documents-page .ds-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+
+            font-size: 22px;
+            font-weight: 700;
+            color: #ffffff;
+
+            text-decoration: none;
+            white-space: nowrap;
+        }
+
+        .documents-page .ds-logo-icon {
+            font-size: 25px;
+        }
+
+        .documents-page .ds-nav {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+        }
+
+        .documents-page .ds-nav a {
+            text-decoration: none;
+
+            color: #e8e4f2;
+
+            padding: 12px 15px;
+            border-radius: 12px;
+
+            font-size: 14px;
+            font-weight: 600;
+
+            transition: 0.25s ease;
+        }
+
+        .documents-page .ds-nav a:hover {
+            background: rgba(255, 255, 255, 0.08);
+            color: #ffffff;
+        }
+
+        .documents-page .ds-nav a.active {
+            background: linear-gradient(135deg, #8b3dff, #a43cff);
+            color: white;
+
+            box-shadow: 0 8px 25px rgba(139, 61, 255, 0.3);
+        }
+
+        /* ---------- MAIN ---------- */
+
+        .documents-page .documents-container {
+            width: min(1000px, 90%);
+            margin: 0 auto;
+
+            padding: 55px 0 80px;
+        }
+
+        .documents-page .back-home {
+            display: inline-block;
+
+            margin-bottom: 12px;
+
+            color: #9b5cff;
+            text-decoration: none;
+
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .documents-page .back-home:hover {
+            color: #c18cff;
+        }
+
+        .documents-page .page-title {
+            margin: 0;
+
+            font-size: clamp(32px, 4vw, 46px);
+            font-weight: 800;
+            letter-spacing: -1px;
+
+            color: #ffffff;
+        }
+
+        .documents-page .page-subtitle {
+            margin: 8px 0 35px;
+
+            font-size: 16px;
+            line-height: 1.6;
+
+            color: #c9c3d8;
+        }
+
+        /* ---------- CATEGORY CARDS ---------- */
+
+        .documents-page .category-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+
+            grid-template-columns: repeat(5, 1fr);
+
+            gap: 18px;
+
+            margin-bottom: 30px;
+        }
+
+        .documents-page .category-card {
+            min-height: 145px;
+
+            background: rgba(255, 255, 255, 0.97);
+
+            border-radius: 17px;
+
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+
+            text-decoration: none;
+
+            border: 1px solid rgba(255, 255, 255, 0.7);
+
+            box-shadow:
+                0 15px 35px rgba(0, 0, 0, 0.20);
+
+            transition:
+                transform 0.25s ease,
+                box-shadow 0.25s ease;
+        }
+
+        .documents-page .category-card:hover {
+            transform: translateY(-6px);
+
+            box-shadow:
+                0 20px 45px rgba(0, 0, 0, 0.30);
+        }
+
+        .documents-page .category-icon {
+            font-size: 40px;
+            margin-bottom: 12px;
+        }
+
+        .documents-page .category-name {
+            color: #28233d;
+
+            font-size: 15px;
+            font-weight: 700;
+        }
+
+        /* ---------- DOCUMENT SECTION ---------- */
+
+        .documents-page .documents-section {
+            margin-top: 20px;
+
+            background: rgba(255, 255, 255, 0.97);
+
+            border-radius: 20px;
+
+            padding: 28px;
+
+            color: #27233a;
+
+            box-shadow:
+                0 18px 45px rgba(0, 0, 0, 0.22);
+        }
+
+        .documents-page .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
             gap: 20px;
-            margin: 30px 0;
+
+            margin-bottom: 22px;
         }
 
-        .category {
-            background: white;
-            padding: 30px;
-            text-align: center;
-            border-radius: 15px;
+        .documents-page .section-title {
+            margin: 0;
+
+            font-size: 24px;
+            font-weight: 800;
+
+            color: #27233a;
+        }
+
+        .documents-page .upload-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+
+            padding: 11px 18px;
+
+            border: none;
+            border-radius: 10px;
+
+            background: #252238;
+            color: white;
+
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: 700;
+
             cursor: pointer;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+
+            transition: 0.2s ease;
         }
 
-        .category:hover {
-            transform: translateY(-4px);
+        .documents-page .upload-btn:hover {
+            background: #7134d6;
+            transform: translateY(-2px);
         }
 
-        .category-icon {
-            font-size: 45px;
-        }
-
-        #fileInput {
+        .documents-page #documentInput {
             display: none;
         }
 
-        .upload-btn {
-            display: inline-block;
-            padding: 12px 20px;
-            background: #222;
-            color: white;
-            border-radius: 8px;
-            cursor: pointer;
+        /* ---------- FILE LIST ---------- */
+
+        .documents-page .file-list {
+            display: grid;
+            gap: 12px;
         }
 
-        #fileList {
-            margin-top: 25px;
+        .documents-page .empty-message {
+            padding: 35px 20px;
+
+            text-align: center;
+
+            border: 2px dashed #ddd7e8;
+            border-radius: 14px;
+
+            color: #777188;
+
+            font-size: 15px;
         }
 
-        .file-item {
+        .documents-page .file-item {
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            padding: 15px;
-            background: white;
-            margin: 10px 0;
-            border-radius: 10px;
+            justify-content: space-between;
+
+            gap: 15px;
+
+            padding: 15px 17px;
+
+            border-radius: 13px;
+
+            background: #f5f2fa;
+
+            border: 1px solid #e5dfef;
         }
 
-        .file-item button {
+        .documents-page .file-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+
+            min-width: 0;
+        }
+
+        .documents-page .file-icon {
+            font-size: 27px;
+        }
+
+        .documents-page .file-name {
+            color: #2a2637;
+
+            font-size: 14px;
+            font-weight: 700;
+
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .documents-page .file-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .documents-page .open-btn,
+        .documents-page .delete-btn {
             border: none;
+            border-radius: 8px;
+
             padding: 8px 12px;
-            border-radius: 6px;
+
+            font-family: inherit;
+            font-size: 13px;
+            font-weight: 600;
+
             cursor: pointer;
         }
 
+        .documents-page .open-btn {
+            background: #7b3ff2;
+            color: white;
+        }
+
+        .documents-page .delete-btn {
+            background: #eee9f3;
+            color: #6b6075;
+        }
+
+        .documents-page .delete-btn:hover {
+            background: #ffdede;
+            color: #c73535;
+        }
+
+        /* ---------- RESPONSIVE ---------- */
+
+        @media (max-width: 900px) {
+
+            .documents-page .ds-header {
+                height: auto;
+                padding: 18px 5%;
+
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .documents-page .ds-nav {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .documents-page .category-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 600px) {
+
+            .documents-page .ds-nav a {
+                padding: 8px 9px;
+                font-size: 12px;
+            }
+
+            .documents-page .documents-container {
+                width: 92%;
+                padding-top: 35px;
+            }
+
+            .documents-page .category-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .documents-page .section-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .documents-page .file-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .documents-page .file-actions {
+                width: 100%;
+            }
+        }
     </style>
 </head>
 
-<body>
+<body class="documents-page">
 
-<div class="documents-container">
+    <!-- HEADER -->
+    <header class="ds-header">
 
-    <a href="../index.html">← Back to Home</a>
+        <a href="../index.html" class="ds-logo">
+            <span class="ds-logo-icon">📚</span>
+            <span>Study Space</span>
+        </a>
 
-    <h1>📂 Important Documents</h1>
+        <nav class="ds-nav">
+            <a href="../index.html">🏠 Home</a>
+            <a href="notes.html">📄 Notes</a>
+            <a href="tasks.html">✅ Tasks</a>
+            <a href="events.html">🗓️ Events</a>
+            <a href="planner.html">⏰ Planner</a>
+            <a href="documents.html" class="active">📁 Documents</a>
+            <a href="painting.html">🎨 Painting</a>
+            <a href="games.html">🎮 Games</a>
+            <a href="profile.html">👤 Profile</a>
+        </nav>
 
-    <p>Keep all your important files organized in one place.</p>
+    </header>
 
-    <div class="categories">
 
-        <div class="category" onclick="selectCategory('pdf')">
-            <div class="category-icon">📄</div>
-            <h3>PDF</h3>
-            <p>PDF files</p>
-        </div>
+    <!-- MAIN -->
+    <main class="documents-container">
 
-        <div class="category" onclick="selectCategory('document')">
-            <div class="category-icon">📝</div>
-            <h3>Documents</h3>
-            <p>Word & text files</p>
-        </div>
+        <a href="../index.html" class="back-home">
+            ← Back to Home
+        </a>
 
-        <div class="category" onclick="selectCategory('excel')">
-            <div class="category-icon">📊</div>
-            <h3>Excel</h3>
-            <p>Spreadsheet files</p>
-        </div>
+        <h1 class="page-title">
+            📁 Important Documents
+        </h1>
 
-        <div class="category" onclick="selectCategory('ppt')">
-            <div class="category-icon">📽️</div>
-            <h3>PPT</h3>
-            <p>Presentation files</p>
-        </div>
+        <p class="page-subtitle">
+            Keep all your important files organized in one place.
+        </p>
 
-        <div class="category" onclick="selectCategory('image')">
-            <div class="category-icon">🖼️</div>
-            <h3>Images</h3>
-            <p>Image files</p>
-        </div>
 
-    </div>
+        <!-- CATEGORY CARDS -->
+        <section class="category-grid">
 
-    <h2 id="selectedCategory">Select a category</h2>
+            <a href="#" class="category-card">
+                <span class="category-icon">📄</span>
+                <span class="category-name">Documents</span>
+            </a>
 
-    <label class="upload-btn" for="fileInput">
-        + Upload File
-    </label>
+            <a href="#" class="category-card">
+                <span class="category-icon">📝</span>
+                <span class="category-name">Notes</span>
+            </a>
 
-    <input type="file" id="fileInput" multiple>
+            <a href="#" class="category-card">
+                <span class="category-icon">📊</span>
+                <span class="category-name">Presentations</span>
+            </a>
 
-    <div id="fileList"></div>
+            <a href="#" class="category-card">
+                <span class="category-icon">🎥</span>
+                <span class="category-name">Videos</span>
+            </a>
 
-</div>
+            <a href="#" class="category-card">
+                <span class="category-icon">🖼️</span>
+                <span class="category-name">Images</span>
+            </a>
 
-<script>
+        </section>
 
-let currentCategory = "";
 
-function selectCategory(category) {
+        <!-- DOCUMENTS -->
+        <section class="documents-section">
 
-    currentCategory = category;
+            <div class="section-header">
 
-    const names = {
-        pdf: "📄 PDF Files",
-        document: "📝 Documents",
-        excel: "📊 Excel Files",
-        ppt: "📽️ PPT Files",
-        image: "🖼️ Images"
-    };
+                <h2 class="section-title">
+                    📑 Documents
+                </h2>
 
-    document.getElementById("selectedCategory").textContent =
-        names[category];
+                <label for="documentInput" class="upload-btn">
+                    + Upload File
+                </label>
 
-    document.getElementById("fileInput").value = "";
-}
+                <input
+                    type="file"
+                    id="documentInput"
+                    multiple
+                >
 
-document.getElementById("fileInput").addEventListener("change", function() {
+            </div>
 
-    const files = this.files;
 
-    if (!currentCategory) {
-        alert("Please select a category first.");
-        return;
-    }
+            <div id="fileList" class="file-list">
 
-    const list = document.getElementById("fileList");
+                <div class="empty-message">
+                    No files uploaded yet.<br>
+                    Click <b>+ Upload File</b> to add your documents.
+                </div>
 
-    for (let file of files) {
+            </div>
 
-        const item = document.createElement("div");
+        </section>
 
-        item.className = "file-item";
+    </main>
 
-        item.innerHTML = `
-            <span>📎 ${file.name}</span>
-            <button onclick="removeFile(this)">Delete</button>
-        `;
 
-        list.appendChild(item);
-    }
+    <script>
+        /* =====================================================
+           DOCUMENTS PAGE JAVASCRIPT ONLY
+        ===================================================== */
 
-});
+        const documentInput =
+            document.getElementById("documentInput");
 
-function removeFile(button) {
+        const fileList =
+            document.getElementById("fileList");
 
-    button.parentElement.remove();
 
-}
+        let savedFiles =
+            JSON.parse(
+                localStorage.getItem("studySpaceDocuments") || "[]"
+            );
 
-</script>
+
+        function saveFiles() {
+
+            localStorage.setItem(
+                "studySpaceDocuments",
+                JSON.stringify(savedFiles)
+            );
+
+        }
+
+
+        function getFileIcon(fileName) {
+
+            const extension =
+                fileName.split(".").pop().toLowerCase();
+
+            if (extension === "pdf") return "📕";
+
+            if (
+                extension === "doc" ||
+                extension === "docx"
+            ) return "📘";
+
+            if (
+                extension === "ppt" ||
+                extension === "pptx"
+            ) return "📊";
+
+            if (
+                extension === "xls" ||
+                extension === "xlsx"
+            ) return "📗";
+
+            if (
+                ["jpg", "jpeg", "png", "gif", "webp"]
+                    .includes(extension)
+            ) return "🖼️";
+
+            if (
+                ["mp4", "mov", "avi"]
+                    .includes(extension)
+            ) return "🎥";
+
+            return "📄";
+        }
+
+
+        function renderFiles() {
+
+            fileList.innerHTML = "";
+
+            if (savedFiles.length === 0) {
+
+                fileList.innerHTML = `
+                    <div class="empty-message">
+                        No files uploaded yet.<br>
+                        Click <b>+ Upload File</b> to add your documents.
+                    </div>
+                `;
+
+                return;
+            }
+
+
+            savedFiles.forEach((file, index) => {
+
+                const item =
+                    document.createElement("div");
+
+                item.className = "file-item";
+
+
+                item.innerHTML = `
+
+                    <div class="file-info">
+
+                        <span class="file-icon">
+                            ${getFileIcon(file.name)}
+                        </span>
+
+                        <span class="file-name">
+                            ${file.name}
+                        </span>
+
+                    </div>
+
+
+                    <div class="file-actions">
+
+                        <button
+                            class="open-btn"
+                            onclick="openFile(${index})">
+                            Open
+                        </button>
+
+                        <button
+                            class="delete-btn"
+                            onclick="deleteFile(${index})">
+                            Delete
+                        </button>
+
+                    </div>
+                `;
+
+
+                fileList.appendChild(item);
+
+            });
+
+        }
+
+
+        documentInput.addEventListener(
+            "change",
+            function () {
+
+                const files =
+                    Array.from(this.files);
+
+
+                files.forEach(file => {
+
+                    savedFiles.push({
+
+                        name: file.name,
+
+                        size: file.size,
+
+                        type: file.type
+
+                    });
+
+                });
+
+
+                saveFiles();
+
+                renderFiles();
+
+                this.value = "";
+
+            }
+        );
+
+
+        function deleteFile(index) {
+
+            if (
+                confirm(
+                    "Are you sure you want to delete this file?"
+                )
+            ) {
+
+                savedFiles.splice(index, 1);
+
+                saveFiles();
+
+                renderFiles();
+
+            }
+
+        }
+
+
+        function openFile(index) {
+
+            alert(
+                "File: " +
+                savedFiles[index].name +
+                "\n\nFor security, browser localStorage stores the file information only."
+            );
+
+        }
+
+
+        renderFiles();
+
+    </script>
 
 </body>
 </html>
