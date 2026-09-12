@@ -1,217 +1,105 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
     <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0">
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Study Planner - Study Space</title>
-
     <link rel="stylesheet" href="../styles.css">
-
 </head>
-
 <body>
 
-
 <header class="navbar">
-
-    <a href="../index.html" class="logo">
-        📚 Study <span>Space</span>
-    </a>
-
-    <ul class="nav-links">
-
-        <li><a href="../index.html">🏠 Home</a></li>
-
-        <li><a href="notes.html">📝 Notes</a></li>
-
-        <li><a href="tasks.html">✅ Tasks</a></li>
-
-        <li><a href="events.html">🗓️ Events</a></li>
-
-        <li>
-            <a href="planner.html" class="active">
-                ⏰ Planner
-            </a>
-        </li>
-
-        <li><a href="documents.html">📁 Documents</a></li>
-
-        <li><a href="painting.html">🎨 Painting</a></li>
-
-        <li><a href="games.html">🎮 Games</a></li>
-
-        <li><a href="profile.html">👤 Profile</a></li>
-
-    </ul>
-
+    <div class="nav-container">
+        <a href="../index.html" class="logo">
+            📚 <span>Study</span> Space
+        </a>
+        <nav class="nav-menu">
+            <a href="../index.html">🏠 Home</a>
+            <a href="notes.html">📝 Notes</a>
+            <a href="tasks.html">✅ Tasks</a>
+            <a href="events.html">🗓️ Events</a>
+            <a href="planner.html" class="active">⏰ Planner</a>
+            <a href="documents.html">📁 Documents</a>
+            <a href="painting.html">🎨 Painting</a>
+            <a href="games.html">🎮 Games</a>
+            <a href="profile.html">👤 Profile</a>
+        </nav>
+    </div>
 </header>
 
-
 <main>
-
-
-<section class="page-hero">
-
-    <div class="page-container">
-
-        <div class="hero-content">
-
-            <div class="hero-icon">
-                ⏰
+    <section class="page-hero">
+        <div class="hero-wrapper">
+            <div class="hero-content">
+                <div class="hero-icon">⏰</div>
+                <h1>Study <span>Planner</span></h1>
+                <p>Create a personalized study schedule and manage your learning time efficiently.</p>
             </div>
-
-            <h1>
-                Study <span>Planner</span>
-            </h1>
-
-            <p>
-                Create a personalized study schedule
-                and manage your learning time efficiently.
-            </p>
-
         </div>
+    </section>
 
-    </div>
+    <section class="content-section">
+        <div class="page-container">
+            <div class="planner-wrapper">
+                <!-- LEFT: SCHEDULE FORM -->
+                <div class="planner-sidebar">
+                    <div class="card">
+                        <h2>📝 Create Schedule</h2>
+                        <div class="planner-form">
+                            <div class="form-group">
+                                <label>Subject / Activity</label>
+                                <input type="text" id="subject" placeholder="e.g. Python, Math, Break" class="input-field">
+                            </div>
+                            <div class="form-group">
+                                <label>Start Time</label>
+                                <input type="time" id="startTime" class="input-field">
+                            </div>
+                            <div class="form-group">
+                                <label>End Time</label>
+                                <input type="time" id="endTime" class="input-field">
+                            </div>
+                            <div class="form-group">
+                                <label>Type</label>
+                                <select id="scheduleType" class="input-field">
+                                    <option value="Study">📚 Study</option>
+                                    <option value="Break">☕ Break</option>
+                                    <option value="Revision">🔄 Revision</option>
+                                    <option value="Assignment">📝 Assignment</option>
+                                    <option value="Exam">📜 Exam Prep</option>
+                                    <option value="Project">💼 Project Work</option>
+                                </select>
+                            </div>
+                            <button class="btn primary" onclick="createSchedule()">+ Add to Schedule</button>
+                        </div>
+                    </div>
+                </div>
 
-</section>
-
-
-<section class="content-section">
-
-    <div class="page-container">
-
-
-        <!-- CREATE SCHEDULE -->
-
-        <div class="card">
-
-            <div class="section-title">
-
-                <h2 style="color:#201a28;">
-                    Create Study Schedule
-                </h2>
-
-                <p>
-                    Add subjects and assign a suitable
-                    time for each study session.
-                </p>
-
+                <!-- RIGHT: SCHEDULE VIEW -->
+                <div class="planner-main">
+                    <div class="card">
+                        <div class="planner-header">
+                            <h2>📅 Today's Schedule</h2>
+                            <small id="scheduleDate"></small>
+                        </div>
+                        <div class="schedule-view">
+                            <div id="scheduleList" class="schedule-list">
+                                <div class="empty-state">
+                                    <div class="empty-icon">📅</div>
+                                    <p>No schedule for today. Create your first schedule!</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-
-
-            <div class="planner-form">
-
-                <div class="form-group">
-
-                    <label>
-                        Subject / Activity
-                    </label>
-
-                    <input
-                        type="text"
-                        id="subject"
-                        placeholder="e.g. Python">
-
-                </div>
-
-
-                <div class="form-group">
-
-                    <label>
-                        Start Time
-                    </label>
-
-                    <input
-                        type="time"
-                        id="startTime">
-
-                </div>
-
-
-                <div class="form-group">
-
-                    <label>
-                        End Time
-                    </label>
-
-                    <input
-                        type="time"
-                        id="endTime">
-
-                </div>
-
-
-                <div class="form-group">
-
-                    <label>
-                        Type
-                    </label>
-
-                    <select id="scheduleType">
-
-                        <option value="Study">
-                            📚 Study
-                        </option>
-
-                        <option value="Break">
-                            ☕ Break
-                        </option>
-
-                        <option value="Revision">
-                            🔄 Revision
-                        </option>
-
-                        <option value="Assignment">
-                            📝 Assignment
-                        </option>
-
-                    </select>
-
-                </div>
-
-
-                <button
-                    class="primary-btn"
-                    onclick="createSchedule()">
-
-                    + Create
-
-                </button>
-
-            </div>
-
-
-            <div
-                id="scheduleList"
-                class="schedule-list">
-
-            </div>
-
         </div>
-
-    </div>
-
-</section>
-
+    </section>
 </main>
 
-
 <footer>
-
-    <p>
-        © 2026 Study Space • Learn • Plan • Create
-    </p>
-
+    <p>© 2026 Study Space • Learn • Plan • Create • Achieve</p>
 </footer>
 
-
 <script src="../script.js"></script>
-
 </body>
 </html>

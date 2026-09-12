@@ -1,191 +1,117 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
     <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0">
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Events - Study Space</title>
-
     <link rel="stylesheet" href="../styles.css">
-
 </head>
-
 <body>
 
-
 <header class="navbar">
-
-    <a href="../index.html" class="logo">
-        📚 Study <span>Space</span>
-    </a>
-
-    <ul class="nav-links">
-
-        <li><a href="../index.html">🏠 Home</a></li>
-
-        <li><a href="notes.html">📝 Notes</a></li>
-
-        <li><a href="tasks.html">✅ Tasks</a></li>
-
-        <li>
-            <a href="events.html" class="active">
-                🗓️ Events
-            </a>
-        </li>
-
-        <li><a href="planner.html">⏰ Planner</a></li>
-
-        <li><a href="documents.html">📁 Documents</a></li>
-
-        <li><a href="painting.html">🎨 Painting</a></li>
-
-        <li><a href="games.html">🎮 Games</a></li>
-
-        <li><a href="profile.html">👤 Profile</a></li>
-
-    </ul>
-
+    <div class="nav-container">
+        <a href="../index.html" class="logo">
+            📚 <span>Study</span> Space
+        </a>
+        <nav class="nav-menu">
+            <a href="../index.html">🏠 Home</a>
+            <a href="notes.html">📝 Notes</a>
+            <a href="tasks.html">✅ Tasks</a>
+            <a href="events.html" class="active">🗓️ Events</a>
+            <a href="planner.html">⏰ Planner</a>
+            <a href="documents.html">📁 Documents</a>
+            <a href="painting.html">🎨 Painting</a>
+            <a href="games.html">🎮 Games</a>
+            <a href="profile.html">👤 Profile</a>
+        </nav>
+    </div>
 </header>
 
-
 <main>
-
-<section class="page-hero">
-
-    <div class="page-container">
-
-        <div class="hero-content">
-
-            <div class="hero-icon">
-                🗓️
+    <section class="page-hero">
+        <div class="hero-wrapper">
+            <div class="hero-content">
+                <div class="hero-icon">🗓️</div>
+                <h1>My <span>Events</span></h1>
+                <p>Keep track of assignments, exams, meetings and important dates.</p>
             </div>
-
-            <h1>
-                My <span>Events</span>
-            </h1>
-
-            <p>
-                Keep track of assignments, exams,
-                meetings and important dates.
-            </p>
-
         </div>
+    </section>
 
-    </div>
-
-</section>
-
-
-<section class="content-section">
-
-    <div class="page-container">
-
-        <div class="events-layout">
-
-
-            <!-- CALENDAR -->
-
-            <div class="calendar-box">
-
-                <h2>📅 Calendar</h2>
-
-                <input
-                    type="date"
-                    id="eventDate">
-
-                <div
-                    id="calendarEvents"
-                    class="event-list">
-
+    <section class="content-section">
+        <div class="page-container">
+            <div class="events-wrapper">
+                <!-- LEFT: EVENT FORM -->
+                <div class="events-sidebar">
+                    <div class="card">
+                        <h2>➕ Add Event</h2>
+                        <div class="event-form-group">
+                            <div class="form-group">
+                                <label>Event Title</label>
+                                <input type="text" id="eventTitle" placeholder="e.g. Math Exam" class="input-field">
+                            </div>
+                            <div class="form-group">
+                                <label>Date</label>
+                                <input type="date" id="eventDateInput" class="input-field">
+                            </div>
+                            <div class="form-group">
+                                <label>Time</label>
+                                <input type="time" id="eventTime" class="input-field">
+                            </div>
+                            <div class="form-group">
+                                <label>Category</label>
+                                <select id="eventCategory" class="input-field">
+                                    <option value="Exam">📜 Exam</option>
+                                    <option value="Assignment">📝 Assignment</option>
+                                    <option value="Project">💼 Project Deadline</option>
+                                    <option value="Meeting">👥 Meeting</option>
+                                    <option value="Important">⭐ Important Date</option>
+                                    <option value="Other">📌 Other</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Description</label>
+                                <textarea id="eventDescription" placeholder="Add event details..." class="input-field" rows="3"></textarea>
+                            </div>
+                            <button class="btn primary" onclick="addEvent()">+ Save Event</button>
+                        </div>
+                    </div>
                 </div>
 
+                <!-- RIGHT: EVENTS CALENDAR & LIST -->
+                <div class="events-main">
+                    <!-- MINI CALENDAR -->
+                    <div class="card">
+                        <h2>📅 Calendar</h2>
+                        <input type="date" id="eventDate" class="input-field">
+                    </div>
+
+                    <!-- UPCOMING EVENTS -->
+                    <div class="card">
+                        <div class="events-header">
+                            <h2>📋 Events</h2>
+                            <div class="event-sort">
+                                <button class="filter-btn active" onclick="sortEvents('upcoming')">Upcoming</button>
+                                <button class="filter-btn" onclick="sortEvents('all')">All</button>
+                            </div>
+                        </div>
+                        <div id="calendarEvents" class="event-list">
+                            <div class="empty-state">
+                                <div class="empty-icon">🗓️</div>
+                                <p>No events yet. Add your first event!</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-
-
-            <!-- EVENT FORM -->
-
-            <div class="event-form">
-
-                <h2>➕ Add Event</h2>
-
-                <div class="form-group">
-
-                    <label>
-                        Event Title
-                    </label>
-
-                    <input
-                        type="text"
-                        id="eventTitle"
-                        placeholder="e.g. Deep Learning Assignment">
-
-                </div>
-
-                <br>
-
-                <div class="form-group">
-
-                    <label>
-                        Date
-                    </label>
-
-                    <input
-                        type="date"
-                        id="eventDateInput">
-
-                </div>
-
-                <br>
-
-                <div class="form-group">
-
-                    <label>
-                        Description
-                    </label>
-
-                    <textarea
-                        id="eventDescription"
-                        placeholder="Add event details...">
-                    </textarea>
-
-                </div>
-
-                <br>
-
-                <button
-                    class="primary-btn"
-                    onclick="addEvent()">
-
-                    + Save Event
-
-                </button>
-
-            </div>
-
         </div>
-
-    </div>
-
-</section>
-
+    </section>
 </main>
 
-
 <footer>
-
-    <p>
-        © 2026 Study Space • Learn • Plan • Create
-    </p>
-
+    <p>© 2026 Study Space • Learn • Plan • Create • Achieve</p>
 </footer>
 
-
 <script src="../script.js"></script>
-
 </body>
 </html>
