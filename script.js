@@ -102,6 +102,75 @@ const Storage = {
         return Storage.get(key).filter(predicate);
     }
 };
+/* =========================================
+   STUDY SPACE MAIN JAVASCRIPT
+========================================= */
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    console.log("Study Space loaded successfully!");
+
+    /* ---------------------------------------
+       NAVBAR ACTIVE LINK
+    --------------------------------------- */
+
+    const currentPage =
+        window.location.pathname.split("/").pop();
+
+    const navLinks =
+        document.querySelectorAll(".nav-links a");
+
+    navLinks.forEach(function (link) {
+
+        const linkPage =
+            link.getAttribute("href")
+                .split("/")
+                .pop();
+
+        if (
+            linkPage === currentPage ||
+            (currentPage === "" &&
+             linkPage === "index.html")
+        ) {
+            link.classList.add("active");
+        }
+
+    });
+
+
+    /* ---------------------------------------
+       SMOOTH SCROLL
+    --------------------------------------- */
+
+    document.querySelectorAll(
+        'a[href^="#"]'
+    ).forEach(function (anchor) {
+
+        anchor.addEventListener(
+            "click",
+            function (event) {
+
+                const target =
+                    document.querySelector(
+                        this.getAttribute("href")
+                    );
+
+                if (target) {
+
+                    event.preventDefault();
+
+                    target.scrollIntoView({
+                        behavior: "smooth"
+                    });
+
+                }
+
+            }
+        );
+
+    });
+
+});
 
 // ============================================
 // DARK MODE MANAGEMENT
